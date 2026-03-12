@@ -532,39 +532,44 @@
           <div class="card-bg-overlay" style="background:${c.overlay}"></div>
           <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,${c.line}66,transparent)"></div>
 
-          <div class="card-content" style="padding:${size==='small'?(bleed+8)+'px '+(bleed+12)+'px ':(bleed+14)+'px '+(bleed+20)+'px '};height:100%;position:relative;">
-            <div style="display:flex;align-items:flex-start;gap:${Math.round(14*s)}px">
-              <div style="flex-shrink:0;margin-top:${Math.round(6*s)}px">
-                ${makeLogo(logoW, logoH, 'front-'+id)}
+          <div class="card-content" style="padding:${bleed+12}px ${bleed+20}px;height:100%;position:relative;display:flex;flex-direction:column;justify-content:space-between;">
+            <!-- Top Section: Logo & Name/Title -->
+            <div style="display:flex;align-items:flex-start;gap:${Math.round(20*s)}px">
+              <div style="flex-shrink:0;margin-top:${Math.round(2*s)}px">
+                ${makeLogo(Math.round(44*s), Math.round(52*s), 'front-'+id)}
               </div>
-              <div style="margin-top:${Math.round(2*s)}px">
-                <div style="display:flex;align-items:baseline;gap:${Math.round(8*s)}px;margin-bottom:${Math.round(5*s)}px">
-                  <span style="font-size:${Math.round(24*s)}px;font-weight:500;letter-spacing:2px;color:${c.nameKr}">${p.nameKr}</span>
-                  <span style="font-size:${Math.round(11*s)}px;font-weight:400;letter-spacing:1.5px;color:${c.titleKr}">${p.titleKr}</span>
+              <div>
+                <div style="display:flex;align-items:baseline;gap:${Math.round(10*s)}px;margin-bottom:${Math.round(6*s)}px">
+                  <span style="font-size:${Math.round(28*s)}px;font-weight:500;letter-spacing:1px;color:${c.nameEn};line-height:1">${p.nameEn}</span>
+                  <span style="font-size:${Math.round(11*s)}px;font-weight:400;color:${c.sub};opacity:0.8">${p.titleEn}</span>
                 </div>
-                <div style="display:flex;align-items:baseline;gap:${Math.round(8*s)}px">
-                  <span style="font-size:${Math.round(11*s)}px;font-weight:400;letter-spacing:0.8px;color:${c.nameEn}">${p.nameEn}</span>
-                  <span style="font-size:${Math.round(9*s)}px;letter-spacing:${size==='small'?'0.8px':'1.2px'};color:${c.titleEn};font-weight:400">${p.titleEn}</span>
+                <div style="font-size:${Math.round(11*s)}px;color:${c.sub};opacity:0.7;letter-spacing:0.5px">
+                  ${p.titleKr} &nbsp; ${p.phone}
                 </div>
               </div>
             </div>
 
-            <div style="position:absolute;left:${size==='small'?(bleed+16):(bleed+24)}px;right:${size==='small'?(bleed+16):(bleed+24)}px;bottom:${size==='small'?(bleed+22):(bleed+34)}px;">
-              <div style="font-size:${Math.round(9.5*s)}px;color:${c.address};letter-spacing:0.3px;line-height:1.5;margin-bottom:${Math.round(5*s)}px">
-                <div>${p.addressKr}</div>
-                <div>${p.addressEn}</div>
-              </div>
-              <div style="width:${Math.round(28*s)}px;height:1px;background:linear-gradient(90deg,${c.line},${c.line}40);margin-bottom:${Math.round(5*s)}px"></div>
-              <div style="display:flex;gap:${Math.round(24*s)}px;align-items:flex-start">
-                <div style="font-size:${Math.round(10*s)}px;color:${c.sub};letter-spacing:0.3px;line-height:${size==='small'?'1.5':'1.65'}">
-                  <div style="color:${c.highlight}">${p.phone}</div>
-                  <div>${p.tel}</div>
-                  <div>${p.fax}</div>
+            <!-- Middle/Bottom Area -->
+            <div style="width:100%">
+              <!-- Middle Section: EN Address & Divider -->
+              <div style="margin-bottom:${Math.round(14*s)}px;">
+                <div style="font-size:${Math.round(9.5*s)}px;color:${c.address};letter-spacing:0.3px;margin-bottom:${Math.round(8*s)}px;opacity:0.6">
+                  ${p.addressEn}
                 </div>
-                <div style="width:1px;height:${Math.round(40*s)}px;background:${c.line}40"></div>
-                <div style="font-size:${Math.round(10*s)}px;color:${c.sub};letter-spacing:0.3px;line-height:${size==='small'?'1.5':'1.65'}">
+                <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent,${c.line},transparent);opacity:0.3"></div>
+              </div>
+
+              <!-- Bottom Section: Split Columns -->
+              <div style="display:flex;gap:${Math.round(30*s)}px;align-items:flex-start">
+                <div style="flex:1.2;font-size:${Math.round(10*s)}px;color:${c.sub};letter-spacing:0.2px;line-height:1.6">
                   <div style="color:${c.highlight}">${p.email}</div>
-                  <div>${p.website}</div>
+                  <div>${p.fax}</div>
+                  <div style="opacity:0.8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${p.website}</div>
+                </div>
+                <div style="width:1px;height:${Math.round(40*s)}px;background:${c.line}40;margin-top:${Math.round(2*s)}px"></div>
+                <div style="flex:1.5;font-size:${Math.round(10*s)}px;color:${c.sub};letter-spacing:0.2px;line-height:1.6">
+                  <div style="color:${c.highlight}">${p.tel}</div>
+                  <div style="opacity:0.8; line-height:1.4">${p.addressKr}</div>
                 </div>
               </div>
             </div>
@@ -715,36 +720,41 @@
           <text x="270" y="235" text-anchor="middle" font-family="${font}" font-size="9" font-weight="400" letter-spacing="5" fill="${c.muted}">AESTHETIC MEDICAL DEVICE</text>
         </svg>`;
       } else {
-        const logoW = 52; const logoH = 56;
+        const logoW = 44; const logoH = 52;
         const leftPadding = 32;
-        // Estimate name width for title positioning
-        const nameLen = p.nameKr.length;
-        const titleX = 66 + (nameLen * 18); 
 
         return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
           <rect width="100%" height="100%" fill="${c.bg}"/>
-          <rect x="0" y="309" width="${w}" height="1" fill="${c.line}" opacity="0.4"/>
-          <g transform="translate(${leftPadding}, 30)">
+          
+          <!-- Top section -->
+          <g transform="translate(${leftPadding}, 40)">
             ${makeLogo(logoW, logoH, 'v-f')}
           </g>
-          <g transform="translate(${leftPadding + 66}, 56)">
-            <text x="0" y="0" font-family="${font}" font-size="24" font-weight="500" letter-spacing="2" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="${titleX}" y="-4" font-family="${font}" font-size="11" font-weight="400" letter-spacing="1.5" fill="${c.titleKr}">${p.titleKr}</text>
-            <text x="0" y="24" font-family="${font}" font-size="11" font-weight="400" letter-spacing="0.8" fill="${c.nameEn}">${p.nameEn}</text>
-            <text x="${titleX}" y="24" font-family="${font}" font-size="9" font-weight="400" letter-spacing="1.2" fill="${c.titleEn}">${p.titleEn}</text>
+          <g transform="translate(${leftPadding + 64}, 68)">
+            <text x="0" y="0" font-family="${font}" font-size="28" font-weight="500" fill="${c.nameEn}">${p.nameEn}</text>
+            <text x="${p.nameEn.length * 15 + 15}" y="-4" font-family="${font}" font-size="11" fill="${c.sub}" opacity="0.8">${p.titleEn}</text>
+            <text x="2" y="24" font-family="${font}" font-size="11" fill="${c.sub}" opacity="0.7">${p.titleKr}   ${p.phone}</text>
           </g>
-          <g transform="translate(${leftPadding + 4}, 205)">
-            <text x="0" y="0" font-family="${font}" font-size="9.5" fill="${c.address}">${p.addressKr}</text>
-            <text x="0" y="15" font-family="${font}" font-size="9.5" fill="${c.address}">${p.addressEn}</text>
-            <rect x="0" y="26" width="28" height="1" fill="${c.line}"/>
-            <g transform="translate(0, 48)">
-              <text x="0" y="0" font-family="${font}" font-size="10" fill="${c.highlight}">${p.phone}</text>
-              <text x="0" y="15" font-family="${font}" font-size="10" fill="${c.sub}">${p.tel}</text>
-              <text x="0" y="30" font-family="${font}" font-size="10" fill="${c.sub}">${p.fax}</text>
-              <line x1="165" y1="-8" x2="165" y2="34" stroke="${c.line}" stroke-opacity="0.4"/>
-              <text x="180" y="0" font-family="${font}" font-size="10" fill="${c.highlight}">${p.email}</text>
-              <text x="180" y="15" font-family="${font}" font-size="10" fill="${c.sub}">${p.website}</text>
-            </g>
+
+          <!-- Middle section (EN Address & Line) -->
+          <g transform="translate(${leftPadding + 4}, 190)">
+            <text x="0" y="0" font-family="${font}" font-size="9.5" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
+            <rect x="0" y="14" width="${w - 72}" height="0.5" fill="${c.line}" opacity="0.3"/>
+          </g>
+
+          <!-- Bottom section (Two columns) -->
+          <g transform="translate(${leftPadding + 4}, 235)">
+            <!-- Left column -->
+            <text x="0" y="0" font-family="${font}" font-size="10" fill="${c.highlight}">${p.email}</text>
+            <text x="0" y="16" font-family="${font}" font-size="10" fill="${c.sub}">${p.fax}</text>
+            <text x="0" y="32" font-family="${font}" font-size="10" fill="${c.sub}" opacity="0.8">${p.website}</text>
+
+            <!-- Divider -->
+            <line x1="210" y1="-8" x2="210" y2="40" stroke="${c.line}" stroke-width="0.5" stroke-opacity="0.4"/>
+
+            <!-- Right column -->
+            <text x="225" y="0" font-family="${font}" font-size="10" fill="${c.highlight}">${p.tel}</text>
+            <text x="225" y="16" font-family="${font}" font-size="10" fill="${c.sub}" opacity="0.8">${p.addressKr}</text>
           </g>
         </svg>`;
       }
@@ -911,13 +921,13 @@
               titleKr: String(r[3] || '').trim(),
               titleEn: String(r[4] || '').trim(),
               phone: String(r[5] || '').trim(),
-              email: (String(r[6] || '') + (r[7] ? ' / ' + r[7] : '')).trim(),
-              tel: String(r[8] || '').trim(),
-              fax: String(r[9] || '').trim(),
-              website: (String(r[10] || '') + (r[11] ? ' / ' + r[11] : '')).trim(),
-              addressKr: String(r[12] || '').trim(),
-              addressEn: String(r[13] || '').trim(),
-              qty: Number(r[14]) || 200
+              email: String(r[6] || '').trim(),
+              tel: String(r[7] || '').trim(),
+              fax: String(r[8] || '').trim(),
+              website: String(r[9] || '').trim(),
+              addressKr: String(r[10] || '').trim(),
+              addressEn: String(r[11] || '').trim(),
+              qty: Number(r[12]) || 200
             });
           }
 

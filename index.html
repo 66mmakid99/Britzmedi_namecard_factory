@@ -94,35 +94,41 @@
     }
     .dept-group {
       width: 100%;
-      margin-bottom: 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin-bottom: 32px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(168, 153, 104, 0.08);
+      border-radius: 12px;
     }
     .dept-label {
-      font-size: 10px;
-      letter-spacing: 4px;
-      color: #666;
-      margin-bottom: 12px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #888;
+      margin-bottom: 16px;
       text-transform: uppercase;
-      font-weight: 500;
-      position: relative;
-    }
-    .dept-label::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 20px;
-      height: 1px;
-      background: #333;
+      font-weight: 600;
+      text-align: left;
+      padding-left: 10px;
+      border-left: 2px solid #8A7B4D;
     }
     .tab-row {
       display: flex;
-      justify-content: center;
-      gap: 8px;
+      justify-content: flex-start;
+      gap: 10px;
       flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 10px 18px;
+      background: rgba(168, 153, 104, 0.04);
+      border: 1px solid rgba(168, 153, 104, 0.15);
+      border-radius: 8px;
+      flex: 0 1 auto;
+      text-align: center;
+      min-width: 120px;
+    }
+    .tab-btn:hover {
+      background: rgba(168, 153, 104, 0.1);
+      border-color: rgba(168, 153, 104, 0.4);
     }
 
     /* Card - 94x54mm ratio (with 2mm bleed) */
@@ -698,7 +704,8 @@
           <div class="tab-row">
             ${groups[d].map(e => `
               <button class="tab-btn ${e.originalIndex === currentPerson ? 'active' : ''}" onclick="selectPerson(${e.originalIndex})">
-                ${e.nameKr} ${e.titleKr}
+                <div style="font-weight:500; font-size:12px; margin-bottom:2px;">${e.nameKr}</div>
+                <div style="font-size:9px; opacity:0.6; letter-spacing:1px;">${e.titleKr}</div>
               </button>
             `).join('')}
           </div>
@@ -950,26 +957,28 @@
           const newEmployees = [];
           for (let i = 1; i < rows.length; i++) {
             const r = rows[i];
-            if (!r[0] || !r[1]) continue; // skip empty rows
+            // Minimum requirement is name (now r[1])
+            if (!r[1]) continue; 
+            
             newEmployees.push({
-              dept: String(r[0] || 'Etc'),
-              nameKr: String(r[1] || ''),
-              nameEn: String(r[2] || ''),
-              titleKr: String(r[3] || ''),
-              titleEn: String(r[4] || ''),
-              phone: String(r[5] || ''),
-              email: String(r[6] || ''),
-              tel: String(r[7] || ''),
-              fax: String(r[8] || ''),
-              website: String(r[9] || ''),
-              addressKr: String(r[10] || ''),
-              addressEn: String(r[11] || ''),
+              dept: String(r[0] || 'Etc').trim(),
+              nameKr: String(r[1] || '').trim(),
+              nameEn: String(r[2] || '').trim(),
+              titleKr: String(r[3] || '').trim(),
+              titleEn: String(r[4] || '').trim(),
+              phone: String(r[5] || '').trim(),
+              email: String(r[6] || '').trim(),
+              tel: String(r[7] || '').trim(),
+              fax: String(r[8] || '').trim(),
+              website: String(r[9] || '').trim(),
+              addressKr: String(r[10] || '').trim(),
+              addressEn: String(r[11] || '').trim(),
               qty: Number(r[12]) || 200
             });
           }
 
           if (newEmployees.length === 0) {
-            alert('유효한 데이터가 없습니다. 엑셀 양식을 확인해주세요.');
+            alert('유효한 명함 데이터(이름 등)를 찾을 수 없습니다. 새로운 엑셀 양식을 다운로드하여 작성해 주세요.');
             return;
           }
 

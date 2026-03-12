@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BRITZMEDI Business Card Design</title>
+  <title>[v1.5] BRITZMEDI Business Card Design</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -397,8 +397,8 @@
         <span class="icon">📂</span> 엑셀 불러오기
         <input type="file" accept=".xlsx,.xls" onchange="importExcel(event)" style="display:none">
       </label>
-      <button class="action-btn" onclick="resetData()" style="opacity:0.6; border-style:dashed;">
-        <span class="icon">🔄</span> 초기화
+      <button class="action-btn" onclick="hardReset()" style="border-color:#ff4444; color:#ff8888; opacity:0.8;">
+        <span class="icon">⚠️</span> 디자인 초기화 (Hard Reset)
       </button>
     </div>
 
@@ -409,7 +409,10 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer">BRITZMEDI · PLATINUM GOLD · BUSINESS CARD</div>
+    <div class="footer">
+      BRITZMEDI · PLATINUM GOLD · BUSINESS CARD<br>
+      <span style="opacity:0.3; font-size:8px; margin-top:8px; display:block;">LAYOUT VERSION: 1.5.0 (KakaoTalk Style)</span>
+    </div>
   </div>
 
   <script>
@@ -465,7 +468,23 @@
     }
 
 
+    var VERSION = '1.5.0';
+
+    function hardReset() {
+      if (confirm("모든 데이터를 초기화하고 최신 [KakaoTalk] 디자인 가이드로 복구하시겠습니까?\n(기존에 저장된 명함 리스트가 삭제됩니다)")) {
+        localStorage.clear();
+        window.location.reload(true);
+      }
+    }
+
     function loadData() {
+      const savedVersion = localStorage.getItem('britzmedi_version');
+      if (savedVersion !== VERSION) {
+        // Force update for new version to ensure layout fix
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.setItem('britzmedi_version', VERSION);
+      }
+      
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) { try { employees = JSON.parse(saved); } catch(e) { console.error("Load failed", e); } }
     }
@@ -538,13 +557,13 @@
                 ${makeLogo(Math.round(44*s), Math.round(52*s), 'front-'+id)}
               </div>
               <div>
-                <div style="display:flex;align-items:baseline;gap:${Math.round(14*s)}px;margin-bottom:${Math.round(6*s)}px">
-                  <span style="font-size:${Math.round(28*s)}px;font-weight:500;letter-spacing:1px;color:${c.nameKr};line-height:1">${p.nameKr}</span>
-                  <span style="font-size:${Math.round(11*s)}px;font-weight:400;color:${c.titleKr};opacity:0.8">${p.titleKr}</span>
+                <div style="display:flex;align-items:baseline;gap:${Math.round(10*s)}px;margin-bottom:${Math.round(6*s)}px">
+                  <span style="font-size:${Math.round(28*s)}px;font-weight:600;letter-spacing:1px;color:${c.nameKr};line-height:1">${p.nameKr}</span>
+                  <span style="font-size:${Math.round(11.5*s)}px;font-weight:400;color:${c.titleKr};opacity:0.8">${p.titleKr}</span>
                 </div>
                 <div style="display:flex;align-items:baseline;gap:${Math.round(10*s)}px">
-                  <span style="font-size:${Math.round(13*s)}px;font-weight:400;letter-spacing:0.5px;color:${c.nameEn}">${p.nameEn}</span>
-                  <span style="font-size:${Math.round(9*s)}px;font-weight:400;color:${c.titleEn};opacity:0.6">${p.titleEn}</span>
+                  <span style="font-size:${Math.round(13.5*s)}px;font-weight:400;letter-spacing:0.5px;color:${c.nameEn};opacity:0.9">${p.nameEn}</span>
+                  <span style="font-size:${Math.round(9.5*s)}px;font-weight:400;color:${c.titleEn};opacity:0.6">${p.titleEn}</span>
                 </div>
               </div>
             </div>
@@ -552,26 +571,26 @@
             <!-- Middle/Bottom Area -->
             <div style="width:100%">
               <!-- Middle Section: Addresses -->
-              <div style="margin-bottom:${Math.round(14*s)}px;">
-                <div style="font-size:${Math.round(9.5*s)}px;color:${c.address};letter-spacing:0.3px;margin-bottom:${Math.round(4*s)}px;opacity:0.8;font-weight:300">
+              <div style="margin-bottom:${Math.round(16*s)}px;">
+                <div style="font-size:${Math.round(10*s)}px;color:${c.address};letter-spacing:0.2px;margin-bottom:${Math.round(4*s)}px;opacity:0.9;font-weight:300">
                   ${p.addressKr}
                 </div>
-                <div style="font-size:${Math.round(9*s)}px;color:${c.address};letter-spacing:0.3px;margin-bottom:${Math.round(8*s)}px;opacity:0.5;font-weight:300">
+                <div style="font-size:${Math.round(9.5*s)}px;color:${c.address};letter-spacing:0.2px;margin-bottom:${Math.round(10*s)}px;opacity:0.5;font-weight:300">
                   ${p.addressEn}
                 </div>
-                <div style="width:${Math.round(32*s)}px;height:1.5px;background:${c.line};opacity:0.8"></div>
+                <div style="width:${Math.round(36*s)}px;height:1.5px;background:${c.line};opacity:0.8"></div>
               </div>
 
               <!-- Bottom Section: Split Columns -->
-              <div style="display:flex;gap:${Math.round(30*s)}px;align-items:flex-start">
-                <div style="flex:1;font-size:${Math.round(10.5*s)}px;color:${c.sub};letter-spacing:0.2px;line-height:1.6">
-                  <div style="color:${c.highlight}">M. ${p.phone}</div>
-                  <div style="opacity:0.75">T. ${p.tel}</div>
-                  <div style="opacity:0.75">F. ${p.fax}</div>
+              <div style="display:flex;gap:${Math.round(34*s)}px;align-items:flex-start">
+                <div style="flex:0 0 auto; min-width:${Math.round(110*s)}px; font-size:${Math.round(11*s)}px;color:${c.sub};letter-spacing:0.1px;line-height:1.55">
+                  <div style="color:${c.highlight}"><b style="font-weight:600">M.</b> ${p.phone}</div>
+                  <div style="opacity:0.75"><b style="font-weight:500">T.</b> ${p.tel}</div>
+                  <div style="opacity:0.75"><b style="font-weight:500">F.</b> ${p.fax}</div>
                 </div>
                 <!-- Vertical Divider -->
-                <div style="width:1px;height:${Math.round(40*s)}px;background:${c.line};opacity:0.3;margin-top:${Math.round(2*s)}px"></div>
-                <div style="flex:1.8;font-size:${Math.round(10.5*s)}px;color:${c.sub};letter-spacing:0.2px;line-height:1.6">
+                <div style="width:1px;height:${Math.round(42*s)}px;background:${c.line};opacity:0.25;margin-top:${Math.round(2*s)}px"></div>
+                <div style="flex:1;font-size:${Math.round(11*s)}px;color:${c.sub};letter-spacing:0.1px;line-height:1.55">
                   <div style="color:${c.highlight}">${p.email}</div>
                   <div style="opacity:0.75">${p.website}</div>
                 </div>
@@ -735,32 +754,37 @@
             ${makeLogo(logoW, logoH, 'v-f')}
           </g>
           <g transform="translate(${leftPadding + 64}, 68)">
-            <text x="0" y="0" font-family="${font}" font-size="28" font-weight="500" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="${p.nameKr.length * 28 + 14}" y="-3" font-family="${font}" font-size="11" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
-            <text x="0" y="24" font-family="${font}" font-size="13" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
-            <text x="${p.nameEn.length * 8 + 14}" y="24" font-family="${font}" font-size="9" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
+            <text x="0" y="0" font-family="${font}" font-size="28" font-weight="600" fill="${c.nameKr}">${p.nameKr}</text>
+            <text x="${p.nameKr.length * 28 + 14}" y="-3" font-family="${font}" font-size="11.5" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
+            <text x="1" y="24" font-family="${font}" font-size="13.5" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
+            <text x="${p.nameEn.length * 8 + 14}" y="24" font-family="${font}" font-size="9.5" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
           </g>
 
           <!-- Middle section (Addresses) -->
           <g transform="translate(${leftPadding + 4}, 185)">
-            <text x="0" y="0" font-family="${font}" font-size="9.5" fill="${c.address}" opacity="0.8">${p.addressKr}</text>
-            <text x="0" y="14" font-family="${font}" font-size="9" fill="${c.address}" opacity="0.5">${p.addressEn}</text>
-            <rect x="0" y="24" width="32" height="1.5" fill="${c.line}" opacity="0.8"/>
+            <text x="0" y="0" font-family="${font}" font-size="10" fill="${c.address}" opacity="0.9">${p.addressKr}</text>
+            <text x="0" y="14" font-family="${font}" font-size="9.5" fill="${c.address}" opacity="0.5">${p.addressEn}</text>
+            <rect x="0" y="24" width="36" height="1.5" fill="${c.line}" opacity="0.8"/>
           </g>
 
           <!-- Bottom section (Two columns) -->
           <g transform="translate(${leftPadding + 4}, 235)">
             <!-- Left column -->
-            <text x="0" y="0" font-family="${font}" font-size="10.5" fill="${c.highlight}">M. ${p.phone}</text>
-            <text x="0" y="16" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">T. ${p.tel}</text>
-            <text x="0" y="32" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">F. ${p.fax}</text>
+            <text x="0" y="0" font-family="${font}" font-size="11" font-weight="600" fill="${c.highlight}">M. </text>
+            <text x="16" y="0" font-family="${font}" font-size="11" fill="${c.highlight}">${p.phone}</text>
+            
+            <text x="0" y="18" font-family="${font}" font-size="11" font-weight="500" fill="${c.sub}" opacity="0.75">T. </text>
+            <text x="16" y="18" font-family="${font}" font-size="11" fill="${c.sub}" opacity="0.75">${p.tel}</text>
+            
+            <text x="0" y="36" font-family="${font}" font-size="11" font-weight="500" fill="${c.sub}" opacity="0.75">F. </text>
+            <text x="16" y="36" font-family="${font}" font-size="11" fill="${c.sub}" opacity="0.75">${p.fax}</text>
 
             <!-- Divider -->
-            <line x1="120" y1="-8" x2="120" y2="40" stroke="${c.line}" stroke-width="0.5" stroke-opacity="0.3"/>
+            <line x1="140" y1="-8" x2="140" y2="44" stroke="${c.line}" stroke-width="0.5" stroke-opacity="0.25"/>
 
             <!-- Right column -->
-            <text x="135" y="0" font-family="${font}" font-size="10.5" fill="${c.highlight}">${p.email}</text>
-            <text x="135" y="16" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.website}</text>
+            <text x="155" y="0" font-family="${font}" font-size="11" fill="${c.highlight}">${p.email}</text>
+            <text x="155" y="18" font-family="${font}" font-size="11" fill="${c.sub}" opacity="0.75">${p.website}</text>
           </g>
         </svg>`;
       }

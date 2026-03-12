@@ -86,10 +86,43 @@
     }
     .tab-btn:hover { border-color: rgba(168, 153, 104, 0.3); color: var(--muted); }
     .tab-btn.active {
-      background: rgba(168, 153, 104, 0.12);
-      border-color: rgba(168, 153, 104, 0.37);
+      background: rgba(184, 169, 120, 0.18);
+      border-color: #B8A978;
       color: var(--accent);
       font-weight: 600;
+      box-shadow: 0 0 15px rgba(184,169,120,0.1);
+    }
+    .dept-group {
+      width: 100%;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dept-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #666;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      font-weight: 500;
+      position: relative;
+    }
+    .dept-label::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 1px;
+      background: #333;
+    }
+    .tab-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     /* Card - 94x54mm ratio (with 2mm bleed) */
@@ -353,6 +386,9 @@
         <span class="icon">📂</span> 엑셀 불러오기
         <input type="file" accept=".xlsx,.xls" onchange="importExcel(event)" style="display:none">
       </label>
+      <button class="action-btn" onclick="resetData()" style="opacity:0.6; border-style:dashed;">
+        <span class="icon">🔄</span> 초기화
+      </button>
     </div>
 
     <!-- All Cards -->
@@ -407,9 +443,14 @@
       return symbolSvg.replace(/__W__/g, w).replace(/__H__/g, h).replace(/__ID__/g, id);
     }
 
-    // ─── Employee Data (from Excel) ───
-    const employees = [
+    // ─── Constants ───
+    const STORAGE_KEY = 'britzmedi_employees';
+    const RANK_ORDER = { '대표이사':1, '이사':2, '영업이사':3, '부문장':4, '과장':5, '대리':6, '사원':7 };
+
+    // ─── Employee Data ───
+    let employees = [
       {
+        dept: "Management",
         nameKr: "김남호",
         nameEn: "Kim Nam Ho",
         titleKr: "영업이사",
@@ -424,6 +465,7 @@
         qty: 200
       },
       {
+        dept: "Sales",
         nameKr: "정승원",
         nameEn: "Jung Seung Won",
         titleKr: "과장",
@@ -438,6 +480,7 @@
         qty: 200
       },
       {
+        dept: "Sales",
         nameKr: "김경현",
         nameEn: "Kim Kyeong Hyeon",
         titleKr: "대리",
@@ -452,6 +495,7 @@
         qty: 400
       },
       {
+        dept: "Marketing",
         nameKr: "이성호",
         nameEn: "Lee Sungho",
         titleKr: "해외영업 마케팅이사",
@@ -466,6 +510,7 @@
         qty: 200
       },
       {
+        dept: "Home Beauty",
         nameKr: "이성호",
         nameEn: "Lee Sungho",
         titleKr: "홈뷰티 부문장",
@@ -480,6 +525,24 @@
         qty: 200
       }
     ];
+
+    function loadData() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try { employees = JSON.parse(saved); } catch(e) { console.error("Load failed", e); }
+      }
+    }
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(employees));
+    }
+    function resetData() {
+      if (confirm('모든 데이터를 초기화하고 기본 목록으로 되돌리시겠습니까?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+      }
+    }
+
+    loadData();
 
     let currentPerson = 0;
     let currentFace = 'front';
@@ -611,10 +674,35 @@
 
     function renderTabs() {
       const tabs = document.getElementById('personTabs');
-      tabs.innerHTML = employees.map((e, i) => `
-        <button class="tab-btn ${i === currentPerson ? 'active' : ''}" onclick="selectPerson(${i})">
-          ${e.nameKr} · ${e.titleKr}
-        </button>
+      
+      // Group by department
+      const groups = {};
+      employees.forEach((e, i) => {
+        const d = e.dept || 'Etc';
+        if (!groups[d]) groups[d] = [];
+        groups[d].push({ ...e, originalIndex: i });
+      });
+
+      // Sort within group by rank
+      Object.keys(groups).forEach(d => {
+        groups[d].sort((a,b) => {
+          const rA = RANK_ORDER[a.titleKr] || 99;
+          const rB = RANK_ORDER[b.titleKr] || 99;
+          return rA - rB;
+        });
+      });
+
+      tabs.innerHTML = Object.keys(groups).sort().map(d => `
+        <div class="dept-group">
+          <div class="dept-label">${d}</div>
+          <div class="tab-row">
+            ${groups[d].map(e => `
+              <button class="tab-btn ${e.originalIndex === currentPerson ? 'active' : ''}" onclick="selectPerson(${e.originalIndex})">
+                ${e.nameKr} ${e.titleKr}
+              </button>
+            `).join('')}
+          </div>
+        </div>
       `).join('');
     }
 
@@ -827,20 +915,17 @@
     // ─── Excel Template ───
 
     function downloadExcelTemplate() {
-      const headers = ['이름(국문)', '이름(영문)', '직함(국문)', '직함(영문)', '휴대폰', '이메일', '전화', '팩스', '웹사이트', '주소(국문)', '주소(영문)', '수량'];
+      const headers = ['부서', '이름(국문)', '이름(영문)', '직함(국문)', '직함(영문)', '휴대폰', '이메일', '전화', '팩스', '웹사이트', '주소(국문)', '주소(영문)', '수량'];
 
-      // Include current employees as example data
       const data = employees.map(p => [
-        p.nameKr, p.nameEn, p.titleKr, p.titleEn,
+        p.dept || '', p.nameKr, p.nameEn, p.titleKr, p.titleEn,
         p.phone, p.email, p.tel, p.fax, p.website,
         p.addressKr, p.addressEn, p.qty
       ]);
 
       const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
-
-      // Set column widths
       ws['!cols'] = [
-        {wch:12},{wch:20},{wch:14},{wch:30},
+        {wch:12},{wch:12},{wch:20},{wch:14},{wch:30},
         {wch:16},{wch:24},{wch:16},{wch:16},{wch:20},
         {wch:40},{wch:60},{wch:8}
       ];
@@ -867,18 +952,19 @@
             const r = rows[i];
             if (!r[0] || !r[1]) continue; // skip empty rows
             newEmployees.push({
-              nameKr: String(r[0] || ''),
-              nameEn: String(r[1] || ''),
-              titleKr: String(r[2] || ''),
-              titleEn: String(r[3] || ''),
-              phone: String(r[4] || ''),
-              email: String(r[5] || ''),
-              tel: String(r[6] || ''),
-              fax: String(r[7] || ''),
-              website: String(r[8] || ''),
-              addressKr: String(r[9] || ''),
-              addressEn: String(r[10] || ''),
-              qty: Number(r[11]) || 200
+              dept: String(r[0] || 'Etc'),
+              nameKr: String(r[1] || ''),
+              nameEn: String(r[2] || ''),
+              titleKr: String(r[3] || ''),
+              titleEn: String(r[4] || ''),
+              phone: String(r[5] || ''),
+              email: String(r[6] || ''),
+              tel: String(r[7] || ''),
+              fax: String(r[8] || ''),
+              website: String(r[9] || ''),
+              addressKr: String(r[10] || ''),
+              addressEn: String(r[11] || ''),
+              qty: Number(r[12]) || 200
             });
           }
 
@@ -889,12 +975,13 @@
 
           employees.length = 0;
           newEmployees.forEach(emp => employees.push(emp));
+          saveData();
           currentPerson = 0;
           currentFace = 'front';
           renderTabs();
           renderPreview();
           renderAllCards();
-          alert(`${newEmployees.length}명의 명함이 성공적으로 불러와졌습니다.`);
+          alert(`${newEmployees.length}명의 명함이 불러와졌으며 자동으로 저장되었습니다.`);
         } catch(err) {
           console.error(err);
           alert('엑셀 파일을 읽는 중 오류가 발생했습니다.');

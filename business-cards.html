@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRITZMEDI Business Card Design</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg: #111116;
+      --main: #B8A978; /* 색감 보정: 조금 더 화사한 골드 */
+      --accent: #E4D8AA;
+      --light: #FDF4D8;
+      --muted: #9A9070;
+      --line: rgba(184, 169, 120, 0.25);
+      --line-light: rgba(184, 169, 120, 0.12);
+      --text-dim: #7B7560;
+      --text-body: #D4C89A;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans KR', 'Segoe UI', -apple-system, sans-serif;
+      background: #050508;
+      color: #E8E0D0;
+      min-height: 100vh;
+      padding: 36px 20px;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+    .header-tag {
+      font-size: 9px;
+      letter-spacing: 7px;
+      color: var(--main);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 200;
+      letter-spacing: 4px;
+      color: var(--light);
+    }
+    .header-line {
+      width: 50px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--main), transparent);
+      margin: 14px auto;
+    }
+    .header p {
+      font-size: 12px;
+      color: #555;
+      font-weight: 300;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 10px 18px;
+      cursor: pointer;
+      color: #555;
+      font-size: 11px;
+      letter-spacing: 1px;
+      font-weight: 400;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    .tab-btn:hover { border-color: rgba(168, 153, 104, 0.3); color: var(--muted); }
+    .tab-btn.active {
+      background: rgba(168, 153, 104, 0.12);
+      border-color: rgba(168, 153, 104, 0.37);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Card - 94x54mm ratio (with 2mm bleed) */
+    .card-face {
+      width: 540px;
+      height: 310px;
+      border-radius: 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+      transition: transform 0.4s ease;
+    }
+    .card-face:hover { transform: scale(1.02); }
+
+    /* Trim line overlay */
+    .trim-guide {
+      position: absolute;
+      top: 12px; left: 12px; right: 12px; bottom: 12px;
+      border: 1px dashed rgba(255,255,255,0.12);
+      pointer-events: none;
+      z-index: 10;
+    }
+    .trim-corner {
+      position: absolute;
+      width: 8px; height: 8px;
+      border-color: rgba(168,153,104,0.35);
+      pointer-events: none;
+      z-index: 10;
+    }
+    .trim-corner.tl { top: 8px; left: 8px; border-top: 1px solid; border-left: 1px solid; border-color: inherit; }
+    .trim-corner.tr { top: 8px; right: 8px; border-top: 1px solid; border-right: 1px solid; border-color: inherit; }
+    .trim-corner.bl { bottom: 8px; left: 8px; border-bottom: 1px solid; border-left: 1px solid; border-color: inherit; }
+    .trim-corner.br { bottom: 8px; right: 8px; border-bottom: 1px solid; border-right: 1px solid; border-color: inherit; }
+
+    /* Preview area */
+    .preview { display: flex; justify-content: center; margin-bottom: 24px; }
+    .face-toggle {
+      display: inline-flex;
+      gap: 4px;
+      background: #111;
+      border-radius: 6px;
+      padding: 3px;
+      margin-bottom: 24px;
+    }
+    .face-btn {
+      background: transparent;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 16px;
+      cursor: pointer;
+      color: #555;
+      font-size: 10px;
+      letter-spacing: 2px;
+      font-weight: 500;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+    .face-btn.active {
+      background: rgba(168, 153, 104, 0.15);
+      color: var(--accent);
+    }
+
+    /* Design info */
+    .design-info {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .design-info .name { font-size: 13px; color: var(--accent); font-weight: 500; letter-spacing: 1px; margin-bottom: 4px; }
+    .design-info .desc { font-size: 12px; color: #555; font-weight: 300; max-width: 500px; margin: 0 auto; }
+
+    /* Print spec */
+    .print-spec {
+      text-align: center;
+      margin: -8px 0 16px;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: #383828;
+    }
+    .print-spec span { color: #555040; }
+
+    /* Action buttons */
+    .action-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 12px 0 24px;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border: 1px solid rgba(168,153,104,0.3);
+      background: rgba(168,153,104,0.06);
+      color: #A89968;
+      font-size: 10px;
+      letter-spacing: 2px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    .action-btn:hover {
+      background: rgba(168,153,104,0.15);
+      border-color: rgba(168,153,104,0.5);
+      color: #D4C89A;
+    }
+    .action-btn:active { transform: scale(0.97); }
+    .action-btn.primary {
+      background: rgba(168,153,104,0.15);
+      border-color: rgba(168,153,104,0.4);
+      color: #D4C89A;
+    }
+    .action-btn .icon { font-size: 13px; }
+
+    /* All cards grid */
+    .all-section {
+      border-top: 1px solid #151515;
+      padding-top: 36px;
+    }
+    .all-title { font-size: 9px; letter-spacing: 5px; color: #444; text-align: center; margin-bottom: 28px; }
+    .all-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 20px;
+    }
+    .all-item { text-align: center; cursor: pointer; }
+    .all-item .card-face { text-align: left; }
+    .all-item .card-face {
+      width: 370px;
+      height: 212px;
+      margin: 0 auto 10px;
+    }
+    .all-item .card-face .trim-guide {
+      top: 8px; left: 8px; right: 8px; bottom: 8px;
+    }
+    .all-item .card-face .trim-corner.tl { top: 5px; left: 5px; }
+    .all-item .card-face .trim-corner.tr { top: 5px; right: 5px; }
+    .all-item .card-face .trim-corner.bl { bottom: 5px; left: 5px; }
+    .all-item .card-face .trim-corner.br { bottom: 5px; right: 5px; }
+    .all-item .card-face:hover { transform: scale(1.04); }
+    .all-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #444;
+      font-weight: 400;
+      margin-top: 6px;
+    }
+
+    /* Card Inner Styles */
+    .card-bg-overlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    }
+    .card-content {
+      padding: 32px 36px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+    .card-name-kr {
+      font-size: 17px; font-weight: 300; letter-spacing: 2px; color: var(--light); margin-bottom: 4px;
+    }
+    .card-title {
+      font-size: 7.5px; letter-spacing: 3px; color: var(--main); font-weight: 500;
+    }
+    .card-info {
+      font-size: 8px; color: var(--text-dim); letter-spacing: 0.5px; line-height: 1.8;
+    }
+    .card-separator {
+      width: 1px; height: 24px; background: var(--line-light);
+    }
+
+    /* Logo text with gradient */
+    .logo-text-gradient {
+      background: linear-gradient(135deg, #A89968, #D4C89A 35%, #EDE4C8 55%, #D4C89A 75%, #A89968);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center; font-size: 9px; letter-spacing: 4px; color: #282828;
+      margin-top: 48px; padding-top: 20px; border-top: 1px solid #111;
+    }
+
+    /* Print styles */
+    @media print {
+      body { background: white; padding: 10mm; }
+      .header, .tabs, .face-toggle, .design-info, .footer, .all-section { display: none; }
+      .preview { page-break-inside: avoid; }
+      .card-face { box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+    }
+
+    /* Animation */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .card-face { animation: fadeIn 0.5s ease; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-tag">BRITZMEDI · PLATINUM GOLD</div>
+      <h1>BUSINESS CARD DESIGN</h1>
+      <div class="header-line"></div>
+      <p>플래티넘 골드 명함 — 직원별 개별 제작</p>
+    </div>
+
+    <!-- Person Tabs -->
+    <div class="tabs" id="personTabs"></div>
+
+    <!-- Front/Back & Theme Toggle -->
+    <div style="display:flex; justify-content:center; gap:20px; margin-bottom: 30px;">
+      <div class="face-toggle">
+        <button class="face-btn active" id="btn-front" onclick="toggleFace('front')">FRONT</button>
+        <button class="face-btn" id="btn-back" onclick="toggleFace('back')">BACK</button>
+      </div>
+      <div class="face-toggle theme-toggle">
+        <button class="face-btn active" id="theme-black" onclick="toggleTheme('black')">BLACK</button>
+        <button class="face-btn" id="theme-white" onclick="toggleTheme('white')">WHITE</button>
+      </div>
+    </div>
+
+    <!-- Main Preview -->
+    <div class="preview" id="mainPreview"></div>
+
+    <!-- Design Info -->
+    <div class="design-info">
+      <div class="name" id="designName"></div>
+      <div class="desc" id="designDesc"></div>
+    </div>
+
+    <!-- Print Spec -->
+    <div class="print-spec">
+      TRIM <span>90×50mm</span> · BLEED <span>2mm</span> · TOTAL <span>94×54mm</span> · <span>---- 절단선</span>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-bar">
+      <button class="action-btn primary" onclick="downloadCurrentPDF()">
+        <span class="icon">📄</span> PDF (인쇄용)
+      </button>
+      <button class="action-btn" onclick="downloadCurrentPNG()">
+        <span class="icon">🖼️</span> PNG (이미지)
+      </button>
+      <button class="action-btn" onclick="downloadCurrentSVG()">
+        <span class="icon">📐</span> SVG (벡터)
+      </button>
+      <button class="action-btn" onclick="downloadAllPDF()">
+        <span class="icon">📦</span> 전체 PDF
+      </button>
+      <button class="action-btn" onclick="downloadExcelTemplate()">
+        <span class="icon">📋</span> 엑셀 양식
+      </button>
+      <label class="action-btn" style="margin:0">
+        <span class="icon">📂</span> 엑셀 불러오기
+        <input type="file" accept=".xlsx,.xls" onchange="importExcel(event)" style="display:none">
+      </label>
+    </div>
+
+    <!-- All Cards -->
+    <div class="all-section">
+      <div class="all-title">ALL EMPLOYEES — FRONT &amp; BACK</div>
+      <div class="all-grid" id="allGrid"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">BRITZMEDI · PLATINUM GOLD · BUSINESS CARD</div>
+  </div>
+
+  <script>
+    // ─── SVG Logo (from BRITZMEDI_Lockup_Black_Gradient.svg) ───
+    const logoSvgFull = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="571 466 908 1225" width="__W__" height="__H__">
+      <defs>
+        <linearGradient id="pg-__ID__" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#A89968"/>
+          <stop offset="25%" stop-color="#D4C89A"/>
+          <stop offset="50%" stop-color="#EDE4C8"/>
+          <stop offset="75%" stop-color="#D4C89A"/>
+          <stop offset="100%" stop-color="#A89968"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#pg-__ID__)" d="M851,972.106C834.869,972.106 819.237,972.106 803.327,972.106C803.327,1005.739 803.327,1038.979 803.327,1072.526C804.674,1072.613 805.954,1072.767 807.234,1072.767C850.899,1072.777 894.564,1072.82 938.229,1072.684C941.976,1072.672 944.836,1073.674 947.73,1075.949C1000.764,1117.659 1053.857,1159.295 1106.937,1200.948C1113.27,1205.917 1119.599,1210.891 1126.927,1216.646C967.592,1216.646 809.705,1216.646 651.489,1216.646C651.489,1087.788 651.489,959.067 651.489,829.842C850.572,829.842 1049.479,829.842 1248.673,829.842C1248.673,783.116 1248.673,736.893 1248.673,690.188C1049.496,690.188 850.596,690.188 651.43,690.188C651.43,642.111 651.43,594.515 651.43,546.507C900.557,546.507 1149.591,546.507 1399.172,546.507C1399.172,548.42 1399.172,550.2 1399.172,551.98C1399.17,669.976 1399.156,787.972 1399.231,905.968C1399.233,909.577 1398.39,911.929 1395.229,914.172C1363.183,936.918 1331.281,959.868 1299.348,982.773C1297.895,983.814 1296.524,984.969 1294.853,986.275C1319.413,1006.804 1343.563,1027.002 1367.726,1047.182C1377.444,1055.298 1387.241,1063.322 1396.87,1071.542C1398.059,1072.557 1399.079,1074.53 1399.083,1076.062C1399.177,1122.393 1399.134,1168.724 1399.103,1215.056C1399.103,1215.38 1398.963,1215.704 1398.781,1216.5C1391.552,1216.793 1384.916,1217.32 1377.974,1212.191C1285.551,1143.898 1192.861,1075.965 1100.239,1007.941C1085.339,996.999 1070.519,985.946 1055.468,975.216C1052.986,973.447 1049.501,972.214 1046.476,972.207C981.484,972.046 916.492,972.096 851,972.106Z"/>
+      <path fill="url(#pg-__ID__)" d="M651.184,1386C651.184,1373.365 651.184,1361.23 651.184,1349.007C652.094,1348.782 652.721,1348.49 653.348,1348.492C690.483,1348.614 727.624,1348.44 764.749,1349.142C773.373,1349.305 782.334,1351.41 790.45,1354.458C807.223,1360.758 814.46,1376.748 809.147,1392.815C806.736,1400.107 801.421,1404.59 794.062,1408.291C796.041,1409.032 797.321,1409.483 798.578,1409.988C816.075,1417.021 825.334,1434.751 820.697,1453.016C817.048,1467.386 806.311,1474.104 792.791,1476.886C785.987,1478.287 778.93,1479.022 771.982,1479.065C733.013,1479.309 694.042,1479.252 655.071,1479.281C653.931,1479.282 652.791,1479.1 651.184,1478.964C651.184,1448.036 651.184,1417.268 651.184,1386Z M774.084,1445.861C778.029,1444.804 781.268,1443.202 781.156,1438.251C781.047,1433.432 778.201,1430.825 774.049,1429.809C770.209,1428.869 766.172,1428.347 762.218,1428.327C738.727,1428.205 715.234,1428.282 691.742,1428.292C690.152,1428.292 688.561,1428.292 686.966,1428.292C686.966,1434.725 686.966,1440.611 686.966,1446.679C710,1446.679 732.654,1446.725 755.307,1446.648C761.292,1446.627 767.276,1446.225 774.084,1445.861Z M769.198,1385.501C765.217,1380.718 759.557,1380.49 754.119,1380.448C732.005,1380.275 709.889,1380.364 687.774,1380.384C687.508,1380.384 687.243,1380.739 686.875,1381.001C686.875,1387.188 686.875,1393.443 686.875,1400.171C688.531,1400.171 689.984,1400.171 691.436,1400.171C712.39,1400.17 733.343,1400.181 754.297,1400.151C756.62,1400.148 758.972,1400.104 761.259,1399.75C769.742,1398.435 772.243,1394.297 769.198,1385.501Z"/>
+      <path fill="url(#pg-__ID__)" d="M1249.999,1380.254C1240.037,1380.254 1230.575,1380.254 1220.787,1380.254C1220.787,1369.641 1220.787,1359.402 1220.787,1348.786C1280.094,1348.786 1339.316,1348.786 1399.08,1348.786C1399.08,1356.422 1399.242,1364.033 1398.926,1371.625C1398.872,1372.937 1397.005,1374.491 1395.621,1375.383C1363.596,1396.035 1331.518,1416.602 1299.465,1437.208C1295.193,1439.955 1291.004,1442.832 1287.064,1446.519C1324.243,1446.519 1361.421,1446.519 1398.894,1446.519C1398.894,1457.547 1398.894,1468.123 1398.894,1479C1339.548,1479 1280.328,1479 1220.32,1479C1220.32,1470.579 1220.2,1462.298 1220.452,1454.029C1220.489,1452.833 1222.102,1451.382 1223.331,1450.571C1251.108,1432.222 1278.938,1413.952 1306.749,1395.654C1314.089,1390.824 1321.399,1385.951 1329.996,1380.255C1302.542,1380.255 1276.521,1380.255 1249.999,1380.254Z"/>
+      <path fill="url(#pg-__ID__)" d="M1101.973,1476.185C1102.737,1477.084 1103.271,1477.693 1104.296,1478.863C1102.74,1479.022 1101.719,1479.213 1100.697,1479.216C1088.368,1479.259 1076.035,1479.454 1063.714,1479.153C1061.082,1479.089 1057.844,1477.863 1055.993,1476.044C1042.928,1463.201 1030.184,1450.033 1017.23,1437.076C1016.095,1435.94 1014.199,1434.963 1012.644,1434.944C999.325,1434.777 986.003,1434.848 972.156,1434.848C972.156,1449.623 972.156,1464.189 972.156,1479.022C960.214,1479.022 948.799,1479.022 937.23,1479.022C937.23,1435.665 937.23,1392.533 937.23,1349.083C938.332,1348.894 939.411,1348.546 940.488,1348.55C976.804,1348.678 1013.122,1348.643 1049.434,1349.104C1061.989,1349.263 1073.461,1353.388 1083.885,1360.806C1106.005,1376.546 1102.088,1410.392 1083.814,1423.017C1076.923,1427.777 1069.171,1431.29 1061.446,1435.574C1074.38,1448.516 1088.062,1462.206 1101.973,1476.185Z M1052.444,1381.813C1050.651,1381.485 1048.861,1380.886 1047.064,1380.869C1024.44,1380.648 1001.814,1380.509 979.189,1380.354C976.903,1380.339 974.617,1380.352 972.289,1380.352C972.289,1388.084 972.289,1395.286 972.289,1402.539C997.574,1402.539 1022.509,1402.62 1047.441,1402.434C1050.48,1402.411 1053.723,1401.399 1056.497,1400.066C1062.116,1397.368 1063.201,1389.607 1058.687,1385.391C1057.153,1383.958 1055.05,1383.136 1052.444,1381.813Z"/>
+      <text font-family="'Noto Sans KR', 'Helvetica Neue', Arial, sans-serif" font-size="72" font-weight="500" fill="#8A8060">
+        <tspan x="651.0" y="1596.6">B</tspan><tspan x="745.3" y="1596.6">R</tspan><tspan x="838.3" y="1596.6">I</tspan><tspan x="888.4" y="1596.6">T</tspan><tspan x="975.8" y="1596.6">Z</tspan><tspan x="1062.6" y="1596.6">M</tspan><tspan x="1176.9" y="1596.6">E</tspan><tspan x="1262.9" y="1596.6">D</tspan><tspan x="1361.0" y="1596.6">I</tspan>
+      </text>
+    </svg>`;
+
+    // Symbol only (B mark without BRITZMEDI text at bottom)
+    const symbolSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="571 466 908 800" width="__W__" height="__H__">
+      <defs>
+        <linearGradient id="ps-__ID__" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#A89968"/>
+          <stop offset="25%" stop-color="#D4C89A"/>
+          <stop offset="50%" stop-color="#EDE4C8"/>
+          <stop offset="75%" stop-color="#D4C89A"/>
+          <stop offset="100%" stop-color="#A89968"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#ps-__ID__)" d="M851,972.106C834.869,972.106 819.237,972.106 803.327,972.106C803.327,1005.739 803.327,1038.979 803.327,1072.526C804.674,1072.613 805.954,1072.767 807.234,1072.767C850.899,1072.777 894.564,1072.82 938.229,1072.684C941.976,1072.672 944.836,1073.674 947.73,1075.949C1000.764,1117.659 1053.857,1159.295 1106.937,1200.948C1113.27,1205.917 1119.599,1210.891 1126.927,1216.646C967.592,1216.646 809.705,1216.646 651.489,1216.646C651.489,1087.788 651.489,959.067 651.489,829.842C850.572,829.842 1049.479,829.842 1248.673,829.842C1248.673,783.116 1248.673,736.893 1248.673,690.188C1049.496,690.188 850.596,690.188 651.43,690.188C651.43,642.111 651.43,594.515 651.43,546.507C900.557,546.507 1149.591,546.507 1399.172,546.507C1399.172,548.42 1399.172,550.2 1399.172,551.98C1399.17,669.976 1399.156,787.972 1399.231,905.968C1399.233,909.577 1398.39,911.929 1395.229,914.172C1363.183,936.918 1331.281,959.868 1299.348,982.773C1297.895,983.814 1296.524,984.969 1294.853,986.275C1319.413,1006.804 1343.563,1027.002 1367.726,1047.182C1377.444,1055.298 1387.241,1063.322 1396.87,1071.542C1398.059,1072.557 1399.079,1074.53 1399.083,1076.062C1399.177,1122.393 1399.134,1168.724 1399.103,1215.056C1399.103,1215.38 1398.963,1215.704 1398.781,1216.5C1391.552,1216.793 1384.916,1217.32 1377.974,1212.191C1285.551,1143.898 1192.861,1075.965 1100.239,1007.941C1085.339,996.999 1070.519,985.946 1055.468,975.216C1052.986,973.447 1049.501,972.214 1046.476,972.207C981.484,972.046 916.492,972.096 851,972.106Z"/>
+    </svg>`;
+
+    function makeLogo(w, h, id) {
+      return logoSvgFull.replace(/__W__/g, w).replace(/__H__/g, h).replace(/__ID__/g, id);
+    }
+    function makeSymbol(w, h, id) {
+      return symbolSvg.replace(/__W__/g, w).replace(/__H__/g, h).replace(/__ID__/g, id);
+    }
+
+    // ─── Employee Data (from Excel) ───
+    const employees = [
+      {
+        nameKr: "김남호",
+        nameEn: "Kim Nam Ho",
+        titleKr: "영업이사",
+        titleEn: "Sales Director",
+        phone: "010-8762-1142",
+        email: "nh.kim@britzmedi.co.kr",
+        tel: "070-4348-7244",
+        fax: "070-4009-8993",
+        website: "www.britzmedi.co.kr",
+        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
+        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
+        qty: 200
+      },
+      {
+        nameKr: "정승원",
+        nameEn: "Jung Seung Won",
+        titleKr: "과장",
+        titleEn: "Sales Manager",
+        phone: "010-4446-4827",
+        email: "sw.jung@britzmedi.co.kr",
+        tel: "070-4348-7244",
+        fax: "070-4009-8993",
+        website: "www.britzmedi.co.kr",
+        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
+        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
+        qty: 200
+      },
+      {
+        nameKr: "김경현",
+        nameEn: "Kim Kyeong Hyeon",
+        titleKr: "대리",
+        titleEn: "Sales Assistant Manager",
+        phone: "010-9393-9475",
+        email: "kh.kim@britzmedi.co.kr",
+        tel: "070-4348-7244",
+        fax: "070-4009-8993",
+        website: "www.britzmedi.co.kr",
+        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
+        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
+        qty: 400
+      },
+      {
+        nameKr: "이성호",
+        nameEn: "Lee Sungho",
+        titleKr: "해외영업 마케팅이사",
+        titleEn: "Overseas Sales Marketing Director",
+        phone: "010-6525-9442",
+        email: "sh.lee@britzmedi.co.kr",
+        tel: "070-4348-7244",
+        fax: "070-4009-8993",
+        website: "www.britzmedi.co.kr",
+        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
+        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
+        qty: 200
+      },
+      {
+        nameKr: "이성호",
+        nameEn: "Lee Sungho",
+        titleKr: "홈뷰티 부문장",
+        titleEn: "Head of Home Beauty Devices",
+        phone: "010-6525-9442",
+        email: "sh.lee@britzmedi.co.kr",
+        tel: "070-4348-7244",
+        fax: "070-4009-8993",
+        website: "www.britzmedi.co.kr",
+        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
+        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
+        qty: 200
+      }
+    ];
+
+    let currentPerson = 0;
+    let currentFace = 'front';
+    let currentTheme = 'black';
+
+    function getThemeColors() {
+      if (currentTheme === 'white') {
+        return {
+          bg: '#FFFFFF',
+          nameKr: '#1A1A1A',
+          titleKr: '#8A7B4D',
+          nameEn: '#555555',
+          titleEn: '#777777',
+          address: '#333333',
+          highlight: '#8A7B4D',
+          sub: '#666666',
+          line: '#B8A978',
+          overlay: 'radial-gradient(ellipse at 80% 20%, rgba(184,169,120,0.08) 0%, transparent 60%)'
+        };
+      }
+      return {
+        bg: '#111116',
+        nameKr: '#FDF4D8',
+        titleKr: '#B8A978',
+        nameEn: '#9a9070',
+        titleEn: '#7a7260',
+        address: '#8B8570',
+        highlight: '#D4C89A',
+        sub: '#7a7260',
+        line: '#B8A978',
+        overlay: 'radial-gradient(ellipse at 80% 20%, rgba(26,26,34,0.06) 0%, transparent 50%)'
+      };
+    }
+
+    // ─── Card Generators ───
+
+    function frontCard(p, id, size) {
+      const w = size === 'small' ? 370 : 540;
+      const h = size === 'small' ? 212 : 310;
+      const s = size === 'small' ? 0.685 : 1;
+      const bleed = size === 'small' ? 8 : 12;
+      const logoW = Math.round(52 * s);
+      const logoH = Math.round(56 * s);
+      const c = getThemeColors();
+      const trimColor = currentTheme === 'white' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.12)';
+      const cornerColor = currentTheme === 'white' ? 'rgba(168,153,104,0.6)' : 'rgba(168,153,104,0.35)';
+
+      return `
+        <div class="card-face" style="width:${w}px;height:${h}px;background:${c.bg};color:${c.sub}">
+          <!-- Trim guides -->
+          <div class="trim-guide" style="border-color:${trimColor}"></div>
+          <div class="trim-corner tl" style="color:${cornerColor}"></div>
+          <div class="trim-corner tr" style="color:${cornerColor}"></div>
+          <div class="trim-corner bl" style="color:${cornerColor}"></div>
+          <div class="trim-corner br" style="color:${cornerColor}"></div>
+          <div class="card-bg-overlay" style="background:${c.overlay}"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,${c.line}66,transparent)"></div>
+
+          <div class="card-content" style="padding:${size==='small'?(bleed+8)+'px '+(bleed+12)+'px ':(bleed+14)+'px '+(bleed+20)+'px '};height:100%;position:relative;">
+            <div style="display:flex;align-items:flex-start;gap:${Math.round(14*s)}px">
+              <div style="flex-shrink:0;margin-top:${Math.round(6*s)}px">
+                ${makeLogo(logoW, logoH, 'front-'+id)}
+              </div>
+              <div style="margin-top:${Math.round(2*s)}px">
+                <div style="display:flex;align-items:baseline;gap:${Math.round(8*s)}px;margin-bottom:${Math.round(5*s)}px">
+                  <span style="font-size:${Math.round(24*s)}px;font-weight:500;letter-spacing:2px;color:${c.nameKr}">${p.nameKr}</span>
+                  <span style="font-size:${Math.round(11*s)}px;font-weight:400;letter-spacing:1.5px;color:${c.titleKr}">${p.titleKr}</span>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:${Math.round(8*s)}px">
+                  <span style="font-size:${Math.round(11*s)}px;font-weight:400;letter-spacing:0.8px;color:${c.nameEn}">${p.nameEn}</span>
+                  <span style="font-size:${Math.round(9*s)}px;letter-spacing:${size==='small'?'0.8px':'1.2px'};color:${c.titleEn};font-weight:400">${p.titleEn}</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="position:absolute;left:${size==='small'?(bleed+16):(bleed+24)}px;right:${size==='small'?(bleed+16):(bleed+24)}px;bottom:${size==='small'?(bleed+22):(bleed+34)}px;">
+              <div style="font-size:${Math.round(9.5*s)}px;color:${c.address};letter-spacing:0.3px;line-height:1.5;margin-bottom:${Math.round(5*s)}px">
+                <div>${p.addressKr}</div>
+                <div>${p.addressEn}</div>
+              </div>
+              <div style="width:${Math.round(28*s)}px;height:1px;background:linear-gradient(90deg,${c.line},${c.line}40);margin-bottom:${Math.round(5*s)}px"></div>
+              <div style="display:flex;gap:${Math.round(24*s)}px;align-items:flex-start">
+                <div style="font-size:${Math.round(10*s)}px;color:${c.sub};letter-spacing:0.3px;line-height:${size==='small'?'1.5':'1.65'}">
+                  <div style="color:${c.highlight}">M. ${p.phone}</div>
+                  <div>T. ${p.tel}</div>
+                  <div>F. ${p.fax}</div>
+                </div>
+                <div style="width:1px;height:${Math.round(40*s)}px;background:${c.line}26"></div>
+                <div style="font-size:${Math.round(10*s)}px;color:${c.sub};letter-spacing:0.3px;line-height:${size==='small'?'1.5':'1.65'}">
+                  <div style="color:${c.highlight}">${p.email}</div>
+                  <div>${p.website}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function backCard(p, id, size) {
+      const w = size === 'small' ? 370 : 540;
+      const h = size === 'small' ? 212 : 310;
+      const s = size === 'small' ? 0.685 : 1;
+      const symW = Math.round(72 * s);
+      const symH = Math.round(65 * s);
+      const c = getThemeColors();
+      const trimColor = currentTheme === 'white' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.12)';
+      const cornerColor = currentTheme === 'white' ? 'rgba(168,153,104,0.6)' : 'rgba(168,153,104,0.35)';
+
+      return `
+        <div class="card-face" style="width:${w}px;height:${h}px;background:${c.bg};">
+          <!-- Trim guides -->
+          <div class="trim-guide" style="border-color:${trimColor}"></div>
+          <div class="trim-corner tl" style="color:${cornerColor}"></div>
+          <div class="trim-corner tr" style="color:${cornerColor}"></div>
+          <div class="trim-corner bl" style="color:${cornerColor}"></div>
+          <div class="trim-corner br" style="color:${cornerColor}"></div>
+          <div class="card-bg-overlay" style="background:radial-gradient(ellipse at 50% 50%, ${currentTheme==='white'?'rgba(168,153,104,0.06)':'rgba(184,169,120,0.04)'} 0%, transparent 60%)"></div>
+
+          <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:1">
+            ${makeSymbol(symW, symH, 'back-'+id)}
+            <div style="font-size:${Math.round(13*s)}px;letter-spacing:8px;color:${c.titleKr};margin-top:${Math.round(12*s)}px;font-weight:500">BRITZMEDI</div>
+            <div style="width:${Math.round(44*s)}px;height:1px;background:linear-gradient(90deg,transparent,${c.line},transparent);margin:${Math.round(6*s)}px 0"></div>
+            <div style="font-size:${Math.round(9*s)}px;letter-spacing:5px;color:${c.muted};font-weight:400">AESTHETIC MEDICAL DEVICE</div>
+          </div>
+        </div>`;
+    }
+
+    // ─── Rendering ───
+
+    function renderTabs() {
+      const tabs = document.getElementById('personTabs');
+      tabs.innerHTML = employees.map((e, i) => `
+        <button class="tab-btn ${i === currentPerson ? 'active' : ''}" onclick="selectPerson(${i})">
+          ${e.nameKr} · ${e.titleKr}
+        </button>
+      `).join('');
+    }
+
+    function renderPreview() {
+      const preview = document.getElementById('mainPreview');
+      const p = employees[currentPerson];
+      if (currentFace === 'front') {
+        preview.innerHTML = frontCard(p, 'main-' + currentPerson, 'large');
+      } else {
+        preview.innerHTML = backCard(p, 'main-' + currentPerson, 'large');
+      }
+
+      document.getElementById('designName').textContent = `${p.nameKr} — ${p.titleKr} / ${p.titleEn}`;
+      document.getElementById('designDesc').textContent = `${p.email} · ${p.phone} · 신청수량: ${p.qty}매`;
+    }
+
+    function renderAllCards() {
+      const grid = document.getElementById('allGrid');
+      grid.innerHTML = employees.map((p, i) => `
+        <div class="all-item" onclick="selectPerson(${i})">
+          ${frontCard(p, 'all-f-' + i, 'small')}
+          <div style="height:12px"></div>
+          ${backCard(p, 'all-b-' + i, 'small')}
+          <div class="all-label" style="color:${i === currentPerson ? '#D4C89A' : '#444'};font-weight:${i === currentPerson ? 600 : 400};margin-top:14px">
+            ${p.nameKr} · ${p.titleKr}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectPerson(idx) {
+      currentPerson = idx;
+      renderTabs();
+      renderPreview();
+      renderAllCards();
+    }
+
+    function toggleFace(face) {
+      currentFace = face;
+      document.getElementById('btn-front').classList.toggle('active', face === 'front');
+      document.getElementById('btn-back').classList.toggle('active', face === 'back');
+      renderPreview();
+    }
+
+    function toggleTheme(theme) {
+      currentTheme = theme;
+      document.getElementById('theme-black').classList.toggle('active', theme === 'black');
+      document.getElementById('theme-white').classList.toggle('active', theme === 'white');
+      renderPreview();
+      renderAllCards();
+    }
+
+    // Initial render
+    renderTabs();
+    renderPreview();
+    renderAllCards();
+
+    // ─── Export Functions (Vector Based) ───
+
+    function generateVectorSVG(p, isBack) {
+      const w = 540; const h = 310;
+      const c = getThemeColors();
+
+      if (isBack) {
+        const symW = 72; const symH = 65;
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+          <rect width="100%" height="100%" fill="${c.bg}"/>
+          <g transform="translate(234, 80)">
+            ${makeSymbol(symW, symH, 'v-b')}
+          </g>
+          <text x="270" y="195" text-anchor="middle" font-family="Noto Sans KR" font-size="13" font-weight="500" letter-spacing="8" fill="${c.titleKr}">BRITZMEDI</text>
+          <rect x="248" y="210" width="44" height="1" fill="${c.line}"/>
+          <text x="270" y="235" text-anchor="middle" font-family="Noto Sans KR" font-size="9" font-weight="400" letter-spacing="5" fill="${c.muted}">AESTHETIC MEDICAL DEVICE</text>
+        </svg>`;
+      } else {
+        const logoW = 52; const logoH = 56;
+        const leftPadding = 32;
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+          <rect width="100%" height="100%" fill="${c.bg}"/>
+          <rect x="0" y="309" width="${w}" height="1" fill="${c.line}" opacity="0.4"/>
+          <g transform="translate(${leftPadding}, 30)">
+            ${makeLogo(logoW, logoH, 'v-f')}
+          </g>
+          <g transform="translate(${leftPadding + 66}, 48)">
+            <text x="0" y="0" font-family="Noto Sans KR" font-size="24" font-weight="500" letter-spacing="2" fill="${c.nameKr}">${p.nameKr}</text>
+            <text x="85" y="-2" font-family="Noto Sans KR" font-size="11" font-weight="400" letter-spacing="1.5" fill="${c.titleKr}">${p.titleKr}</text>
+            <text x="0" y="24" font-family="Noto Sans KR" font-size="11" font-weight="400" letter-spacing="0.8" fill="${c.nameEn}">${p.nameEn}</text>
+            <text x="85" y="24" font-family="Noto Sans KR" font-size="9" font-weight="400" letter-spacing="1.2" fill="${c.titleEn}">${p.titleEn}</text>
+          </g>
+          <g transform="translate(${leftPadding + 4}, 185)">
+            <text x="0" y="0" font-family="Noto Sans KR" font-size="9.5" fill="${c.address}">${p.addressKr}</text>
+            <text x="0" y="15" font-family="Noto Sans KR" font-size="9.5" fill="${c.address}">${p.addressEn}</text>
+            <rect x="0" y="26" width="28" height="1" fill="${c.line}"/>
+            <g transform="translate(0, 42)">
+              <text x="0" y="0" font-family="Noto Sans KR" font-size="10" fill="${c.highlight}">M. ${p.phone}</text>
+              <text x="0" y="16" font-family="Noto Sans KR" font-size="10" fill="${c.sub}">T. ${p.tel}</text>
+              <text x="0" y="32" font-family="Noto Sans KR" font-size="10" fill="${c.sub}">F. ${p.fax}</text>
+              <line x1="165" y1="-8" x2="165" y2="34" stroke="${c.line}" stroke-opacity="0.2"/>
+              <text x="180" y="0" font-family="Noto Sans KR" font-size="10" fill="${c.highlight}">${p.email}</text>
+              <text x="180" y="16" font-family="Noto Sans KR" font-size="10" fill="${c.sub}">${p.website}</text>
+            </g>
+          </g>
+        </svg>`;
+      }
+    }
+
+    async function svgToCanvas(svgStr) {
+      return new Promise((resolve) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 540 * 4; 
+        canvas.height = 310 * 4;
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        const svgBlob = new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'});
+        const url = URL.createObjectURL(svgBlob);
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          URL.revokeObjectURL(url);
+          resolve(canvas);
+        };
+        img.src = url;
+      });
+    }
+
+    async function downloadCurrentPDF() {
+      const btn = event.currentTarget;
+      const origText = btn.innerHTML;
+      btn.innerHTML = '<span class="icon">⏳</span>'; btn.disabled = true;
+      try {
+        const { jsPDF } = window.jspdf;
+        const p = employees[currentPerson];
+        const pdf = new jsPDF({ orientation:'landscape', unit:'mm', format:[94, 54] });
+
+        const frontSvg = generateVectorSVG(p, false);
+        const frontCanvas = await svgToCanvas(frontSvg);
+        pdf.addImage(frontCanvas.toDataURL('image/png'), 'PNG', 0, 0, 94, 54, undefined, 'NONE');
+
+        pdf.addPage([94, 54], 'landscape');
+        const backSvg = generateVectorSVG(p, true);
+        const backCanvas = await svgToCanvas(backSvg);
+        pdf.addImage(backCanvas.toDataURL('image/png'), 'PNG', 0, 0, 94, 54, undefined, 'NONE');
+
+        pdf.save(`BRITZMEDI_Card_${p.nameKr}.pdf`);
+      } catch(e) { console.error(e); alert('PDF 생성 실패'); }
+      btn.innerHTML = origText; btn.disabled = false;
+    }
+
+    async function downloadCurrentPNG() {
+      const btn = event.currentTarget;
+      const origText = btn.innerHTML;
+      btn.innerHTML = '<span class="icon">⏳</span>'; btn.disabled = true;
+      try {
+        const p = employees[currentPerson];
+        const isBack = currentFace === 'back';
+        const svg = generateVectorSVG(p, isBack);
+        const canvas = await svgToCanvas(svg);
+        const link = document.createElement('a');
+        link.download = `BRITZMEDI_${isBack?'Back':'Front'}_${p.nameKr}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch(e) { console.error(e); alert('PNG 생성 실패'); }
+      btn.innerHTML = origText; btn.disabled = false;
+    }
+
+    async function downloadCurrentSVG() {
+      const p = employees[currentPerson];
+      const isBack = currentFace === 'back';
+      const svgOut = generateVectorSVG(p, isBack);
+      const blob = new Blob([svgOut], {type: 'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = `BRITZMEDI_${isBack?'Back':'Front'}_${p.nameKr}.svg`;
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function downloadAllPDF() {
+      const btn = event.currentTarget;
+      const origText = btn.innerHTML;
+      btn.disabled = true;
+      try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation:'landscape', unit:'mm', format:[94, 54] });
+
+        for (let i = 0; i < employees.length; i++) {
+          btn.innerHTML = `<span class="icon">⏳</span> ${i+1}/${employees.length}`;
+          const p = employees[i];
+          
+          if (i > 0) pdf.addPage([94, 54], 'landscape');
+          const frontSvg = generateVectorSVG(p, false);
+          const frontCanvas = await svgToCanvas(frontSvg);
+          pdf.addImage(frontCanvas.toDataURL('image/png'), 'PNG', 0, 0, 94, 54, undefined, 'NONE');
+
+          pdf.addPage([94, 54], 'landscape');
+          const backSvg = generateVectorSVG(p, true);
+          const backCanvas = await svgToCanvas(backSvg);
+          pdf.addImage(backCanvas.toDataURL('image/png'), 'PNG', 0, 0, 94, 54, undefined, 'NONE');
+        }
+
+        pdf.save('BRITZMEDI_Cards_Full.pdf');
+      } catch(e) {
+        console.error(e);
+        alert('PDF 생성 실패');
+      }
+      btn.innerHTML = origText;
+      btn.disabled = false;
+    }
+
+    // ─── Excel Template ───
+
+    function downloadExcelTemplate() {
+      const headers = ['이름(국문)', '이름(영문)', '직함(국문)', '직함(영문)', '휴대폰', '이메일', '전화', '팩스', '웹사이트', '주소(국문)', '주소(영문)', '수량'];
+
+      // Include current employees as example data
+      const data = employees.map(p => [
+        p.nameKr, p.nameEn, p.titleKr, p.titleEn,
+        p.phone, p.email, p.tel, p.fax, p.website,
+        p.addressKr, p.addressEn, p.qty
+      ]);
+
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+
+      // Set column widths
+      ws['!cols'] = [
+        {wch:12},{wch:20},{wch:14},{wch:30},
+        {wch:16},{wch:24},{wch:16},{wch:16},{wch:20},
+        {wch:40},{wch:60},{wch:8}
+      ];
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, '명함리스트');
+      XLSX.writeFile(wb, 'BRITZMEDI_명함양식.xlsx');
+    }
+
+    function importExcel(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const wb = XLSX.read(e.target.result, {type:'array'});
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(ws, {header:1});
+
+          // Skip header row
+          const newEmployees = [];
+          for (let i = 1; i < rows.length; i++) {
+            const r = rows[i];
+            if (!r[0] || !r[1]) continue; // skip empty rows
+            newEmployees.push({
+              nameKr: String(r[0] || ''),
+              nameEn: String(r[1] || ''),
+              titleKr: String(r[2] || ''),
+              titleEn: String(r[3] || ''),
+              phone: String(r[4] || ''),
+              email: String(r[5] || ''),
+              tel: String(r[6] || ''),
+              fax: String(r[7] || ''),
+              website: String(r[8] || ''),
+              addressKr: String(r[9] || ''),
+              addressEn: String(r[10] || ''),
+              qty: Number(r[11]) || 200
+            });
+          }
+
+          if (newEmployees.length === 0) {
+            alert('유효한 데이터가 없습니다. 엑셀 양식을 확인해주세요.');
+            return;
+          }
+
+          employees.length = 0;
+          newEmployees.forEach(emp => employees.push(emp));
+          currentPerson = 0;
+          currentFace = 'front';
+          renderTabs();
+          renderPreview();
+          renderAllCards();
+          alert(`${newEmployees.length}명의 명함이 성공적으로 불러와졌습니다.`);
+        } catch(err) {
+          console.error(err);
+          alert('엑셀 파일을 읽는 중 오류가 발생했습니다.');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+      event.target.value = '';
+    }
+  </script>
+</body>
+</html>

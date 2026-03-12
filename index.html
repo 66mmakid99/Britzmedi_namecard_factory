@@ -557,11 +557,11 @@
               <div style="width:${Math.round(28*s)}px;height:1px;background:linear-gradient(90deg,${c.line},${c.line}40);margin-bottom:${Math.round(5*s)}px"></div>
               <div style="display:flex;gap:${Math.round(24*s)}px;align-items:flex-start">
                 <div style="font-size:${Math.round(10*s)}px;color:${c.sub};letter-spacing:0.3px;line-height:${size==='small'?'1.5':'1.65'}">
-                  <div style="color:${c.highlight}">M. ${p.phone}</div>
-                  <div>T. ${p.tel}</div>
-                  <div>F. ${p.fax}</div>
+                  <div style="color:${c.highlight}">${p.phone}</div>
+                  <div>${p.tel}</div>
+                  <div>${p.fax}</div>
                 </div>
-                <div style="width:1px;height:${Math.round(40*s)}px;background:${c.line}26"></div>
+                <div style="width:1px;height:${Math.round(40*s)}px;background:${c.line}40"></div>
                 <div style="font-size:${Math.round(10*s)}px;color:${c.sub};letter-spacing:0.3px;line-height:${size==='small'?'1.5':'1.65'}">
                   <div style="color:${c.highlight}">${p.email}</div>
                   <div>${p.website}</div>
@@ -738,10 +738,10 @@
             <text x="0" y="15" font-family="${font}" font-size="9.5" fill="${c.address}">${p.addressEn}</text>
             <rect x="0" y="26" width="28" height="1" fill="${c.line}"/>
             <g transform="translate(0, 48)">
-              <text x="0" y="0" font-family="${font}" font-size="10" fill="${c.highlight}">M. ${p.phone}</text>
-              <text x="0" y="15" font-family="${font}" font-size="10" fill="${c.sub}">T. ${p.tel}</text>
-              <text x="0" y="30" font-family="${font}" font-size="10" fill="${c.sub}">F. ${p.fax}</text>
-              <line x1="165" y1="-8" x2="165" y2="34" stroke="${c.line}" stroke-opacity="0.2"/>
+              <text x="0" y="0" font-family="${font}" font-size="10" fill="${c.highlight}">${p.phone}</text>
+              <text x="0" y="15" font-family="${font}" font-size="10" fill="${c.sub}">${p.tel}</text>
+              <text x="0" y="30" font-family="${font}" font-size="10" fill="${c.sub}">${p.fax}</text>
+              <line x1="165" y1="-8" x2="165" y2="34" stroke="${c.line}" stroke-opacity="0.4"/>
               <text x="180" y="0" font-family="${font}" font-size="10" fill="${c.highlight}">${p.email}</text>
               <text x="180" y="15" font-family="${font}" font-size="10" fill="${c.sub}">${p.website}</text>
             </g>
@@ -911,13 +911,13 @@
               titleKr: String(r[3] || '').trim(),
               titleEn: String(r[4] || '').trim(),
               phone: String(r[5] || '').trim(),
-              email: String(r[6] || '').trim(),
-              tel: String(r[7] || '').trim(),
-              fax: String(r[8] || '').trim(),
-              website: String(r[9] || '').trim(),
-              addressKr: String(r[10] || '').trim(),
-              addressEn: String(r[11] || '').trim(),
-              qty: Number(r[12]) || 200
+              email: (String(r[6] || '') + (r[7] ? ' / ' + r[7] : '')).trim(),
+              tel: String(r[8] || '').trim(),
+              fax: String(r[9] || '').trim(),
+              website: (String(r[10] || '') + (r[11] ? ' / ' + r[11] : '')).trim(),
+              addressKr: String(r[12] || '').trim(),
+              addressEn: String(r[13] || '').trim(),
+              qty: Number(r[14]) || 200
             });
           }
 

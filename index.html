@@ -373,19 +373,19 @@
 
     <!-- Action Buttons -->
     <div class="action-bar">
-      <button class="action-btn primary" onclick="downloadCurrentPDF()">
+      <button class="action-btn primary" onclick="downloadCurrentPDF(event)">
         <span class="icon">📄</span> PDF (인쇄용)
       </button>
-      <button class="action-btn" onclick="downloadCurrentPNG()">
+      <button class="action-btn" onclick="downloadCurrentPNG(event)">
         <span class="icon">🖼️</span> PNG (이미지)
       </button>
-      <button class="action-btn" onclick="downloadCurrentSVG()">
+      <button class="action-btn" onclick="downloadCurrentSVG(event)">
         <span class="icon">📐</span> SVG (벡터)
       </button>
-      <button class="action-btn" onclick="downloadAllPDF()">
+      <button class="action-btn" onclick="downloadAllPDF(event)">
         <span class="icon">📦</span> 전체 PDF
       </button>
-      <button class="action-btn" onclick="downloadExcelTemplate()">
+      <button class="action-btn" onclick="downloadExcelTemplate(event)">
         <span class="icon">📋</span> 엑셀 양식
       </button>
       <label class="action-btn" style="margin:0">
@@ -408,139 +408,63 @@
   </div>
 
   <script>
-    // ─── SVG Logo (from BRITZMEDI_Lockup_Black_Gradient.svg) ───
-    const logoSvgFull = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="571 466 908 1225" width="__W__" height="__H__">
-      <defs>
-        <linearGradient id="pg-__ID__" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${currentTheme==='white'?'#8A7B4D':'#A89968'}"/>
-          <stop offset="25%" stop-color="${currentTheme==='white'?'#B8A978':'#D4C89A'}"/>
-          <stop offset="50%" stop-color="${currentTheme==='white'?'#D4C89A':'#EDE4C8'}"/>
-          <stop offset="75%" stop-color="${currentTheme==='white'?'#B8A978':'#D4C89A'}"/>
-          <stop offset="100%" stop-color="${currentTheme==='white'?'#8A7B4D':'#A89968'}"/>
-        </linearGradient>
-      </defs>
-      <path fill="url(#pg-__ID__)" d="M851,972.106C834.869,972.106 819.237,972.106 803.327,972.106C803.327,1005.739 803.327,1038.979 803.327,1072.526C804.674,1072.613 805.954,1072.767 807.234,1072.767C850.899,1072.777 894.564,1072.82 938.229,1072.684C941.976,1072.672 944.836,1073.674 947.73,1075.949C1000.764,1117.659 1053.857,1159.295 1106.937,1200.948C1113.27,1205.917 1119.599,1210.891 1126.927,1216.646C967.592,1216.646 809.705,1216.646 651.489,1216.646C651.489,1087.788 651.489,959.067 651.489,829.842C850.572,829.842 1049.479,829.842 1248.673,829.842C1248.673,783.116 1248.673,736.893 1248.673,690.188C1049.496,690.188 850.596,690.188 651.43,690.188C651.43,642.111 651.43,594.515 651.43,546.507C900.557,546.507 1149.591,546.507 1399.172,546.507C1399.172,548.42 1399.172,550.2 1399.172,551.98C1399.17,669.976 1399.156,787.972 1399.231,905.968C1399.233,909.577 1398.39,911.929 1395.229,914.172C1363.183,936.918 1331.281,959.868 1299.348,982.773C1297.895,983.814 1296.524,984.969 1294.853,986.275C1319.413,1006.804 1343.563,1027.002 1367.726,1047.182C1377.444,1055.298 1387.241,1063.322 1396.87,1071.542C1398.059,1072.557 1399.079,1074.53 1399.083,1076.062C1399.177,1122.393 1399.134,1168.724 1399.103,1215.056C1399.103,1215.38 1398.963,1215.704 1398.781,1216.5C1391.552,1216.793 1384.916,1217.32 1377.974,1212.191C1285.551,1143.898 1192.861,1075.965 1100.239,1007.941C1085.339,996.999 1070.519,985.946 1055.468,975.216C1052.986,973.447 1049.501,972.214 1046.476,972.207C981.484,972.046 916.492,972.096 851,972.106Z"/>
-      <path fill="url(#pg-__ID__)" d="M651.184,1386C651.184,1373.365 651.184,1361.23 651.184,1349.007C652.094,1348.782 652.721,1348.49 653.348,1348.492C690.483,1348.614 727.624,1348.44 764.749,1349.142C773.373,1349.305 782.334,1351.41 790.45,1354.458C807.223,1360.758 814.46,1376.748 809.147,1392.815C806.736,1400.107 801.421,1404.59 794.062,1408.291C796.041,1409.032 797.321,1409.483 798.578,1409.988C816.075,1417.021 825.334,1434.751 820.697,1453.016C817.048,1467.386 806.311,1474.104 792.791,1476.886C785.987,1478.287 778.93,1479.022 771.982,1479.065C733.013,1479.309 694.042,1479.252 655.071,1479.281C653.931,1479.282 652.791,1479.1 651.184,1478.964C651.184,1448.036 651.184,1417.268 651.184,1386Z M774.084,1445.861C778.029,1444.804 781.268,1443.202 781.156,1438.251C781.047,1433.432 778.201,1430.825 774.049,1429.809C770.209,1428.869 766.172,1428.347 762.218,1428.327C738.727,1428.205 715.234,1428.282 691.742,1428.292C690.152,1428.292 688.561,1428.292 686.966,1428.292C686.966,1434.725 686.966,1440.611 686.966,1446.679C710,1446.679 732.654,1446.725 755.307,1446.648C761.292,1446.627 767.276,1446.225 774.084,1445.861Z M769.198,1385.501C765.217,1380.718 759.557,1380.49 754.119,1380.448C732.005,1380.275 709.889,1380.364 687.774,1380.384C687.508,1380.384 687.243,1380.739 686.875,1381.001C686.875,1387.188 686.875,1393.443 686.875,1400.171C688.531,1400.171 689.984,1400.171 691.436,1400.171C712.39,1400.17 733.343,1400.181 754.297,1400.151C756.62,1400.148 758.972,1400.104 761.259,1399.75C769.742,1398.435 772.243,1394.297 769.198,1385.501Z"/>
-      <path fill="url(#pg-__ID__)" d="M1249.999,1380.254C1240.037,1380.254 1230.575,1380.254 1220.787,1380.254C1220.787,1369.641 1220.787,1359.402 1220.787,1348.786C1280.094,1348.786 1339.316,1348.786 1399.08,1348.786C1399.08,1356.422 1399.242,1364.033 1398.926,1371.625C1398.872,1372.937 1397.005,1374.491 1395.621,1375.383C1363.596,1396.035 1331.518,1416.602 1299.465,1437.208C1295.193,1439.955 1291.004,1442.832 1287.064,1446.519C1324.243,1446.519 1361.421,1446.519 1398.894,1446.519C1398.894,1457.547 1398.894,1468.123 1398.894,1479C1339.548,1479 1280.328,1479 1220.32,1479C1220.32,1470.579 1220.2,1462.298 1220.452,1454.029C1220.489,1452.833 1222.102,1451.382 1223.331,1450.571C1251.108,1432.222 1278.938,1413.952 1306.749,1395.654C1314.089,1390.824 1321.399,1385.951 1329.996,1380.255C1302.542,1380.255 1276.521,1380.255 1249.999,1380.254Z"/>
-      <path fill="url(#pg-__ID__)" d="M1101.973,1476.185C1102.737,1477.084 1103.271,1477.693 1104.296,1478.863C1102.74,1479.022 1101.719,1479.213 1100.697,1479.216C1088.368,1479.259 1076.035,1479.454 1063.714,1479.153C1061.082,1479.089 1057.844,1477.863 1055.993,1476.044C1042.928,1463.201 1030.184,1450.033 1017.23,1437.076C1016.095,1435.94 1014.199,1434.963 1012.644,1434.944C999.325,1434.777 986.003,1434.848 972.156,1434.848C972.156,1449.623 972.156,1464.189 972.156,1479.022C960.214,1479.022 948.799,1479.022 937.23,1479.022C937.23,1435.665 937.23,1392.533 937.23,1349.083C938.332,1348.894 939.411,1348.546 940.488,1348.55C976.804,1348.678 1013.122,1348.643 1049.434,1349.104C1061.989,1349.263 1073.461,1353.388 1083.885,1360.806C1106.005,1376.546 1102.088,1410.392 1083.814,1423.017C1076.923,1427.777 1069.171,1431.29 1061.446,1435.574C1074.38,1448.516 1088.062,1462.206 1101.973,1476.185Z M1052.444,1381.813C1050.651,1381.485 1048.861,1380.886 1047.064,1380.869C1024.44,1380.648 1001.814,1380.509 979.189,1380.354C976.903,1380.339 974.617,1380.352 972.289,1380.352C972.289,1388.084 972.289,1395.286 972.289,1402.539C997.574,1402.539 1022.509,1402.62 1047.441,1402.434C1050.48,1402.411 1053.723,1401.399 1056.497,1400.066C1062.116,1397.368 1063.201,1389.607 1058.687,1385.391C1057.153,1383.958 1055.05,1383.136 1052.444,1381.813Z"/>
-      <text font-family="'Noto Sans KR', 'Helvetica Neue', Arial, sans-serif" font-size="72" font-weight="500" fill="#8A8060">
-        <tspan x="651.0" y="1596.6">B</tspan><tspan x="745.3" y="1596.6">R</tspan><tspan x="838.3" y="1596.6">I</tspan><tspan x="888.4" y="1596.6">T</tspan><tspan x="975.8" y="1596.6">Z</tspan><tspan x="1062.6" y="1596.6">M</tspan><tspan x="1176.9" y="1596.6">E</tspan><tspan x="1262.9" y="1596.6">D</tspan><tspan x="1361.0" y="1596.6">I</tspan>
-      </text>
-    </svg>`;
+    // ─── Constants & State ───
+    var STORAGE_KEY = 'britzmedi_employees';
+    var RANK_ORDER = { '대표이사':1, '이사':2, '영업이사':3, '부문장':4, '과장':5, '대리':6, '사원':7 };
 
-    // Symbol only (B mark without BRITZMEDI text at bottom)
-    const symbolSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="571 466 908 800" width="__W__" height="__H__">
-      <defs>
-        <linearGradient id="ps-__ID__" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${currentTheme==='white'?'#8A7B4D':'#A89968'}"/>
-          <stop offset="25%" stop-color="${currentTheme==='white'?'#B8A978':'#D4C89A'}"/>
-          <stop offset="50%" stop-color="${currentTheme==='white'?'#D4C89A':'#EDE4C8'}"/>
-          <stop offset="75%" stop-color="${currentTheme==='white'?'#B8A978':'#D4C89A'}"/>
-          <stop offset="100%" stop-color="${currentTheme==='white'?'#8A7B4D':'#A89968'}"/>
-        </linearGradient>
-      </defs>
-      <path fill="url(#ps-__ID__)" d="M851,972.106C834.869,972.106 819.237,972.106 803.327,972.106C803.327,1005.739 803.327,1038.979 803.327,1072.526C804.674,1072.613 805.954,1072.767 807.234,1072.767C850.899,1072.777 894.564,1072.82 938.229,1072.684C941.976,1072.672 944.836,1073.674 947.73,1075.949C1000.764,1117.659 1053.857,1159.295 1106.937,1200.948C1113.27,1205.917 1119.599,1210.891 1126.927,1216.646C967.592,1216.646 809.705,1216.646 651.489,1216.646C651.489,1087.788 651.489,959.067 651.489,829.842C850.572,829.842 1049.479,829.842 1248.673,829.842C1248.673,783.116 1248.673,736.893 1248.673,690.188C1049.496,690.188 850.596,690.188 651.43,690.188C651.43,642.111 651.43,594.515 651.43,546.507C900.557,546.507 1149.591,546.507 1399.172,546.507C1399.172,548.42 1399.172,550.2 1399.172,551.98C1399.17,669.976 1399.156,787.972 1399.231,905.968C1399.233,909.577 1398.39,911.929 1395.229,914.172C1363.183,936.918 1331.281,959.868 1299.348,982.773C1297.895,983.814 1296.524,984.969 1294.853,986.275C1319.413,1006.804 1343.563,1027.002 1367.726,1047.182C1377.444,1055.298 1387.241,1063.322 1396.87,1071.542C1398.059,1072.557 1399.079,1074.53 1399.083,1076.062C1399.177,1122.393 1399.134,1168.724 1399.103,1215.056C1399.103,1215.38 1398.963,1215.704 1398.781,1216.5C1391.552,1216.793 1384.916,1217.32 1377.974,1212.191C1285.551,1143.898 1192.861,1075.965 1100.239,1007.941C1085.339,996.999 1070.519,985.946 1055.468,975.216C1052.986,973.447 1049.501,972.214 1046.476,972.207C981.484,972.046 916.492,972.096 851,972.106Z"/>
-    </svg>`;
+    var currentPerson = 0;
+    var currentFace = 'front';
+    var currentTheme = 'black';
+    var employees = [
+      { dept: "Management", nameKr: "김남호", nameEn: "Kim Nam Ho", titleKr: "영업이사", titleEn: "Sales Director", phone: "010-8762-1142", email: "nh.kim@britzmedi.co.kr", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)", addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Sales", nameKr: "정승원", nameEn: "Jung Seung Won", titleKr: "과장", titleEn: "Sales Manager", phone: "010-4446-4827", email: "sw.jung@britzmedi.co.kr", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)", addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Sales", nameKr: "김경현", nameEn: "Kim Kyeong Hyeon", titleKr: "대리", titleEn: "Sales Assistant Manager", phone: "010-9393-9475", email: "kh.kim@britzmedi.co.kr", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)", addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 400 },
+      { dept: "Marketing", nameKr: "이성호", nameEn: "Lee Sungho", titleKr: "해외영업 마케팅이사", titleEn: "Overseas Sales Marketing Director", phone: "010-6525-9442", email: "sh.lee@britzmedi.co.kr", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)", addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Home Beauty", nameKr: "이성호", nameEn: "Lee Sungho", titleKr: "홈뷰티 부문장", titleEn: "Head of Home Beauty Devices", phone: "010-6525-9442", email: "sh.lee@britzmedi.co.kr", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)", addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 }
+    ];
+
+    // ─── SVG Assets (Dynamic) ───
+    function getSvgGradient(id) {
+      const stops = currentTheme === 'white' 
+        ? ['#8A7B4D', '#B8A978', '#D4C89A']
+        : ['#A89968', '#D4C89A', '#EDE4C8'];
+      return `
+        <linearGradient id="pg-${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${stops[0]}"/>
+          <stop offset="25%" stop-color="${stops[1]}"/>
+          <stop offset="50%" stop-color="${stops[2]}"/>
+          <stop offset="75%" stop-color="${stops[1]}"/>
+          <stop offset="100%" stop-color="${stops[0]}"/>
+        </linearGradient>`;
+    }
 
     function makeLogo(w, h, id) {
-      return logoSvgFull.replace(/__W__/g, w).replace(/__H__/g, h).replace(/__ID__/g, id);
+      const textFill = currentTheme === 'white' ? '#6A5D35' : '#8A8060';
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="571 466 908 1225" width="${w}" height="${h}">
+        <defs>${getSvgGradient(id)}</defs>
+        <path fill="url(#pg-${id})" d="M851,972.106C834.869,972.106 819.237,972.106 803.327,972.106C803.327,1005.739 803.327,1038.979 803.327,1072.526C804.674,1072.613 805.954,1072.767 807.234,1072.767C850.899,1072.777 894.564,1072.82 938.229,1072.684C941.976,1072.672 944.836,1073.674 947.73,1075.949C1000.764,1117.659 1053.857,1159.295 1106.937,1200.948C1113.27,1205.917 1119.599,1210.891 1126.927,1216.646C967.592,1216.646 809.705,1216.646 651.489,1216.646C651.489,1087.788 651.489,959.067 651.489,829.842C850.572,829.842 1049.479,829.842 1248.673,829.842C1248.673,783.116 1248.673,736.893 1248.673,690.188C1049.496,690.188 850.596,690.188 651.43,690.188C651.43,642.111 651.43,594.515 651.43,546.507C900.557,546.507 1149.591,546.507 1399.172,546.507C1399.172,548.42 1399.172,550.2 1399.172,551.98C1399.17,669.976 1399.156,787.972 1399.231,905.968C1399.233,909.577 1398.39,911.929 1395.229,914.172C1363.183,936.918 1331.281,959.868 1299.348,982.773C1297.895,983.814 1296.524,984.969 1294.853,986.275C1319.413,1006.804 1343.563,1027.002 1367.726,1047.182C1377.444,1055.298 1387.241,1063.322 1396.87,1071.542C1398.059,1072.557 1399.079,1074.53 1399.083,1076.062C1399.177,1122.393 1399.134,1168.724 1399.103,1215.056C1399.103,1215.38 1398.963,1215.704 1398.781,1216.5C1391.552,1216.793 1384.916,1217.32 1377.974,1212.191C1285.551,1143.898 1192.861,1075.965 1100.239,1007.941C1085.339,996.999 1070.519,985.946 1055.468,975.216C1052.986,973.447 1049.501,972.214 1046.476,972.207C981.484,972.046 916.492,972.096 851,972.106Z"/>
+        <path fill="url(#pg-${id})" d="M651.184,1386C651.184,1373.365 651.184,1361.23 651.184,1349.007C652.094,1348.782 652.721,1348.49 653.348,1348.492C690.483,1348.614 727.624,1348.44 764.749,1349.142C773.373,1349.305 782.334,1351.41 790.45,1354.458C807.223,1360.758 814.46,1376.748 809.147,1392.815C806.736,1400.107 801.421,1404.59 794.062,1408.291C796.041,1409.032 797.321,1409.483 798.578,1409.988C816.075,1417.021 825.334,1434.751 820.697,1453.016C817.048,1467.386 806.311,1474.104 792.791,1476.886C785.987,1478.287 778.93,1479.022 771.982,1479.065C733.013,1479.309 694.042,1479.252 655.071,1479.281C653.931,1479.282 652.791,1479.1 651.184,1478.964C651.184,1448.036 651.184,1417.268 651.184,1386Z M774.084,1445.861C778.029,1444.804 781.268,1443.202 781.156,1438.251C781.047,1433.432 778.201,1430.825 774.049,1429.809C770.209,1428.869 766.172,1428.347 762.218,1428.327C738.727,1428.205 715.234,1428.282 691.742,1428.292C690.152,1428.292 688.561,1428.292 686.966,1428.292C686.966,1434.725 686.966,1440.611 686.966,1446.679C710,1446.679 732.654,1446.725 755.307,1446.648C761.292,1446.627 767.276,1446.225 774.084,1445.861Z M769.198,1385.501C765.217,1380.718 759.557,1380.49 754.119,1380.448C732.005,1380.275 709.889,1380.364 687.774,1380.384C687.508,1380.384 687.243,1380.739 686.875,1381.001C686.875,1387.188 686.875,1393.443 686.875,1400.171C688.531,1400.171 689.984,1400.171 691.436,1400.171C712.39,1400.17 733.343,1400.181 754.297,1400.151C756.62,1400.148 758.972,1400.104 761.259,1399.75C769.742,1398.435 772.243,1394.297 769.198,1385.501Z"/>
+        <path fill="url(#pg-${id})" d="M1249.999,1380.254C1240.037,1380.254 1230.575,1380.254 1220.787,1380.254C1220.787,1369.641 1220.787,1359.402 1220.787,1348.786C1280.094,1348.786 1339.316,1348.786 1399.08,1348.786C1399.08,1356.422 1399.242,1364.033 1398.926,1371.625C1398.872,1372.937 1397.005,1374.491 1395.621,1375.383C1363.596,1396.035 1331.518,1416.602 1299.465,1437.208C1295.193,1439.955 1291.004,1442.832 1287.064,1446.519C1324.243,1446.519 1361.421,1446.519 1398.894,1446.519C1398.894,1457.547 1398.894,1468.123 1398.894,1479C1339.548,1479 1280.328,1479 1220.32,1479C1220.32,1470.579 1220.2,1462.298 1220.452,1454.029C1220.489,1452.833 1222.102,1451.382 1223.331,1450.571C1251.108,1432.222 1278.938,1413.952 1306.749,1395.654C1314.089,1390.824 1321.399,1385.951 1329.996,1380.255C1302.542,1380.255 1276.521,1380.255 1249.999,1380.254Z"/>
+        <path fill="url(#pg-${id})" d="M1101.973,1476.185C1102.737,1477.084 1103.271,1477.693 1104.296,1478.863C1102.74,1479.022 1101.719,1479.213 1100.697,1479.216C1088.368,1479.259 1076.035,1479.454 1063.714,1479.153C1061.082,1479.089 1057.844,1477.863 1055.993,1476.044C1042.928,1463.201 1030.184,1450.033 1017.23,1437.076C1016.095,1435.94 1014.199,1434.963 1012.644,1434.944C999.325,1434.777 986.003,1434.848 972.156,1434.848C972.156,1449.623 972.156,1464.189 972.156,1479.022C960.214,1479.022 948.799,1479.022 937.23,1479.022C937.23,1435.665 937.23,1392.533 937.23,1349.083C938.332,1348.894 939.411,1348.546 940.488,1348.55C976.804,1348.678 1013.122,1348.643 1049.434,1349.104C1061.989,1349.263 1073.461,1353.388 1083.885,1360.806C1106.005,1376.546 1102.088,1410.392 1083.814,1423.017C1076.923,1427.777 1069.171,1431.29 1061.446,1435.574C1074.38,1448.516 1088.062,1462.206 1101.973,1476.185Z M1052.444,1381.813C1050.651,1381.485 1048.861,1380.886 1047.064,1380.869C1024.44,1380.648 1001.814,1380.509 979.189,1380.354C976.903,1380.339 974.617,1380.352 972.289,1380.352C972.289,1388.084 972.289,1395.286 972.289,1402.539C997.574,1402.539 1022.509,1402.62 1047.441,1402.434C1050.48,1402.411 1053.723,1401.399 1056.497,1400.066C1062.116,1397.368 1063.201,1389.607 1058.687,1385.391C1057.153,1383.958 1055.05,1383.136 1052.444,1381.813Z"/>
+        <text font-family="'Noto Sans KR', sans-serif" font-size="72" font-weight="500" fill="${textFill}">
+          <tspan x="651.0" y="1596.6">B</tspan><tspan x="745.3" y="1596.6">R</tspan><tspan x="838.3" y="1596.6">I</tspan><tspan x="888.4" y="1596.6">T</tspan><tspan x="975.8" y="1596.6">Z</tspan><tspan x="1062.6" y="1596.6">M</tspan><tspan x="1176.9" y="1596.6">E</tspan><tspan x="1262.9" y="1596.6">D</tspan><tspan x="1361.0" y="1596.6">I</tspan>
+        </text>
+      </svg>`;
     }
+
     function makeSymbol(w, h, id) {
-      return symbolSvg.replace(/__W__/g, w).replace(/__H__/g, h).replace(/__ID__/g, id);
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="571 466 908 800" width="${w}" height="${h}">
+        <defs>${getSvgGradient('s-'+id)}</defs>
+        <path fill="url(#pg-${id})" d="M851,972.106C834.869,972.106 819.237,972.106 803.327,972.106C803.327,1005.739 803.327,1038.979 803.327,1072.526C804.674,1072.613 805.954,1072.767 807.234,1072.767C850.899,1072.777 894.564,1072.82 938.229,1072.684C941.976,1072.672 944.836,1073.674 947.73,1075.949C1000.764,1117.659 1053.857,1159.295 1106.937,1200.948C1113.27,1205.917 1119.599,1210.891 1126.927,1216.646C967.592,1216.646 809.705,1216.646 651.489,1216.646C651.489,1087.788 651.489,959.067 651.489,829.842C850.572,829.842 1049.479,829.842 1248.673,829.842C1248.673,783.116 1248.673,736.893 1248.673,690.188C1049.496,690.188 850.596,690.188 651.43,690.188C651.43,642.111 651.43,594.515 651.43,546.507C900.557,546.507 1149.591,546.507 1399.172,546.507C1399.172,548.42 1399.172,550.2 1399.172,551.98C1399.17,669.976 1399.156,787.972 1399.231,905.968C1399.233,909.577 1398.39,911.929 1395.229,914.172C1363.183,936.918 1331.281,959.868 1299.348,982.773C1297.895,983.814 1296.524,984.969 1294.853,986.275C1319.413,1006.804 1343.563,1027.002 1367.726,1047.182C1377.444,1055.298 1387.241,1063.322 1396.87,1071.542C1398.059,1072.557 1399.079,1074.53 1399.083,1076.062C1399.177,1122.393 1399.134,1168.724 1399.103,1215.056C1399.103,1215.38 1398.963,1215.704 1398.781,1216.5C1391.552,1216.793 1384.916,1217.32 1377.974,1212.191C1285.551,1143.898 1192.861,1075.965 1100.239,1007.941C1085.339,996.999 1070.519,985.946 1055.468,975.216C1052.986,973.447 1049.501,972.214 1046.476,972.207C981.484,972.046 916.492,972.096 851,972.106Z"/>
+      </svg>`;
     }
 
-    // ─── Constants ───
-    const STORAGE_KEY = 'britzmedi_employees';
-    const RANK_ORDER = { '대표이사':1, '이사':2, '영업이사':3, '부문장':4, '과장':5, '대리':6, '사원':7 };
-
-    // ─── Employee Data ───
-    let employees = [
-      {
-        dept: "Management",
-        nameKr: "김남호",
-        nameEn: "Kim Nam Ho",
-        titleKr: "영업이사",
-        titleEn: "Sales Director",
-        phone: "010-8762-1142",
-        email: "nh.kim@britzmedi.co.kr",
-        tel: "070-4348-7244",
-        fax: "070-4009-8993",
-        website: "www.britzmedi.co.kr",
-        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
-        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
-        qty: 200
-      },
-      {
-        dept: "Sales",
-        nameKr: "정승원",
-        nameEn: "Jung Seung Won",
-        titleKr: "과장",
-        titleEn: "Sales Manager",
-        phone: "010-4446-4827",
-        email: "sw.jung@britzmedi.co.kr",
-        tel: "070-4348-7244",
-        fax: "070-4009-8993",
-        website: "www.britzmedi.co.kr",
-        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
-        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
-        qty: 200
-      },
-      {
-        dept: "Sales",
-        nameKr: "김경현",
-        nameEn: "Kim Kyeong Hyeon",
-        titleKr: "대리",
-        titleEn: "Sales Assistant Manager",
-        phone: "010-9393-9475",
-        email: "kh.kim@britzmedi.co.kr",
-        tel: "070-4348-7244",
-        fax: "070-4009-8993",
-        website: "www.britzmedi.co.kr",
-        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
-        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
-        qty: 400
-      },
-      {
-        dept: "Marketing",
-        nameKr: "이성호",
-        nameEn: "Lee Sungho",
-        titleKr: "해외영업 마케팅이사",
-        titleEn: "Overseas Sales Marketing Director",
-        phone: "010-6525-9442",
-        email: "sh.lee@britzmedi.co.kr",
-        tel: "070-4348-7244",
-        fax: "070-4009-8993",
-        website: "www.britzmedi.co.kr",
-        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
-        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
-        qty: 200
-      },
-      {
-        dept: "Home Beauty",
-        nameKr: "이성호",
-        nameEn: "Lee Sungho",
-        titleKr: "홈뷰티 부문장",
-        titleEn: "Head of Home Beauty Devices",
-        phone: "010-6525-9442",
-        email: "sh.lee@britzmedi.co.kr",
-        tel: "070-4348-7244",
-        fax: "070-4009-8993",
-        website: "www.britzmedi.co.kr",
-        addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노)",
-        addressEn: "388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea",
-        qty: 200
-      }
-    ];
 
     function loadData() {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try { employees = JSON.parse(saved); } catch(e) { console.error("Load failed", e); }
-      }
+      if (saved) { try { employees = JSON.parse(saved); } catch(e) { console.error("Load failed", e); } }
     }
-    function saveData() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(employees));
-    }
+    function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(employees)); }
     function resetData() {
       if (confirm('모든 데이터를 초기화하고 기본 목록으로 되돌리시겠습니까?')) {
         localStorage.removeItem(STORAGE_KEY);
@@ -548,11 +472,6 @@
       }
     }
 
-    loadData();
-
-    let currentPerson = 0;
-    let currentFace = 'front';
-    let currentTheme = 'black';
 
     function getThemeColors() {
       if (currentTheme === 'white') {
@@ -763,15 +682,20 @@
     }
 
     // Initial render
-    renderTabs();
-    renderPreview();
-    renderAllCards();
+    function init() {
+      loadData();
+      renderTabs();
+      renderPreview();
+      renderAllCards();
+    }
+    init();
 
     // ─── Export Functions (Vector Based) ───
 
     function generateVectorSVG(p, isBack) {
       const w = 540; const h = 310;
       const c = getThemeColors();
+      const font = "'Noto Sans KR', sans-serif";
 
       if (isBack) {
         const symW = 72; const symH = 65;
@@ -780,13 +704,17 @@
           <g transform="translate(234, 80)">
             ${makeSymbol(symW, symH, 'v-b')}
           </g>
-          <text x="270" y="195" text-anchor="middle" font-family="Noto Sans KR" font-size="13" font-weight="500" letter-spacing="8" fill="${c.titleKr}">BRITZMEDI</text>
+          <text x="270" y="195" text-anchor="middle" font-family="${font}" font-size="13" font-weight="500" letter-spacing="8" fill="${c.titleKr}">BRITZMEDI</text>
           <rect x="248" y="210" width="44" height="1" fill="${c.line}"/>
-          <text x="270" y="235" text-anchor="middle" font-family="Noto Sans KR" font-size="9" font-weight="400" letter-spacing="5" fill="${c.muted}">AESTHETIC MEDICAL DEVICE</text>
+          <text x="270" y="235" text-anchor="middle" font-family="${font}" font-size="9" font-weight="400" letter-spacing="5" fill="${c.muted}">AESTHETIC MEDICAL DEVICE</text>
         </svg>`;
       } else {
         const logoW = 52; const logoH = 56;
         const leftPadding = 32;
+        // Estimate name width for title positioning
+        const nameLen = p.nameKr.length;
+        const titleX = 66 + (nameLen * 18); 
+
         return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
           <rect width="100%" height="100%" fill="${c.bg}"/>
           <rect x="0" y="309" width="${w}" height="1" fill="${c.line}" opacity="0.4"/>
@@ -794,22 +722,22 @@
             ${makeLogo(logoW, logoH, 'v-f')}
           </g>
           <g transform="translate(${leftPadding + 66}, 48)">
-            <text x="0" y="0" font-family="Noto Sans KR" font-size="24" font-weight="500" letter-spacing="2" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="85" y="-2" font-family="Noto Sans KR" font-size="11" font-weight="400" letter-spacing="1.5" fill="${c.titleKr}">${p.titleKr}</text>
-            <text x="0" y="24" font-family="Noto Sans KR" font-size="11" font-weight="400" letter-spacing="0.8" fill="${c.nameEn}">${p.nameEn}</text>
-            <text x="85" y="24" font-family="Noto Sans KR" font-size="9" font-weight="400" letter-spacing="1.2" fill="${c.titleEn}">${p.titleEn}</text>
+            <text x="0" y="0" font-family="${font}" font-size="24" font-weight="500" letter-spacing="2" fill="${c.nameKr}">${p.nameKr}</text>
+            <text x="${titleX}" y="-2" font-family="${font}" font-size="11" font-weight="400" letter-spacing="1.5" fill="${c.titleKr}">${p.titleKr}</text>
+            <text x="0" y="24" font-family="${font}" font-size="11" font-weight="400" letter-spacing="0.8" fill="${c.nameEn}">${p.nameEn}</text>
+            <text x="${titleX}" y="24" font-family="${font}" font-size="9" font-weight="400" letter-spacing="1.2" fill="${c.titleEn}">${p.titleEn}</text>
           </g>
           <g transform="translate(${leftPadding + 4}, 185)">
-            <text x="0" y="0" font-family="Noto Sans KR" font-size="9.5" fill="${c.address}">${p.addressKr}</text>
-            <text x="0" y="15" font-family="Noto Sans KR" font-size="9.5" fill="${c.address}">${p.addressEn}</text>
+            <text x="0" y="0" font-family="${font}" font-size="9.5" fill="${c.address}">${p.addressKr}</text>
+            <text x="0" y="15" font-family="${font}" font-size="9.5" fill="${c.address}">${p.addressEn}</text>
             <rect x="0" y="26" width="28" height="1" fill="${c.line}"/>
             <g transform="translate(0, 42)">
-              <text x="0" y="0" font-family="Noto Sans KR" font-size="10" fill="${c.highlight}">M. ${p.phone}</text>
-              <text x="0" y="16" font-family="Noto Sans KR" font-size="10" fill="${c.sub}">T. ${p.tel}</text>
-              <text x="0" y="32" font-family="Noto Sans KR" font-size="10" fill="${c.sub}">F. ${p.fax}</text>
+              <text x="0" y="0" font-family="${font}" font-size="10" fill="${c.highlight}">M. ${p.phone}</text>
+              <text x="0" y="16" font-family="${font}" font-size="10" fill="${c.sub}">T. ${p.tel}</text>
+              <text x="0" y="32" font-family="${font}" font-size="10" fill="${c.sub}">F. ${p.fax}</text>
               <line x1="165" y1="-8" x2="165" y2="34" stroke="${c.line}" stroke-opacity="0.2"/>
-              <text x="180" y="0" font-family="Noto Sans KR" font-size="10" fill="${c.highlight}">${p.email}</text>
-              <text x="180" y="16" font-family="Noto Sans KR" font-size="10" fill="${c.sub}">${p.website}</text>
+              <text x="180" y="0" font-family="${font}" font-size="10" fill="${c.highlight}">${p.email}</text>
+              <text x="180" y="16" font-family="${font}" font-size="10" fill="${c.sub}">${p.website}</text>
             </g>
           </g>
         </svg>`;
@@ -834,7 +762,7 @@
       });
     }
 
-    async function downloadCurrentPDF() {
+    async function downloadCurrentPDF(event) {
       const btn = event.currentTarget;
       const origText = btn.innerHTML;
       btn.innerHTML = '<span class="icon">⏳</span>'; btn.disabled = true;
@@ -857,7 +785,7 @@
       btn.innerHTML = origText; btn.disabled = false;
     }
 
-    async function downloadCurrentPNG() {
+    async function downloadCurrentPNG(event) {
       const btn = event.currentTarget;
       const origText = btn.innerHTML;
       btn.innerHTML = '<span class="icon">⏳</span>'; btn.disabled = true;
@@ -874,20 +802,26 @@
       btn.innerHTML = origText; btn.disabled = false;
     }
 
-    async function downloadCurrentSVG() {
-      const p = employees[currentPerson];
-      const isBack = currentFace === 'back';
-      const svgOut = generateVectorSVG(p, isBack);
-      const blob = new Blob([svgOut], {type: 'image/svg+xml;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.download = `BRITZMEDI_${isBack?'Back':'Front'}_${p.nameKr}.svg`;
-      link.href = url;
-      link.click();
-      URL.revokeObjectURL(url);
+    async function downloadCurrentSVG(event) {
+      const btn = event.currentTarget;
+      const origText = btn.innerHTML;
+      btn.innerHTML = '<span class="icon">⏳</span>'; btn.disabled = true;
+      try {
+        const p = employees[currentPerson];
+        const isBack = currentFace === 'back';
+        const svgOut = generateVectorSVG(p, isBack);
+        const blob = new Blob([svgOut], {type: 'image/svg+xml;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `BRITZMEDI_${isBack?'Back':'Front'}_${p.nameKr}.svg`;
+        link.href = url;
+        link.click();
+        URL.revokeObjectURL(url);
+      } catch(e) { console.error(e); alert('SVG 생성 실패'); }
+      btn.innerHTML = origText; btn.disabled = false;
     }
 
-    async function downloadAllPDF() {
+    async function downloadAllPDF(event) {
       const btn = event.currentTarget;
       const origText = btn.innerHTML;
       btn.disabled = true;
@@ -983,7 +917,7 @@
           }
 
           employees.length = 0;
-          newEmployees.forEach(emp => employees.push(emp));
+          newEmployees.forEach(function(emp) { employees.push(emp); });
           saveData();
           currentPerson = 0;
           currentFace = 'front';

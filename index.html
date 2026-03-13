@@ -32,7 +32,38 @@
       padding: 36px 20px;
     }
 
-    .container { max-width: 960px; margin: 0 auto; }
+    .container { max-width: 1400px; margin: 0 auto; }
+
+    /* 2-Column Workspace Layout */
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 28px;
+      align-items: start;
+    }
+    .ws-preview {
+      position: sticky;
+      top: 20px;
+    }
+    .ws-preview .face-toggle { margin-bottom: 16px; }
+    .ws-preview .preview { margin-bottom: 12px; }
+    .ws-preview .design-info { margin-bottom: 12px; }
+    .ws-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ws-controls .tabs {
+      margin-bottom: 0;
+      justify-content: stretch;
+    }
+    .ws-controls .tabs .face-btn {
+      flex: 1;
+      text-align: center;
+    }
+    .ws-controls #personTabs {
+      flex-wrap: wrap;
+    }
 
     /* Header */
     .header {
@@ -99,8 +130,8 @@
     .tabs {
       display: flex;
       justify-content: center;
-      gap: 8px;
-      margin-bottom: 36px;
+      gap: 6px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
     }
     .tab-btn {
@@ -260,10 +291,146 @@
       color: var(--accent);
     }
 
+    /* Color Customization Panel */
+    .color-panel {
+      padding: 10px 14px;
+      border: 1px solid var(--line-light); border-radius: 6px;
+      background: rgba(255,255,255,0.02);
+    }
+    .color-row {
+      display: flex; align-items: center; gap: 10px; padding: 4px 0;
+    }
+    .color-label {
+      font-size: 8px; letter-spacing: 2px; color: var(--muted); min-width: 42px; font-weight: 600;
+    }
+    .color-label-sm {
+      font-size: 7px; letter-spacing: 1px; color: #555; text-align: center;
+    }
+    .color-swatches {
+      display: flex; gap: 6px; flex: 1;
+    }
+    .color-swatch {
+      width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: all 0.2s;
+      position: relative;
+    }
+    .color-swatch:hover { transform: scale(1.15); }
+    .color-swatch.active { border-color: var(--accent); box-shadow: 0 0 6px rgba(184,169,120,0.4); }
+    .color-custom {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .color-custom input[type="color"] {
+      width: 22px; height: 22px; border: 1px solid #333; border-radius: 50%;
+      cursor: pointer; padding: 0; background: none; -webkit-appearance: none;
+    }
+    .color-custom input[type="color"]::-webkit-color-swatch-wrapper { padding: 1px; }
+    .color-custom input[type="color"]::-webkit-color-swatch { border-radius: 50%; border: none; }
+    .bg-pickers {
+      display: flex; gap: 12px; align-items: center;
+    }
+    .bg-pick {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .bg-pick input[type="color"] {
+      width: 22px; height: 22px; border: 1px solid #444; border-radius: 3px;
+      cursor: pointer; padding: 0; -webkit-appearance: none;
+    }
+    .bg-pick input[type="color"]::-webkit-color-swatch-wrapper { padding: 1px; }
+    .bg-pick input[type="color"]::-webkit-color-swatch { border-radius: 2px; border: none; }
+    .color-reset-btn {
+      background: none; border: 1px solid #333; color: #777; border-radius: 4px;
+      padding: 2px 6px; cursor: pointer; font-size: 12px; transition: all 0.2s;
+    }
+    .color-reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Font Panel */
+    .font-panel {
+      border: 1px solid rgba(184,169,120,0.15);
+      border-radius: 10px; padding: 12px 14px; background: rgba(20,20,20,0.5);
+    }
+    .font-panel-header {
+      display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+    }
+    .font-toggle-btn {
+      background: none; border: none; color: #777; font-size: 11px; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .font-toggle-btn.collapsed { transform: rotate(-90deg); }
+    .font-panel-body { margin-top: 12px; }
+    .font-panel-body.hidden { display: none; }
+    .font-grid {
+      display: grid; grid-template-columns: 1fr; gap: 6px;
+    }
+    .font-item {
+      display: flex; align-items: center; gap: 6px; padding: 3px 0;
+    }
+    .font-item-label {
+      font-family: 'Noto Sans KR', sans-serif; font-size: 11px; color: #888;
+      min-width: 52px; letter-spacing: 0.02em;
+    }
+    .font-size-ctrl {
+      display: flex; align-items: center; gap: 0;
+    }
+    .font-size-ctrl button {
+      background: rgba(255,255,255,0.05); border: 1px solid #333; color: #aaa;
+      width: 20px; height: 22px; font-size: 12px; cursor: pointer; line-height: 1;
+      transition: all 0.15s;
+    }
+    .font-size-ctrl button:hover { border-color: var(--accent); color: var(--accent); }
+    .font-size-ctrl button:first-child { border-radius: 3px 0 0 3px; }
+    .font-size-ctrl button:last-child { border-radius: 0 3px 3px 0; }
+    .font-size-val {
+      background: rgba(0,0,0,0.3); border: 1px solid #333; border-left: none; border-right: none;
+      color: #ddd; width: 28px; height: 22px; text-align: center; font-size: 11px;
+      font-family: 'Courier New', monospace;
+    }
+    .font-bold-btn {
+      background: none; border: 1px solid #333; color: #666; font-weight: bold;
+      width: 22px; height: 22px; font-size: 12px; border-radius: 3px; cursor: pointer;
+      transition: all 0.15s; line-height: 1;
+    }
+    .font-bold-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(184,169,120,0.1); }
+    .font-bold-btn:hover { border-color: var(--accent); }
+    .font-pos-ctrl {
+      display: grid;
+      grid-template-columns: 18px 18px 18px;
+      grid-template-rows: 15px 15px;
+      gap: 1px;
+      margin-left: 4px;
+    }
+    .font-pos-btn {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid #2a2a2a;
+      color: #666;
+      font-size: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      line-height: 1;
+      padding: 0;
+    }
+    .font-pos-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .font-pos-btn.up    { grid-column: 2; grid-row: 1; border-radius: 3px 3px 0 0; }
+    .font-pos-btn.down  { grid-column: 2; grid-row: 2; border-radius: 0 0 3px 3px; }
+    .font-pos-btn.left  { grid-column: 1; grid-row: 1 / 3; border-radius: 3px 0 0 3px; }
+    .font-pos-btn.right { grid-column: 3; grid-row: 1 / 3; border-radius: 0 3px 3px 0; }
+    .font-pos-val {
+      font-size: 7px;
+      color: #555;
+      font-family: 'Courier New', monospace;
+      margin-left: 2px;
+      min-width: 30px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .font-reset-row { text-align: right; margin-top: 10px; }
+
     /* Design info */
     .design-info {
       text-align: center;
-      margin-bottom: 48px;
+      margin-bottom: 16px;
     }
     .design-info .name { font-size: 13px; color: var(--accent); font-weight: 500; letter-spacing: 1px; margin-bottom: 4px; }
     .design-info .desc { font-size: 12px; color: #555; font-weight: 300; max-width: 500px; margin: 0 auto; }
@@ -278,14 +445,83 @@
     }
     .print-spec span { color: #555040; }
 
-    /* Action buttons */
-    .action-bar {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 12px 0 24px;
-      flex-wrap: wrap;
+    /* Export panel (replaces action-bar) */
+    .export-panel {
+      border: 1px solid var(--line-light);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.02);
+      padding: 12px;
     }
+    .export-panel .color-label { display: block; margin-bottom: 8px; }
+    .export-select {
+      width: 100%;
+      padding: 8px 10px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(168,153,104,0.3);
+      border-radius: 4px;
+      color: #D4C89A;
+      font-size: 11px;
+      font-family: inherit;
+      letter-spacing: 1px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23A89968'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+    .export-select:focus { outline: none; border-color: var(--accent); }
+    .export-select option { background: #1a1a1a; color: #ccc; }
+    .export-actions {
+      display: flex; gap: 6px; margin-top: 8px;
+    }
+    .export-run-btn {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1px solid rgba(168,153,104,0.4);
+      background: rgba(168,153,104,0.15);
+      color: #D4C89A;
+      font-size: 10px;
+      letter-spacing: 2px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .export-run-btn:hover { background: rgba(168,153,104,0.25); border-color: var(--accent); }
+    .export-run-btn:active { transform: scale(0.97); }
+    .export-file-label {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 9px 12px;
+      border: 1px solid rgba(168,153,104,0.25);
+      background: rgba(168,153,104,0.06);
+      color: #A89968;
+      font-size: 10px;
+      letter-spacing: 1px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .export-file-label:hover { background: rgba(168,153,104,0.15); border-color: var(--accent); color: #D4C89A; }
+    .export-reset-btn {
+      width: 100%; margin-top: 8px;
+      padding: 7px 12px;
+      border: 1px solid rgba(255,68,68,0.3);
+      background: rgba(255,68,68,0.05);
+      color: #ff8888;
+      font-size: 9px;
+      letter-spacing: 2px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-family: inherit;
+      opacity: 0.7;
+    }
+    .export-reset-btn:hover { opacity: 1; border-color: rgba(255,68,68,0.5); }
+    /* Legacy action-btn kept for any remaining references */
     .action-btn {
       display: inline-flex;
       align-items: center;
@@ -300,17 +536,6 @@
       cursor: pointer;
       transition: all 0.3s ease;
       font-family: inherit;
-    }
-    .action-btn:hover {
-      background: rgba(168,153,104,0.15);
-      border-color: rgba(168,153,104,0.5);
-      color: #D4C89A;
-    }
-    .action-btn:active { transform: scale(0.97); }
-    .action-btn.primary {
-      background: rgba(168,153,104,0.15);
-      border-color: rgba(168,153,104,0.4);
-      color: #D4C89A;
     }
     .action-btn .icon { font-size: 13px; }
 
@@ -392,9 +617,16 @@
     /* Print styles */
     @media print {
       body { background: white; padding: 10mm; }
-      .header, .tabs, .face-toggle, .design-info, .footer, .all-section { display: none; }
+      .header, .tabs, .face-toggle, .design-info, .footer, .all-section, .ws-controls { display: none; }
+      .workspace { display: block; }
       .preview { page-break-inside: avoid; }
       .card-face { box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+    }
+
+    /* Responsive: stack on narrow screens */
+    @media (max-width: 900px) {
+      .workspace { grid-template-columns: 1fr; }
+      .ws-preview { position: static; }
     }
 
     /* Animation */
@@ -417,79 +649,124 @@
       </div>
     </div>
 
-    <!-- Person Selection -->
-    <div id="personTabs" class="tabs"></div>
+    <!-- ═══════ Workspace: Preview Left, Controls Right ═══════ -->
+    <div class="workspace">
 
-    <!-- Theme Selection -->
-    <div class="tabs">
-      <button class="face-btn active" id="theme-black" onclick="setTheme('black')">BLACK / GOLD</button>
-      <button class="face-btn" id="theme-white" onclick="setTheme('white')">WHITE / GOLD</button>
-    </div>
+      <!-- LEFT COLUMN: Preview -->
+      <div class="ws-preview">
+        <!-- Main Preview Area -->
+        <div class="preview-section" id="cardPreviewSection">
+          <div style="text-align:center">
+            <div class="face-toggle">
+              <button class="face-btn active" id="face-front" onclick="setFace('front')">FRONT (앞면)</button>
+              <button class="face-btn" id="face-back" onclick="setFace('back')">BACK (뒷면)</button>
+            </div>
+          </div>
+          <div class="preview" id="mainPreview"></div>
+          <div class="print-spec" id="printSpec">
+            SIZE: <span>90 x 50mm</span> (Bleed: 94 x 54mm) · 300DPI · CMYK READY
+          </div>
+        </div>
 
-    <!-- Main Preview Area -->
-    <div class="preview-section" id="cardPreviewSection">
-      <div style="text-align:center">
-        <div class="face-toggle">
-          <button class="face-btn active" id="face-front" onclick="setFace('front')">FRONT (앞면)</button>
-          <button class="face-btn" id="face-back" onclick="setFace('back')">BACK (뒷면)</button>
+        <!-- Envelope Preview Area (Hidden by default) -->
+        <div class="preview-section" id="envelopePreviewSection" style="display:none">
+          <div style="text-align:center">
+            <div class="face-toggle">
+              <button class="face-btn active" id="face-fold" onclick="setEnvView('fold')">FOLDED (완성형)</button>
+              <button class="face-btn" id="face-flat" onclick="setEnvView('flat')">DIELINE (칼선도면)</button>
+            </div>
+            <div class="env-size-toggle">
+              <button class="face-btn active" id="env-a4" onclick="setEnvSize('A4')">A4 DOC (245x330)</button>
+              <button class="face-btn" id="env-dl" onclick="setEnvSize('DL')">DL LETTER (220x110)</button>
+            </div>
+          </div>
+          <div class="envelope-container">
+            <div id="envelopePreview" class="envelope-preview"></div>
+          </div>
+        </div>
+
+        <!-- Design Info -->
+        <div class="design-info">
+          <div class="name" id="designName"></div>
+          <div class="desc" id="designDesc"></div>
         </div>
       </div>
-      
-      <div class="preview" id="mainPreview"></div>
-      
-      <div class="print-spec" id="printSpec">
-        SIZE: <span>90 x 50mm</span> (Bleed: 94 x 54mm) · 300DPI · CMYK READY
-      </div>
-    </div>
 
-    <!-- Envelope Preview Area (Hidden by default) -->
-    <div class="preview-section" id="envelopePreviewSection" style="display:none">
-      <div style="text-align:center">
-        <div class="face-toggle">
-          <button class="face-btn active" id="face-fold" onclick="setEnvView('fold')">FOLDED (완성형)</button>
-          <button class="face-btn" id="face-flat" onclick="setEnvView('flat')">DIELINE (칼선도면)</button>
+      <!-- RIGHT COLUMN: Controls -->
+      <div class="ws-controls">
+
+        <!-- Person Selection -->
+        <div id="personTabs" class="tabs"></div>
+
+        <!-- Theme Selection -->
+        <div class="tabs">
+          <button class="face-btn active" id="theme-black" onclick="setTheme('black')">BLACK / GOLD</button>
+          <button class="face-btn" id="theme-white" onclick="setTheme('white')">WHITE / GOLD</button>
         </div>
-        <div class="env-size-toggle">
-            <button class="face-btn active" id="env-a4" onclick="setEnvSize('A4')">A4 DOC (245x330)</button>
-            <button class="face-btn" id="env-dl" onclick="setEnvSize('DL')">DL LETTER (220x110)</button>
+
+        <!-- Color Customization -->
+        <div class="color-panel">
+          <div class="color-row">
+            <span class="color-label">ACCENT</span>
+            <div class="color-swatches" id="presetSwatches"></div>
+            <div class="color-custom">
+              <input type="color" id="customAccent" value="#B8A978" onchange="onCustomAccent(this.value)" title="Custom Color">
+              <span class="color-label-sm">CUSTOM</span>
+            </div>
+          </div>
+          <div class="color-row">
+            <span class="color-label">BG</span>
+            <div class="bg-pickers">
+              <div class="bg-pick">
+                <span class="color-label-sm">DARK</span>
+                <input type="color" id="bgBlackPicker" value="#000000" onchange="onBgChange('black', this.value)">
+              </div>
+              <div class="bg-pick">
+                <span class="color-label-sm">LIGHT</span>
+                <input type="color" id="bgWhitePicker" value="#FFFFFF" onchange="onBgChange('white', this.value)">
+              </div>
+              <button class="color-reset-btn" onclick="resetColors()" title="Reset to defaults">↺</button>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <div class="envelope-container">
-        <div id="envelopePreview" class="envelope-preview"></div>
-      </div>
-    </div>
 
-    <!-- Design Info -->
-    <div class="design-info">
-      <div class="name" id="designName"></div>
-      <div class="desc" id="designDesc"></div>
-    </div>
+        <!-- Font Panel -->
+        <div class="font-panel" id="fontPanel">
+          <div class="font-panel-header">
+            <span class="color-label">FONT SIZE & WEIGHT</span>
+            <button class="font-toggle-btn" onclick="toggleFontPanel()" id="fontPanelToggle">▼</button>
+          </div>
+          <div class="font-panel-body" id="fontPanelBody">
+            <div class="font-grid" id="fontGrid"></div>
+            <div class="font-reset-row">
+              <button class="color-reset-btn" onclick="resetFonts()" title="Reset to defaults">↺ RESET</button>
+            </div>
+          </div>
+        </div>
 
-    <!-- Action Buttons -->
-    <div class="action-bar">
-      <button class="action-btn primary" onclick="downloadCurrentPDF(event)">
-        <span class="icon">📄</span> PDF (인쇄용)
-      </button>
-      <button class="action-btn" onclick="downloadCurrentPNG(event)">
-        <span class="icon">🖼️</span> PNG (이미지)
-      </button>
-      <button class="action-btn" onclick="downloadCurrentSVG(event)">
-        <span class="icon">📐</span> SVG (벡터)
-      </button>
-      <button class="action-btn" onclick="downloadAllPDF(event)">
-        <span class="icon">📦</span> 전체 PDF
-      </button>
-      <button class="action-btn" onclick="downloadExcelTemplate(event)">
-        <span class="icon">📋</span> 엑셀 양식
-      </button>
-      <label class="action-btn" style="margin:0">
-        <span class="icon">📂</span> 엑셀 불러오기
-        <input type="file" accept=".xlsx,.xls" onchange="importExcel(event)" style="display:none">
-      </label>
-      <button class="action-btn" onclick="hardReset()" style="border-color:#ff4444; color:#ff8888; opacity:0.8;">
-        <span class="icon">⚠️</span> 디자인 초기화 (Hard Reset)
-      </button>
+        <!-- Export Panel -->
+        <div class="export-panel">
+          <span class="color-label">EXPORT / ACTIONS</span>
+          <select class="export-select" id="exportSelect">
+            <option value="pdf">📄  PDF (인쇄용) — 현재 카드</option>
+            <option value="png">🖼️  PNG (이미지) — 현재 카드</option>
+            <option value="svg">📐  SVG (벡터) — 현재 카드</option>
+            <option value="allpdf">📦  전체 PDF — 모든 직원</option>
+            <option value="proofone">🎴  개별 시안 PDF</option>
+            <option value="proofall">📑  전체 시안 PDF</option>
+            <option value="excel">📋  엑셀 양식 다운로드</option>
+          </select>
+          <div class="export-actions">
+            <button class="export-run-btn" onclick="executeExport()">▶ EXPORT</button>
+            <label class="export-file-label">
+              📂 엑셀 불러오기
+              <input type="file" accept=".xlsx,.xls" onchange="importExcel(event)" style="display:none">
+            </label>
+          </div>
+          <button class="export-reset-btn" onclick="hardReset()">⚠️  디자인 초기화 (Hard Reset)</button>
+        </div>
+
+      </div>
     </div>
 
     <!-- All Cards -->
@@ -517,28 +794,159 @@
     var currentEnvSize = 'A4'; // 'A4' or 'DL'
     var currentEnvView = 'fold'; // 'fold' or 'flat'
 
+    // ─── Color Customization Engine ───
+    var colorConfig = {
+      accent: { h: 43, s: 35, l: 53 },   // Platinum Gold (default)
+      bgBlack: '#000000',
+      bgWhite: '#FFFFFF'
+    };
+
+    // ─── Font Configuration ───
+    var FONT_DEFAULTS = {
+      nameKr:    { size: 45, weight: 'bold'   },
+      nameEn:    { size: 22, weight: 'normal' },
+      titleKr:   { size: 22, weight: 'bold'   },
+      titleEn:   { size: 19, weight: 'bold'   },
+      addressKr: { size: 21, weight: 'bold'   },
+      addressEn: { size: 20, weight: 'bold'   },
+      phone:     { size: 22, weight: 'bold'   },
+      tel:       { size: 21, weight: 'bold'   },
+      fax:       { size: 21, weight: 'bold'   },
+      email:     { size: 22, weight: 'bold'   },
+      website:   { size: 20, weight: 'bold'   }
+    };
+    var fontConfig = JSON.parse(JSON.stringify(FONT_DEFAULTS));
+
+    // Per-person position offsets (dx/dy) — stored on each employee object
+    var OFFSET_KEYS = ['nameKr','nameEn','titleKr','titleEn','addressKr','addressEn','phone','tel','fax','email','website'];
+    function ensurePersonOffsets(idx) {
+      if (!employees[idx].fontOffsets) {
+        employees[idx].fontOffsets = {};
+        OFFSET_KEYS.forEach(function(k) { employees[idx].fontOffsets[k] = { dx: 0, dy: 0 }; });
+      } else {
+        // Ensure all keys exist (forward-compat)
+        OFFSET_KEYS.forEach(function(k) {
+          if (!employees[idx].fontOffsets[k]) employees[idx].fontOffsets[k] = { dx: 0, dy: 0 };
+        });
+      }
+      return employees[idx].fontOffsets;
+    }
+    function getPersonOffsets(idx) { return ensurePersonOffsets(idx); }
+
+    var FONT_LABELS = {
+      nameKr: '이름(한)', nameEn: '이름(영)', titleKr: '직함(한)', titleEn: '직함(영)',
+      addressKr: '주소(한)', addressEn: '주소(영)', phone: 'M.', tel: 'T.',
+      fax: 'F.', email: 'Email', website: 'Website'
+    };
+
+    var COLOR_PRESETS = [
+      { name: 'Platinum Gold', h: 43, s: 35, l: 53 },
+      { name: 'Rose Gold',     h: 15, s: 45, l: 55 },
+      { name: 'Silver',        h: 210, s: 10, l: 60 },
+      { name: 'Copper',        h: 25, s: 50, l: 48 },
+      { name: 'Emerald',       h: 155, s: 35, l: 45 },
+      { name: 'Royal Blue',    h: 225, s: 40, l: 50 }
+    ];
+
+    function hslToHex(h, s, l) {
+      s /= 100; l /= 100;
+      const a = s * Math.min(l, 1 - l);
+      const f = n => { const k = (n + h / 30) % 12; return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1); };
+      const toHex = x => Math.round(x * 255).toString(16).padStart(2, '0');
+      return '#' + toHex(f(0)) + toHex(f(8)) + toHex(f(4));
+    }
+
+    function hexToHsl(hex) {
+      let r = parseInt(hex.slice(1,3),16)/255, g = parseInt(hex.slice(3,5),16)/255, b = parseInt(hex.slice(5,7),16)/255;
+      const max = Math.max(r,g,b), min = Math.min(r,g,b), d = max - min;
+      let h = 0, s = 0, l = (max + min) / 2;
+      if (d > 0) {
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) * 60;
+        else if (max === g) h = ((b - r) / d + 2) * 60;
+        else h = ((r - g) / d + 4) * 60;
+      }
+      return { h: Math.round(h), s: Math.round(s * 100), l: Math.round(l * 100) };
+    }
+
+    function generateAccentPalette() {
+      const { h, s, l } = colorConfig.accent;
+      return {
+        // Black theme: gradient dark→mid→light on dark background
+        blackGrad: [hslToHex(h, s, l - 8), hslToHex(h, s - 5, l + 5), hslToHex(h, s - 12, l + 18)],
+        // White theme: gradient darker→mid→lighter on white background
+        whiteGrad: [hslToHex(h, s + 5, l - 18), hslToHex(h, s, l - 5), hslToHex(h, s - 5, l + 5)],
+        // Black theme text colors
+        blackText: {
+          titleKr: hslToHex(h, s - 12, l + 18),
+          titleEn: hslToHex(h, s - 5, l + 5),
+          address: hslToHex(h, s - 12, l + 18),
+          sub:     hslToHex(h, s - 12, l + 18),
+          muted:   hslToHex(h, s - 5, l + 5),
+          line:    hslToHex(h, s - 12, l + 18)
+        },
+        // White theme text colors
+        whiteText: {
+          titleKr: hslToHex(h, s + 10, l - 28),
+          titleEn: hslToHex(h, s, l - 15),
+          address: '#111111',
+          highlight: hslToHex(h, s + 10, l - 25),
+          sub:     '#222222',
+          muted:   '#444444',
+          line:    hslToHex(h, s + 5, l - 15)
+        },
+        // Solid text for lockup/logo text
+        blackSolid: hslToHex(h, s - 12, l + 18),
+        whiteSolid: hslToHex(h, s + 5, l - 18),
+        // Overlay for radial gradient
+        blackOvl: { color: '#FFFFFF', opacity: '0.03' },
+        whiteOvl: { color: hslToHex(h, s, l), opacity: '0.08' },
+        // CSS variables
+        cssMain:    hslToHex(h, s, l),
+        cssAccent:  hslToHex(h, s - 10, l + 12),
+        cssLight:   hslToHex(h, s - 15, l + 25),
+        cssMuted:   hslToHex(h, s - 5, l - 5),
+        cssTextDim: hslToHex(h, s - 10, l - 10),
+        cssTextBody: hslToHex(h, s - 5, l + 5)
+      };
+    }
+
+    function updateCSSVariables() {
+      const p = generateAccentPalette();
+      const r = document.documentElement.style;
+      r.setProperty('--main', p.cssMain);
+      r.setProperty('--accent', p.cssAccent);
+      r.setProperty('--light', p.cssLight);
+      r.setProperty('--muted', p.cssMuted);
+      r.setProperty('--text-dim', p.cssTextDim);
+      r.setProperty('--text-body', p.cssTextBody);
+      const m = hexToHsl(p.cssMain);
+      const rgb = [parseInt(p.cssMain.slice(1,3),16), parseInt(p.cssMain.slice(3,5),16), parseInt(p.cssMain.slice(5,7),16)];
+      r.setProperty('--line', `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.25)`);
+      r.setProperty('--line-light', `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.12)`);
+    }
+
     const ENVELOPE_SPECS = {
       'A4': { w: 245, h: 330, flap: 45, wing: 15, bleed: 3 }, // Dimensions in mm
       'DL': { w: 220, h: 110, flap: 35, wing: 12, bleed: 3 }
     };
     var employees = [
       // ─── Management ───────────────────────────────────────────────────────────
-      { dept: "Management", nameKr: "이신재", nameEn: "Lee Shin Jae",    titleKr: "대표이사",        titleEn: "CEO",                                phone: "010-5620-0754", email: "sj.lee@britzmedi.co.kr / ssuibs@naver.com", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
-      { dept: "Management", nameKr: "이상덕", nameEn: "Lee Sang Duk",    titleKr: "부사장",          titleEn: "Vice President",                     phone: "010-9397-3107", email: "sd.lee@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
-      { dept: "Management", nameKr: "민경욱", nameEn: "Min Kyung Wook",  titleKr: "개발총괄이사",    titleEn: "Chief Development Director",         phone: "010-4751-7894", email: "kw.min@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
-      { dept: "Management", nameKr: "김남호", nameEn: "Kim Nam Ho",       titleKr: "영업이사",        titleEn: "Sales Director",                     phone: "010-8762-1142", email: "nh.kim@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
-      { dept: "Management", nameKr: "이성호", nameEn: "Lee Sungho",       titleKr: "해외영업 마케팅이사", titleEn: "Overseas Sales Marketing Director", phone: "010-6525-9442", email: "sh.lee@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
-      { dept: "Management", nameKr: "이성호", nameEn: "Lee Sungho",       titleKr: "홈뷰티 부문장",   titleEn: "Head of Home Beauty Devices",        phone: "010-6525-9442", email: "sh.lee@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Management", nameKr: "이신재", nameEn: "Lee Shin Jae",    titleKr: "대표이사",        titleEn: "CEO",                                phone: "010-5620-0754", email: "sj.lee@britzmedi.co.kr / ssuibs@naver.com", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do", qty: 200 },
+      { dept: "Management", nameKr: "이상덕", nameEn: "Lee Sang Duk",    titleKr: "부사장",          titleEn: "Vice President",                     phone: "010-9397-3107", email: "sd.lee@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do", qty: 200 },
+      { dept: "Management", nameKr: "민경욱", nameEn: "Min Kyung Wook",  titleKr: "개발총괄이사",    titleEn: "Chief Development Director",         phone: "010-4751-7894", email: "kw.min@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do", qty: 200 },
+      { dept: "Management", nameKr: "김남호", nameEn: "Kim Nam Ho",       titleKr: "영업이사",        titleEn: "Sales Director",                     phone: "010-8762-1142", email: "nh.kim@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do", qty: 200 },
+      { dept: "Management", nameKr: "이성호", nameEn: "Lee Sungho",       titleKr: "해외영업 마케팅이사", titleEn: "Overseas Sales Marketing Director", phone: "010-6525-9442", email: "sh.lee@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do", qty: 200 },
+      { dept: "Management", nameKr: "이성호", nameEn: "Lee Sungho",       titleKr: "홈뷰티 부문장",   titleEn: "Head of Home Beauty Devices",        phone: "010-6525-9442", email: "sh.lee@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do", qty: 200 },
       // ─── Sales ────────────────────────────────────────────────────────────────
-      { dept: "Sales",       nameKr: "정승원", nameEn: "Jung Seung Won",  titleKr: "과장",            titleEn: "Sales Manager",                      phone: "010-4446-4827", email: "sw.jung@britzmedi.co.kr",                   tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
-      { dept: "Sales",       nameKr: "김경현", nameEn: "Kim Kyeong Hyeon",titleKr: "대리",            titleEn: "Sales Assistant Manager",            phone: "010-9393-9475", email: "kh.kim@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 400 }
+      { dept: "Sales",       nameKr: "정승원", nameEn: "Jung Seung Won",  titleKr: "과장",            titleEn: "Sales Manager",                      phone: "010-4446-4827", email: "sw.jung@britzmedi.co.kr",                   tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do", qty: 200 },
+      { dept: "Sales",       nameKr: "김경현", nameEn: "Kim Kyeong Hyeon",titleKr: "대리",            titleEn: "Sales Assistant Manager",            phone: "010-9393-9475", email: "kh.kim@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do", qty: 400 }
     ];
 
     // ─── SVG Assets (Dynamic) ───
     function getSvgGradient(id) {
-      const stops = currentTheme === 'white' 
-        ? ['#8A7B4D', '#B8A978', '#D4C89A']
-        : ['#D4C89A', '#EDE4C8', '#FFFFFF'];
+      const pal = generateAccentPalette();
+      const stops = currentTheme === 'white' ? pal.whiteGrad : pal.blackGrad;
       return `
         <linearGradient id="pg-${id}" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="${stops[0]}"/>
@@ -550,14 +958,15 @@
     }
 
     function makeLogo(w, h, id, raw = false) {
-      const textFill = currentTheme === 'white' ? '#4A3D15' : '#B8A978';
+      const pal = generateAccentPalette();
+      const textFill = currentTheme === 'white' ? pal.whiteSolid : pal.blackSolid;
       const content = `
         <defs>${getSvgGradient(id)}</defs>
         <path fill="url(#pg-${id})" d="M851,972.106C834.869,972.106 819.237,972.106 803.327,972.106C803.327,1005.739 803.327,1038.979 803.327,1072.526C804.674,1072.613 805.954,1072.767 807.234,1072.767C850.899,1072.777 894.564,1072.82 938.229,1072.684C941.976,1072.672 944.836,1073.674 947.73,1075.949C1000.764,1117.659 1053.857,1159.295 1106.937,1200.948C1113.27,1205.917 1119.599,1210.891 1126.927,1216.646C967.592,1216.646 809.705,1216.646 651.489,1216.646C651.489,1087.788 651.489,959.067 651.489,829.842C850.572,829.842 1049.479,829.842 1248.673,829.842C1248.673,783.116 1248.673,736.893 1248.673,690.188C1049.496,690.188 850.596,690.188 651.43,690.188C651.43,642.111 651.43,594.515 651.43,546.507C900.557,546.507 1149.591,546.507 1399.172,546.507C1399.172,548.42 1399.172,550.2 1399.172,551.98C1399.17,669.976 1399.156,787.972 1399.231,905.968C1399.233,909.577 1398.39,911.929 1395.229,914.172C1363.183,936.918 1331.281,959.868 1299.348,982.773C1297.895,983.814 1296.524,984.969 1294.853,986.275C1319.413,1006.804 1343.563,1027.002 1367.726,1047.182C1377.444,1055.298 1387.241,1063.322 1396.87,1071.542C1398.059,1072.557 1399.079,1074.53 1399.083,1076.062C1399.177,1122.393 1399.134,1168.724 1399.103,1215.056C1399.103,1215.38 1398.963,1215.704 1398.781,1216.5C1391.552,1216.793 1384.916,1217.32 1377.974,1212.191C1285.551,1143.898 1192.861,1075.965 1100.239,1007.941C1085.339,996.999 1070.519,985.946 1055.468,975.216C1052.986,973.447 1049.501,972.214 1046.476,972.207C981.484,972.046 916.492,972.096 851,972.106Z"/>
         <path fill="url(#pg-${id})" d="M651.184,1386C651.184,1373.365 651.184,1361.23 651.184,1349.007C652.094,1348.782 652.721,1348.49 653.348,1348.492C690.483,1348.614 727.624,1348.44 764.749,1349.142C773.373,1349.305 782.334,1351.41 790.45,1354.458C807.223,1360.758 814.46,1376.748 809.147,1392.815C806.736,1400.107 801.421,1404.59 794.062,1408.291C796.041,1409.032 797.321,1409.483 798.578,1409.988C816.075,1417.021 825.334,1434.751 820.697,1453.016C817.048,1467.386 806.311,1474.104 792.791,1476.886C785.987,1478.287 778.93,1479.022 771.982,1479.065C733.013,1479.309 694.042,1479.252 655.071,1479.281C653.931,1479.282 652.791,1479.1 651.184,1478.964C651.184,1448.036 651.184,1417.268 651.184,1386Z M774.084,1445.861C778.029,1444.804 781.268,1443.202 781.156,1438.251C781.047,1433.432 778.201,1430.825 774.049,1429.809C770.209,1428.869 766.172,1428.347 762.218,1428.327C738.727,1428.205 715.234,1428.282 691.742,1428.292C690.152,1428.292 688.561,1428.292 686.966,1428.292C686.966,1434.725 686.966,1440.611 686.966,1446.679C710,1446.679 732.654,1446.725 755.307,1446.648C761.292,1446.627 767.276,1446.225 774.084,1445.861Z M769.198,1385.501C765.217,1380.718 759.557,1380.49 754.119,1380.448C732.005,1380.275 709.889,1380.364 687.774,1380.384C687.508,1380.384 687.243,1380.739 686.875,1381.001C686.875,1387.188 686.875,1393.443 686.875,1400.171C688.531,1400.171 689.984,1400.171 691.436,1400.171C712.39,1400.17 733.343,1400.181 754.297,1400.151C756.62,1400.148 758.972,1400.104 761.259,1399.75C769.742,1398.435 772.243,1394.297 769.198,1385.501Z"/>
         <path fill="url(#pg-${id})" d="M1249.999,1380.254C1240.037,1380.254 1230.575,1380.254 1220.787,1380.254C1220.787,1369.641 1220.787,1359.402 1220.787,1348.786C1280.094,1348.786 1339.316,1348.786 1399.08,1348.786C1399.08,1356.422 1399.242,1364.033 1398.926,1371.625C1398.872,1372.937 1397.005,1374.491 1395.621,1375.383C1363.596,1396.035 1331.518,1416.602 1299.465,1437.208C1295.193,1439.955 1291.004,1442.832 1287.064,1446.519C1324.243,1446.519 1361.421,1446.519 1398.894,1446.519C1398.894,1457.547 1398.894,1468.123 1398.894,1479C1339.548,1479 1280.328,1479 1220.32,1479C1220.32,1470.579 1220.2,1462.298 1220.452,1454.029C1220.489,1452.833 1222.102,1451.382 1223.331,1450.571C1251.108,1432.222 1278.938,1413.952 1306.749,1395.654C1314.089,1390.824 1321.399,1385.951 1329.996,1380.255C1302.542,1380.255 1276.521,1380.255 1249.999,1380.254Z"/>
         <path fill="url(#pg-${id})" d="M1101.973,1476.185C1102.737,1477.084 1103.271,1477.693 1104.296,1478.863C1102.74,1479.022 1101.719,1479.213 1100.697,1479.216C1088.368,1479.259 1076.035,1479.454 1063.714,1479.153C1061.082,1479.089 1057.844,1477.863 1055.993,1476.044C1042.928,1463.201 1030.184,1450.033 1017.23,1437.076C1016.095,1435.94 1014.199,1434.963 1012.644,1434.944C999.325,1434.777 986.003,1434.848 972.156,1434.848C972.156,1449.623 972.156,1464.189 972.156,1479.022C960.214,1479.022 948.799,1479.022 937.23,1479.022C937.23,1435.665 937.23,1392.533 937.23,1349.083C938.332,1348.894 939.411,1348.546 940.488,1348.55C976.804,1348.678 1013.122,1348.643 1049.434,1349.104C1061.989,1349.263 1073.461,1353.388 1083.885,1360.806C1106.005,1376.546 1102.088,1410.392 1083.814,1423.017C1076.923,1427.777 1069.171,1431.29 1061.446,1435.574C1074.38,1448.516 1088.062,1462.206 1101.973,1476.185Z M1052.444,1381.813C1050.651,1381.485 1048.861,1380.886 1047.064,1380.869C1024.44,1380.648 1001.814,1380.509 979.189,1380.354C976.903,1380.339 974.617,1380.352 972.289,1380.352C972.289,1388.084 972.289,1395.286 972.289,1402.539C997.574,1402.539 1022.509,1402.62 1047.441,1402.434C1050.48,1402.411 1053.723,1401.399 1056.497,1400.066C1062.116,1397.368 1063.201,1389.607 1058.687,1385.391C1057.153,1383.958 1055.05,1383.136 1052.444,1381.813Z"/>
-        <text font-family="'Pretendard', sans-serif" font-size="76" font-weight="600" letter-spacing="0.1em" fill="url(#pg-${id})">
+        <text font-family="'Noto Sans KR', sans-serif" font-size="76" font-weight="bold" letter-spacing="0.1em" fill="${textFill}">
           <tspan x="651.0" y="1596.6">B</tspan><tspan x="745.3" y="1596.6">R</tspan><tspan x="838.3" y="1596.6">I</tspan><tspan x="888.4" y="1596.6">T</tspan><tspan x="975.8" y="1596.6">Z</tspan><tspan x="1062.6" y="1596.6">M</tspan><tspan x="1176.9" y="1596.6">E</tspan><tspan x="1262.9" y="1596.6">D</tspan><tspan x="1361.0" y="1596.6">I</tspan>
         </text>
       `;
@@ -595,6 +1004,43 @@
       if (saved) { try { employees = JSON.parse(saved); } catch(e) { console.error("Load failed", e); } }
     }
     function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(employees)); }
+
+    // ─── Font & Color Config Persistence ───
+    var FONT_STORAGE_KEY  = 'britzmedi_fontConfig';
+    var COLOR_STORAGE_KEY = 'britzmedi_colorConfig';
+
+    function saveFontConfig() { localStorage.setItem(FONT_STORAGE_KEY, JSON.stringify(fontConfig)); }
+    function saveColorConfig() { localStorage.setItem(COLOR_STORAGE_KEY, JSON.stringify(colorConfig)); }
+
+    function loadFontConfig() {
+      var saved = localStorage.getItem(FONT_STORAGE_KEY);
+      if (saved) {
+        try {
+          var parsed = JSON.parse(saved);
+          // Merge with defaults (size/weight only — dx/dy now per-person in employees)
+          var keys = Object.keys(FONT_DEFAULTS);
+          for (var i = 0; i < keys.length; i++) {
+            var k = keys[i];
+            if (parsed[k]) {
+              fontConfig[k].size   = parsed[k].size   != null ? parsed[k].size   : FONT_DEFAULTS[k].size;
+              fontConfig[k].weight = parsed[k].weight  || FONT_DEFAULTS[k].weight;
+            }
+          }
+        } catch(e) { console.error('fontConfig load failed', e); }
+      }
+    }
+
+    function loadColorConfig() {
+      var saved = localStorage.getItem(COLOR_STORAGE_KEY);
+      if (saved) {
+        try {
+          var parsed = JSON.parse(saved);
+          if (parsed.accent) colorConfig.accent = parsed.accent;
+          if (parsed.bgBlack) colorConfig.bgBlack = parsed.bgBlack;
+          if (parsed.bgWhite) colorConfig.bgWhite = parsed.bgWhite;
+        } catch(e) { console.error('colorConfig load failed', e); }
+      }
+    }
     function resetData() {
       if (confirm('모든 데이터를 초기화하고 기본 목록으로 되돌리시겠습니까?')) {
         localStorage.removeItem(STORAGE_KEY);
@@ -604,33 +1050,36 @@
 
 
     function getThemeColors() {
+      const pal = generateAccentPalette();
       if (currentTheme === 'white') {
+        const ovlRgb = [parseInt(pal.whiteOvl.color.slice(1,3),16), parseInt(pal.whiteOvl.color.slice(3,5),16), parseInt(pal.whiteOvl.color.slice(5,7),16)];
         return {
-          bg: '#FFFFFF',
+          bg: colorConfig.bgWhite,
           nameKr: '#000000',
-          titleKr: '#4A3D15',
+          titleKr: pal.whiteText.titleKr,
           nameEn: '#222222',
-          titleEn: '#333333',
-          address: '#111111',
-          highlight: '#403310',
-          sub: '#222222',
-          muted: '#444444',
-          line: '#6A5D35',
-          overlay: 'radial-gradient(ellipse at 80% 20%, rgba(168,153,104,0.08) 0%, transparent 60%)'
+          titleEn: pal.whiteText.titleEn,
+          address: pal.whiteText.address,
+          highlight: pal.whiteText.highlight,
+          sub: pal.whiteText.sub,
+          muted: pal.whiteText.muted,
+          line: pal.whiteText.line,
+          overlay: `radial-gradient(ellipse at 80% 20%, rgba(${ovlRgb[0]},${ovlRgb[1]},${ovlRgb[2]},${pal.whiteOvl.opacity}) 0%, transparent 60%)`
         };
       }
+      const ovlRgb = [parseInt(pal.blackOvl.color.slice(1,3),16), parseInt(pal.blackOvl.color.slice(3,5),16), parseInt(pal.blackOvl.color.slice(5,7),16)];
       return {
-        bg: '#000000',
+        bg: colorConfig.bgBlack,
         nameKr: '#FFFFFF',
-        titleKr: '#EDE4C8',
+        titleKr: pal.blackText.titleKr,
         nameEn: '#FFFFFF',
-        titleEn: '#D4C89A',
-        address: '#EDE4C8',
+        titleEn: pal.blackText.titleEn,
+        address: pal.blackText.address,
         highlight: '#FFFFFF',
-        sub: '#EDE4C8',
-        muted: '#D4C89A',
-        line: '#EDE4C8',
-        overlay: 'radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.03) 0%, transparent 50%)'
+        sub: pal.blackText.sub,
+        muted: pal.blackText.muted,
+        line: pal.blackText.line,
+        overlay: `radial-gradient(ellipse at 80% 20%, rgba(${ovlRgb[0]},${ovlRgb[1]},${ovlRgb[2]},${pal.blackOvl.opacity}) 0%, transparent 50%)`
       };
     }
 
@@ -774,7 +1223,7 @@
                         ${makeLogo(44, 52, 'env-logo-svg')}
                     </g>
                     <g transform="translate(60, 10)">
-                        <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 14 : 11}" font-weight="600" fill="${c.nameKr}">BRITZMEDI</text>
+                        <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 14 : 11}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
                         <text x="0" y="14" font-family="${font}" font-size="${isA4 ? 8 : 7}" fill="${c.titleKr}" letter-spacing="3">AESTHETIC MEDICAL DEVICE</text>
                     </g>
                     <g transform="translate(0, 70)">
@@ -795,9 +1244,9 @@
     }
 
     function getLockupContent(noDefs) {
-      const stops = currentTheme === 'white'
-        ? ['#8A7B4D', '#B8A978', '#D4C89A']
-        : ['#D4C89A', '#EDE4C8', '#FFFFFF'];
+      const pal = generateAccentPalette();
+      const stops = currentTheme === 'white' ? pal.whiteGrad : pal.blackGrad;
+      const textSolid = currentTheme === 'white' ? pal.whiteSolid : pal.blackSolid;
       const defs = noDefs ? '' : `
         <defs>
           <linearGradient id="pg_back" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -814,7 +1263,7 @@
         <path fill="url(#pg_back)" d="M651.184,1386C651.184,1373.365 651.184,1361.23 651.184,1349.007C652.094,1348.782 652.721,1348.49 653.348,1348.492C690.483,1348.614 727.624,1348.44 764.749,1349.142C773.373,1349.305 782.334,1351.41 790.45,1354.458C807.223,1360.758 814.46,1376.748 809.147,1392.815C806.736,1400.107 801.421,1404.59 794.062,1408.291C796.041,1409.032 797.321,1409.483 798.578,1409.988C816.075,1417.021 825.334,1434.751 820.697,1453.016C817.048,1467.386 806.311,1474.104 792.791,1476.886C785.987,1478.287 778.93,1479.022 771.982,1479.065C733.013,1479.309 694.042,1479.252 655.071,1479.281C653.931,1479.282 652.791,1479.1 651.184,1478.964C651.184,1448.036 651.184,1417.268 651.184,1386Z M774.084,1445.861C778.029,1444.804 781.268,1443.202 781.156,1438.251C781.047,1433.432 778.201,1430.825 774.049,1429.809C770.209,1428.869 766.172,1428.347 762.218,1428.327C738.727,1428.205 715.234,1428.282 691.742,1428.292C690.152,1428.292 688.561,1428.292 686.966,1428.292C686.966,1434.725 686.966,1440.611 686.966,1446.679C710,1446.679 732.654,1446.725 755.307,1446.648C761.292,1446.627 767.276,1446.225 774.084,1445.861Z M769.198,1385.501C765.217,1380.718 759.557,1380.49 754.119,1380.448C732.005,1380.275 709.889,1380.364 687.774,1380.384C687.508,1380.384 687.243,1380.739 686.875,1381.001C686.875,1387.188 686.875,1393.443 686.875,1400.171C688.531,1400.171 689.984,1400.171 691.436,1400.171C712.39,1400.17 733.343,1400.181 754.297,1400.151C756.62,1400.148 758.972,1400.104 761.259,1399.75C769.742,1398.435 772.243,1394.297 769.198,1385.501Z"/>
         <path fill="url(#pg_back)" d="M1249.999,1380.254C1240.037,1380.254 1230.575,1380.254 1220.787,1380.254C1220.787,1369.641 1220.787,1359.402 1220.787,1348.786C1280.094,1348.786 1339.316,1348.786 1399.08,1348.786C1399.08,1356.422 1399.242,1364.033 1398.926,1371.625C1398.872,1372.937 1397.005,1374.491 1395.621,1375.383C1363.596,1396.035 1331.518,1416.602 1299.465,1437.208C1295.193,1439.955 1291.004,1442.832 1287.064,1446.519C1324.243,1446.519 1361.421,1446.519 1398.894,1446.519C1398.894,1457.547 1398.894,1468.123 1398.894,1479C1339.548,1479 1280.328,1479 1220.32,1479C1220.32,1470.579 1220.2,1462.298 1220.452,1454.029C1220.489,1452.833 1222.102,1451.382 1223.331,1450.571C1251.108,1432.222 1278.938,1413.952 1306.749,1395.654C1314.089,1390.824 1321.399,1385.951 1329.996,1380.255C1302.542,1380.255 1276.521,1380.255 1249.999,1380.254Z"/>
         <path fill="url(#pg_back)" d="M1101.973,1476.185C1102.737,1477.084 1103.271,1477.693 1104.296,1478.863C1102.74,1479.022 1101.719,1479.213 1100.697,1479.216C1088.368,1479.259 1076.035,1479.454 1063.714,1479.153C1061.082,1479.089 1057.844,1477.863 1055.993,1476.044C1042.928,1463.201 1030.184,1450.033 1017.23,1437.076C1016.095,1435.94 1014.199,1434.963 1012.644,1434.944C999.325,1434.777 986.003,1434.848 972.156,1434.848C972.156,1449.623 972.156,1464.189 972.156,1479.022C960.214,1479.022 948.799,1479.022 937.23,1479.022C937.23,1435.665 937.23,1392.533 937.23,1349.083C938.332,1348.894 939.411,1348.546 940.488,1348.55C976.804,1348.678 1013.122,1348.643 1049.434,1349.104C1061.989,1349.263 1073.461,1353.388 1083.885,1360.806C1106.005,1376.546 1102.088,1410.392 1083.814,1423.017C1076.923,1427.777 1069.171,1431.29 1061.446,1435.574C1074.38,1448.516 1088.062,1462.206 1101.973,1476.185Z M1052.444,1381.813C1050.651,1381.485 1048.861,1380.886 1047.064,1380.869C1024.44,1380.648 1001.814,1380.509 979.189,1380.354C976.903,1380.339 974.617,1380.352 972.289,1380.352C972.289,1388.084 972.289,1395.286 972.289,1402.539C997.574,1402.539 1022.509,1402.62 1047.441,1402.434C1050.48,1402.411 1053.723,1401.399 1056.497,1400.066C1062.116,1397.368 1063.201,1389.607 1058.687,1385.391C1057.153,1383.958 1055.05,1383.136 1052.444,1381.813Z"/>
-        <text font-family="'Pretendard', sans-serif" font-size="76" font-weight="600" letter-spacing="0.1em" fill="url(#pg_back)">
+        <text font-family="'Noto Sans KR', sans-serif" font-size="76" font-weight="bold" letter-spacing="0.1em" fill="${textSolid}">
           <tspan x="651.0" y="1596.6">B</tspan><tspan x="745.3" y="1596.6">R</tspan><tspan x="838.3" y="1596.6">I</tspan><tspan x="888.4" y="1596.6">T</tspan><tspan x="975.8" y="1596.6">Z</tspan><tspan x="1062.6" y="1596.6">M</tspan><tspan x="1176.9" y="1596.6">E</tspan><tspan x="1262.9" y="1596.6">D</tspan><tspan x="1361.0" y="1596.6">I</tspan>
         </text>
       `;
@@ -826,21 +1275,20 @@
     function buildFrontSVG(p, theme, uid) {
       uid = uid || 'v';
       var isWhite = theme === 'white';
+      var pal = generateAccentPalette();
+      var gStops = isWhite ? pal.whiteGrad : pal.blackGrad;
       var c = isWhite ? {
-        bg: '#FFFFFF', nameKr: '#000000', titleKr: '#4A3D15',
-        nameEn: '#222222', titleEn: '#333333', address: '#111111',
-        highlight: '#403310', sub: '#222222', line: '#6A5D35'
+        bg: colorConfig.bgWhite, nameKr: '#000000', titleKr: pal.whiteText.titleKr,
+        nameEn: '#222222', titleEn: pal.whiteText.titleEn, address: pal.whiteText.address,
+        highlight: pal.whiteText.highlight, sub: pal.whiteText.sub, line: pal.whiteText.line
       } : {
-        bg: '#000000', nameKr: '#FFFFFF', titleKr: '#EDE4C8',
-        nameEn: '#FFFFFF', titleEn: '#D4C89A', address: '#EDE4C8',
-        highlight: '#FFFFFF', sub: '#EDE4C8', line: '#EDE4C8'
+        bg: colorConfig.bgBlack, nameKr: '#FFFFFF', titleKr: pal.blackText.titleKr,
+        nameEn: '#FFFFFF', titleEn: pal.blackText.titleEn, address: pal.blackText.address,
+        highlight: '#FFFFFF', sub: pal.blackText.sub, line: pal.blackText.line
       };
-      var gStops = isWhite
-        ? ['#8A7B4D', '#B8A978', '#D4C89A']
-        : ['#D4C89A', '#EDE4C8', '#FFFFFF'];
       var trimColor = isWhite ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.5)';
-      var ovlColor  = isWhite ? '#A89968' : '#FFFFFF';
-      var ovlOpacity = isWhite ? '0.08' : '0.03';
+      var ovlColor  = isWhite ? pal.whiteOvl.color : pal.blackOvl.color;
+      var ovlOpacity = isWhite ? pal.whiteOvl.opacity : pal.blackOvl.opacity;
 
       var gId  = 'pg-f-' + uid;
       var bGId = 'bg-f-' + uid;
@@ -859,9 +1307,18 @@
         }
         return w;
       }
-      var nameKrW  = estW(p.nameKr, 45);
-      var nameEnW  = estW(p.nameEn, 22);
-      var titleX   = Math.round(140 + Math.max(nameKrW, nameEnW) + 24);
+      var f = fontConfig;
+      // Per-person position offsets
+      var pIdx = employees.indexOf(p);
+      var o = (pIdx >= 0) ? getPersonOffsets(pIdx) : {};
+      function ox(key) { return (o[key] && o[key].dx) || 0; }
+      function oy(key) { return (o[key] && o[key].dy) || 0; }
+      var nameKrW  = estW(p.nameKr, f.nameKr.size);
+      var nameEnW  = estW(p.nameEn, f.nameEn.size);
+      var logoRight = Math.round(81 + 840 * 0.065);   // logo visible right edge
+      var nameX    = logoRight + 22;                    // gap: logo → name = 22 (optical balance)
+      var titleX   = Math.round(nameX + Math.max(nameKrW, nameEnW) + 5); // gap: name → title = 5
+      var fw = function(key) { return f[key].weight === 'bold' ? ' font-weight="bold"' : ''; };
 
       return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 940 540">
   <defs>
@@ -886,43 +1343,45 @@
   <rect width="940" height="540" fill="url(#${ovlId})"/>
   <rect x="0" y="535" width="940" height="5" fill="url(#${bGId})"/>
   <rect x="20" y="20" width="900" height="500" fill="none" stroke="${trimColor}" stroke-width="1" stroke-dasharray="4,2"/>
-  <g transform="translate(56,98) scale(0.065) translate(-571,-466)">${logoRaw}</g>
-  <text x="140" y="155" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="45" font-weight="600" fill="${c.nameKr}">${p.nameKr}</text>
-  <text x="${titleX}" y="155" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="20" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
-  <text x="140" y="187" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="22" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
-  <text x="${titleX}" y="187" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="17" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
-  <text x="56" y="282" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="18" font-weight="300" fill="${c.address}" opacity="0.9">${p.addressKr}</text>
-  <text x="56" y="306" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="17" font-weight="300" fill="${c.address}" opacity="0.5">${p.addressEn}</text>
-  <rect x="56" y="322" width="59" height="2" fill="${c.line}" opacity="0.75"/>
-  <text x="56" y="362" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="19" font-weight="600" fill="${c.highlight}">M. ${p.phone}</text>
-  <text x="56" y="386" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="18" fill="${c.sub}" opacity="0.85">T. ${p.tel}</text>
-  <text x="56" y="412" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="18" fill="${c.sub}" opacity="0.85">F. ${p.fax}</text>
-  <line x1="260" y1="342" x2="260" y2="428" stroke="${c.line}" stroke-width="1" opacity="0.25"/>
-  <text x="275" y="362" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="19" font-weight="600" fill="${c.highlight}">${p.email}</text>
-  <text x="275" y="386" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="17" fill="${c.sub}" opacity="0.85">${p.website}</text>
+  <g transform="translate(81,85) scale(0.065) translate(-571,-466)">${logoRaw}</g>
+  <text x="${nameX + ox('nameKr')}" y="${122 + oy('nameKr')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.nameKr.size}"${fw('nameKr')} fill="${c.nameKr}">${p.nameKr}</text>
+  <text x="${titleX + ox('titleKr')}" y="${122 + oy('titleKr')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.titleKr.size}"${fw('titleKr')} fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
+  <text x="${nameX + ox('nameEn')}" y="${156 + oy('nameEn')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.nameEn.size}"${fw('nameEn')} fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
+  <text x="${titleX + ox('titleEn')}" y="${156 + oy('titleEn')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.titleEn.size}"${fw('titleEn')} fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
+  <text x="${86 + ox('addressKr')}" y="${337 + oy('addressKr')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.addressKr.size}"${fw('addressKr')} fill="${c.address}" opacity="0.9">${p.addressKr}</text>
+  <text x="${86 + ox('addressEn')}" y="${362 + oy('addressEn')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.addressEn.size}"${fw('addressEn')} fill="${c.address}" opacity="0.5">${p.addressEn}</text>
+  <rect x="86" y="385" width="59" height="2" fill="${c.line}" opacity="0.75"/>
+  <text x="${86 + ox('phone')}" y="${414 + oy('phone')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.phone.size}"${fw('phone')} fill="${c.highlight}">M. ${p.phone}</text>
+  <text x="${86 + ox('tel')}" y="${437 + oy('tel')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.tel.size}"${fw('tel')} fill="${c.sub}" opacity="0.85">T. ${p.tel}</text>
+  <text x="${86 + ox('fax')}" y="${459 + oy('fax')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.fax.size}"${fw('fax')} fill="${c.sub}" opacity="0.85">F. ${p.fax}</text>
+  <line x1="293" y1="398" x2="293" y2="473" stroke="${c.line}" stroke-width="1" opacity="0.25"/>
+  <text x="${304 + ox('email')}" y="${414 + oy('email')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.email.size}"${fw('email')} fill="${c.highlight}">${p.email}</text>
+  <text x="${304 + ox('website')}" y="${437 + oy('website')}" font-family="'Noto Sans KR',sans-serif" font-size="${f.website.size}"${fw('website')} fill="${c.sub}" opacity="0.85">${p.website}</text>
 </svg>`;
     }
 
     function buildBackSVG(p, theme, uid) {
       uid = uid || 'v';
       var isWhite = theme === 'white';
+      var pal = generateAccentPalette();
+      var gStops = isWhite ? pal.whiteGrad : pal.blackGrad;
       var c = isWhite
-        ? { bg: '#FFFFFF', line: '#6A5D35' }
-        : { bg: '#000000', line: '#EDE4C8' };
-      var gStops = isWhite
-        ? ['#8A7B4D', '#B8A978', '#D4C89A']
-        : ['#D4C89A', '#EDE4C8', '#FFFFFF'];
+        ? { bg: colorConfig.bgWhite, line: pal.whiteText.line }
+        : { bg: colorConfig.bgBlack, line: pal.blackText.line };
       var trimColor = isWhite ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.5)';
+      var ovlColor = isWhite ? pal.whiteOvl.color : pal.blackOvl.color;
+      var ovlOpacityVal = isWhite ? pal.whiteOvl.opacity : pal.blackOvl.opacity;
 
       var gId  = 'pg-b-' + uid;
       var ovlId = 'ovl-b-' + uid;
       var logoRaw = getLockupContent(true).replace(/url\(#pg_back\)/g, 'url(#' + gId + ')');
 
-      var lockupScale = 200 / 1225;           // ≈ 0.1633 (20% reduced from 250)
-      var lockupW = 908 * lockupScale;        // ≈ 148.2
-      var lockupX = (940 - lockupW) / 2;     // ≈ 395.9
-      var lockupY = (540 - 200) / 2 + 8;     // = 178
-
+      // Content bounds after translate(-571,-466): x=[80,840] → visW=760, y=[80,1131] → visH=1051
+      var lockupScale = 0.1512;
+      var visW = 760 * lockupScale;           // ≈ 191.5
+      var visH = 1051 * lockupScale;          // ≈ 264.9
+      var lockupX = (940 - visW) / 2 - 80 * lockupScale;   // center horizontally
+      var lockupY = (540 - visH) / 2 - 80 * lockupScale;   // center vertically
       return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 940 540">
   <defs>
     <linearGradient id="${gId}" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -933,8 +1392,8 @@
       <stop offset="100%" stop-color="${gStops[0]}"/>
     </linearGradient>
     <radialGradient id="${ovlId}" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#B8A978" stop-opacity="0.06"/>
-      <stop offset="100%" stop-color="#B8A978" stop-opacity="0"/>
+      <stop offset="0%"   stop-color="${ovlColor}" stop-opacity="${ovlOpacityVal}"/>
+      <stop offset="100%" stop-color="${ovlColor}" stop-opacity="0"/>
     </radialGradient>
   </defs>
   <rect width="940" height="540" fill="${c.bg}"/>
@@ -1048,6 +1507,7 @@
     function selectPerson(idx) {
       currentPerson = idx;
       renderTabs();
+      initFontGrid();  // Refresh font grid to show this person's offsets
       updatePreview();
       renderAllCards();
     }
@@ -1067,21 +1527,206 @@
       renderAllCards();
     }
 
+    // ─── Color Customization Event Handlers ───
+
+    function setAccentColor(h, s, l) {
+      colorConfig.accent = { h: h, s: s, l: l };
+      updateCSSVariables();
+      // Update custom color picker to match
+      document.getElementById('customAccent').value = hslToHex(h, s, l);
+      // Update active swatch indicator
+      document.querySelectorAll('.color-swatch').forEach(function(sw) {
+        sw.classList.toggle('active', parseInt(sw.dataset.h) === h && parseInt(sw.dataset.s) === s && parseInt(sw.dataset.l) === l);
+      });
+      saveColorConfig();
+      renderPreview();
+      renderAllCards();
+    }
+
+    function onCustomAccent(hexValue) {
+      var hsl = hexToHsl(hexValue);
+      colorConfig.accent = hsl;
+      updateCSSVariables();
+      // Deselect all preset swatches
+      document.querySelectorAll('.color-swatch').forEach(function(sw) { sw.classList.remove('active'); });
+      saveColorConfig();
+      renderPreview();
+      renderAllCards();
+    }
+
+    function onBgChange(theme, hexValue) {
+      if (theme === 'black') {
+        colorConfig.bgBlack = hexValue;
+      } else {
+        colorConfig.bgWhite = hexValue;
+      }
+      saveColorConfig();
+      renderPreview();
+      renderAllCards();
+    }
+
+    function resetColors() {
+      colorConfig.accent = { h: 43, s: 35, l: 53 };
+      colorConfig.bgBlack = '#000000';
+      colorConfig.bgWhite = '#FFFFFF';
+      document.getElementById('customAccent').value = hslToHex(43, 35, 53);
+      document.getElementById('bgBlackPicker').value = '#000000';
+      document.getElementById('bgWhitePicker').value = '#FFFFFF';
+      updateCSSVariables();
+      // Re-activate Platinum Gold swatch
+      document.querySelectorAll('.color-swatch').forEach(function(sw, i) {
+        sw.classList.toggle('active', i === 0);
+      });
+      saveColorConfig();
+      renderPreview();
+      renderAllCards();
+    }
+
+    function initColorSwatches() {
+      var container = document.getElementById('presetSwatches');
+      if (!container) return;
+      container.innerHTML = '';
+      COLOR_PRESETS.forEach(function(preset, idx) {
+        var swatch = document.createElement('div');
+        swatch.className = 'color-swatch' + (idx === 0 ? ' active' : '');
+        swatch.style.backgroundColor = hslToHex(preset.h, preset.s, preset.l);
+        swatch.title = preset.name;
+        swatch.dataset.h = preset.h;
+        swatch.dataset.s = preset.s;
+        swatch.dataset.l = preset.l;
+        swatch.onclick = function() { setAccentColor(preset.h, preset.s, preset.l); };
+        container.appendChild(swatch);
+      });
+    }
+
+    // ─── Font Panel Event Handlers ───
+
+    function toggleFontPanel() {
+      var body = document.getElementById('fontPanelBody');
+      var btn = document.getElementById('fontPanelToggle');
+      body.classList.toggle('hidden');
+      btn.classList.toggle('collapsed');
+    }
+
+    function onFontSizeChange(key, delta) {
+      var cur = fontConfig[key].size + delta;
+      if (cur < 10) cur = 10;
+      if (cur > 60) cur = 60;
+      fontConfig[key].size = cur;
+      document.getElementById('fs-' + key).textContent = cur;
+      saveFontConfig();
+      renderPreview();
+      renderAllCards();
+    }
+
+    function onFontWeightToggle(key) {
+      fontConfig[key].weight = fontConfig[key].weight === 'bold' ? 'normal' : 'bold';
+      var btn = document.getElementById('fw-' + key);
+      btn.classList.toggle('active', fontConfig[key].weight === 'bold');
+      saveFontConfig();
+      renderPreview();
+      renderAllCards();
+    }
+
+    function onFontPosChange(key, axis, delta) {
+      var o = ensurePersonOffsets(currentPerson);
+      o[key][axis] += delta;
+      var el = document.getElementById('fp-' + key);
+      if (el) el.textContent = o[key].dx + ',' + o[key].dy;
+      saveData();
+      renderPreview();
+      renderAllCards();
+    }
+
+    function resetFonts() {
+      fontConfig = JSON.parse(JSON.stringify(FONT_DEFAULTS));
+      saveFontConfig();
+      // Reset current person's position offsets
+      OFFSET_KEYS.forEach(function(k) { employees[currentPerson].fontOffsets[k] = { dx: 0, dy: 0 }; });
+      saveData();
+      initFontGrid();
+      renderPreview();
+      renderAllCards();
+    }
+
+    function initFontGrid() {
+      var grid = document.getElementById('fontGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      var keys = Object.keys(fontConfig);
+      var o = getPersonOffsets(currentPerson);
+      keys.forEach(function(key) {
+        var f = fontConfig[key];
+        var po = o[key] || { dx: 0, dy: 0 };
+        var label = FONT_LABELS[key] || key;
+        var item = document.createElement('div');
+        item.className = 'font-item';
+        item.innerHTML = `
+          <span class="font-item-label">${label}</span>
+          <div class="font-size-ctrl">
+            <button onclick="onFontSizeChange('${key}',-1)">−</button>
+            <span class="font-size-val" id="fs-${key}">${f.size}</span>
+            <button onclick="onFontSizeChange('${key}',1)">+</button>
+          </div>
+          <button class="font-bold-btn ${f.weight === 'bold' ? 'active' : ''}" id="fw-${key}" onclick="onFontWeightToggle('${key}')" title="Bold">B</button>
+          <div class="font-pos-ctrl">
+            <button class="font-pos-btn up" onclick="onFontPosChange('${key}','dy',-1)" title="Up 1px">▲</button>
+            <button class="font-pos-btn down" onclick="onFontPosChange('${key}','dy',1)" title="Down 1px">▼</button>
+            <button class="font-pos-btn left" onclick="onFontPosChange('${key}','dx',-1)" title="Left 1px">◀</button>
+            <button class="font-pos-btn right" onclick="onFontPosChange('${key}','dx',1)" title="Right 1px">▶</button>
+          </div>
+          <span class="font-pos-val" id="fp-${key}">${po.dx},${po.dy}</span>
+        `;
+        grid.appendChild(item);
+      });
+    }
+
     // Initial render
     function init() {
       loadData();
+      // Load saved configs from localStorage before building UI
+      loadFontConfig();
+      loadColorConfig();
+      initColorSwatches();
+      // Sync loaded color values to UI pickers
+      syncColorUI();
+      initFontGrid();
+      updateCSSVariables();
       renderTabs();
       switchMode(currentMode); // Initialize UI based on currentMode
       setTheme(currentTheme); // Apply initial theme
       renderAllCards();
     }
+
+    function syncColorUI() {
+      // Sync accent color picker
+      var accentPicker = document.getElementById('customAccent');
+      if (accentPicker) {
+        accentPicker.value = hslToHex(colorConfig.accent.h, colorConfig.accent.s, colorConfig.accent.l);
+      }
+      // Sync background pickers
+      var bgBlack = document.getElementById('bgBlackPicker');
+      if (bgBlack) bgBlack.value = colorConfig.bgBlack;
+      var bgWhite = document.getElementById('bgWhitePicker');
+      if (bgWhite) bgWhite.value = colorConfig.bgWhite;
+      // Sync active swatch highlight
+      var a = colorConfig.accent;
+      document.querySelectorAll('.color-swatch').forEach(function(sw) {
+        sw.classList.toggle('active',
+          parseInt(sw.dataset.h) === a.h &&
+          parseInt(sw.dataset.s) === a.s &&
+          parseInt(sw.dataset.l) === a.l
+        );
+      });
+    }
+
     init();
 
     // ─── Export Functions (Vector Based) ───
 
     function generateVectorSVG(p, isBack) {
       const c = getThemeColors();
-      const font = "Pretendard"; 
+      const font = "'Noto Sans KR', sans-serif";
 
       if (currentMode === 'envelope') {
           const spec = ENVELOPE_SPECS[currentEnvSize];
@@ -1192,26 +1837,138 @@
       });
     }
 
+    // Font cache: avoid re-downloading on repeated PDF exports within same session
+    var _fontCache = { notoB64: null };
+
     async function loadFont(doc) {
       try {
-        const fontUrl = "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Regular.ttf";
-        const response = await fetch(fontUrl);
-        if (!response.ok) throw new Error('Font fetch failed: ' + response.status);
-        const arrayBuffer = await response.arrayBuffer();
+        const toBase64 = async (url) => {
+          const resp = await fetch(url);
+          if (!resp.ok) throw new Error('Font fetch failed: ' + resp.status);
+          const buf = await resp.arrayBuffer();
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.readAsDataURL(new Blob([buf]));
+          });
+        };
 
-        // Use a more reliable way to convert ArrayBuffer to Base64 for large files
-        const base64 = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result.split(',')[1]);
-          reader.readAsDataURL(new Blob([arrayBuffer]));
-        });
-
-        doc.addFileToVFS('NanumGothic.ttf', base64);
-        doc.addFont('NanumGothic.ttf', 'NanumGothic', 'normal');
-        return 'NanumGothic';
+        // Primary: Noto Sans KR variable font (same font as viewer CSS for perfect consistency)
+        // Fallback: NanumGothic static fonts (reliable, similar Korean font)
+        if (!_fontCache.notoB64) {
+          try {
+            _fontCache.notoB64 = await toBase64(
+              "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanskr/NotoSansKR%5Bwght%5D.ttf"
+            );
+          } catch(e2) {
+            console.warn("Noto Sans KR fetch failed, falling back to NanumGothic", e2);
+            const [regB64, boldB64] = await Promise.all([
+              toBase64("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Regular.ttf"),
+              toBase64("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Bold.ttf")
+            ]);
+            doc.addFileToVFS('NanumGothic.ttf', regB64);
+            doc.addFont('NanumGothic.ttf', 'Noto Sans KR', 'normal');
+            doc.addFileToVFS('NanumGothicBold.ttf', boldB64);
+            doc.addFont('NanumGothicBold.ttf', 'Noto Sans KR', 'bold');
+            return 'Noto Sans KR';
+          }
+        }
+        // Register Noto Sans KR variable font for both normal and bold weights
+        doc.addFileToVFS('NotoSansKR.ttf', _fontCache.notoB64);
+        doc.addFont('NotoSansKR.ttf', 'Noto Sans KR', 'normal');
+        doc.addFileToVFS('NotoSansKR-Bold.ttf', _fontCache.notoB64);
+        doc.addFont('NotoSansKR-Bold.ttf', 'Noto Sans KR', 'bold');
+        return 'Noto Sans KR';
       } catch(e) {
         console.warn("Font loading failed", e);
         return 'sans-serif';
+      }
+    }
+
+    // Rasterize gradient-filled logo at high DPI for PDF export
+    // (svg2pdf.js cannot render linearGradient on transformed paths)
+    async function rasterizeGradientLogo(svgStr) {
+      return new Promise((resolve) => {
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgStr, 'image/svg+xml');
+        const svg = svgDoc.documentElement;
+        const vb = svg.getAttribute('viewBox').split(' ').map(Number);
+
+        // Find the logo <g> with scale transform
+        let logoG = null;
+        svg.querySelectorAll('g[transform]').forEach(g => {
+          if (/scale\(0\.0|scale\(0\.1/.test(g.getAttribute('transform'))) logoG = g;
+        });
+        if (!logoG) return resolve(null);
+
+        // Find gradient def referenced by logo paths
+        const fillRef = logoG.innerHTML.match(/url\(#([^)]+)\)/);
+        const gradId = fillRef ? fillRef[1] : null;
+        const gradEl = gradId ? svg.querySelector('#' + gradId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\\/g, '')) : null;
+        if (!gradEl) {
+          // Try direct getElementById
+          const g2 = svgDoc.getElementById(gradId);
+          if (!g2) return resolve(null);
+          var gradNode = g2;
+        } else {
+          var gradNode = gradEl;
+        }
+
+        // Create standalone SVG with just gradient + logo at 6x DPI
+        const dpi = 6;
+        const miniSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        miniSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        miniSvg.setAttribute('viewBox', svg.getAttribute('viewBox'));
+        miniSvg.setAttribute('width', vb[2] * dpi);
+        miniSvg.setAttribute('height', vb[3] * dpi);
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        defs.appendChild(gradNode.cloneNode(true));
+        miniSvg.appendChild(defs);
+        miniSvg.appendChild(logoG.cloneNode(true));
+
+        const blob = new Blob([new XMLSerializer().serializeToString(miniSvg)],
+          { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = () => {
+          const c = document.createElement('canvas');
+          c.width = vb[2] * dpi; c.height = vb[3] * dpi;
+          const ctx = c.getContext('2d');
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+          URL.revokeObjectURL(url);
+          resolve(c.toDataURL('image/png'));
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+        img.src = url;
+      });
+    }
+
+    // Strip logo <g> from SVG string (will be overlaid as raster)
+    function stripLogoGroup(svgStr) {
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(svgStr, 'image/svg+xml');
+      const svg = svgDoc.documentElement;
+      svg.querySelectorAll('g[transform]').forEach(g => {
+        if (/scale\(0\.0|scale\(0\.1/.test(g.getAttribute('transform'))) {
+          g.parentNode.removeChild(g);
+        }
+      });
+      return new XMLSerializer().serializeToString(svg);
+    }
+
+    // ─── Export Dropdown Handler ───
+    function executeExport() {
+      var sel = document.getElementById('exportSelect');
+      var v = sel.value;
+      var fakeEvent = { currentTarget: document.querySelector('.export-run-btn') };
+      switch(v) {
+        case 'pdf':     downloadCurrentPDF(fakeEvent); break;
+        case 'png':     downloadCurrentPNG(fakeEvent); break;
+        case 'svg':     downloadCurrentSVG(fakeEvent); break;
+        case 'allpdf':  downloadAllPDF(fakeEvent); break;
+        case 'proofone': downloadPersonProofPDF(fakeEvent); break;
+        case 'proofall': downloadAllProofPDF(fakeEvent); break;
+        case 'excel':   downloadExcelTemplate(fakeEvent); break;
       }
     }
 
@@ -1227,10 +1984,7 @@
           const svgStr = currentMode === 'envelope'
             ? generateVectorSVG(p, isBack)
             : (isBack ? buildBackSVG(p, currentTheme) : buildFrontSVG(p, currentTheme));
-          const parser = new DOMParser();
-          const svgDoc = parser.parseFromString(svgStr, "image/svg+xml");
-          const svgElement = svgDoc.documentElement;
-          
+
           let w, h;
           if (currentMode === 'envelope') {
              const spec = ENVELOPE_SPECS[currentEnvSize];
@@ -1240,19 +1994,23 @@
           } else {
              w = 94; h = 54;
           }
-          
+
           const c = getThemeColors();
-          // Map hex to RGB for jsPDF solid fill
           const r = parseInt(c.bg.slice(1,3), 16);
           const g = parseInt(c.bg.slice(3,5), 16);
           const b = parseInt(c.bg.slice(5,7), 16);
           doc.setFillColor(r, g, b);
           doc.rect(0, 0, w, h, 'F');
 
-          await doc.svg(svgElement, { 
-            x: 0, y: 0, width: w, height: h,
-            fontCallback: (family) => fontName
-          });
+          // Rasterize gradient logo, then render card without logo via svg2pdf
+          const logoImg = await rasterizeGradientLogo(svgStr);
+          const strippedSvg = logoImg ? stripLogoGroup(svgStr) : svgStr;
+          const parser = new DOMParser();
+          const svgDoc = parser.parseFromString(strippedSvg, "image/svg+xml");
+          await doc.svg(svgDoc.documentElement, { x: 0, y: 0, width: w, height: h, fontCallback: (family) => fontName });
+
+          // Overlay high-DPI gradient logo
+          if (logoImg) doc.addImage(logoImg, 'PNG', 0, 0, w, h);
         };
 
         const fontName = await loadFont(new jsPDF()); // Test instance to pre-load or just use the target
@@ -1346,17 +2104,24 @@
           const svgStr = currentMode === 'envelope'
             ? generateVectorSVG(person, isBack)
             : (isBack ? buildBackSVG(person, currentTheme) : buildFrontSVG(person, currentTheme));
-          const svgDoc = parser.parseFromString(svgStr, "image/svg+xml");
           const c = getThemeColors();
           const r = parseInt(c.bg.slice(1,3), 16);
           const g = parseInt(c.bg.slice(3,5), 16);
           const b = parseInt(c.bg.slice(5,7), 16);
           doc.setFillColor(r, g, b);
           doc.rect(0, 0, w, h, 'F');
-          await doc.svg(svgDoc.documentElement, { 
+
+          // Rasterize gradient logo, then render card without logo via svg2pdf
+          const logoImg = await rasterizeGradientLogo(svgStr);
+          const strippedSvg = logoImg ? stripLogoGroup(svgStr) : svgStr;
+          const svgDoc = parser.parseFromString(strippedSvg, "image/svg+xml");
+          await doc.svg(svgDoc.documentElement, {
             x: 0, y: 0, width: w, height: h,
             fontCallback: (family) => fontName
           });
+
+          // Overlay high-DPI gradient logo
+          if (logoImg) doc.addImage(logoImg, 'PNG', 0, 0, w, h);
         };
 
         if (currentMode === 'envelope') {
@@ -1392,6 +2157,93 @@
           pdf.save('BRITZMEDI_Cards_Full_Vector.pdf');
         }
       } catch(e) { console.error(e); alert('전체 PDF 생성 실패 (Vector Mode)'); }
+      btn.innerHTML = origText; btn.disabled = false;
+    }
+
+    // ─── Proof PDF (시안 PDF) ───
+
+    async function downloadPersonProofPDF(event) {
+      const btn = event.currentTarget;
+      const origText = btn.innerHTML;
+      btn.innerHTML = '<span class="icon">⏳</span>'; btn.disabled = true;
+      const savedTheme = currentTheme;
+      try {
+        const { jsPDF } = window.jspdf;
+        const parser = new DOMParser();
+        const p = employees[currentPerson];
+        const pdf = new jsPDF({ orientation:'landscape', unit:'mm', format:[94, 54] });
+        const font = await loadFont(pdf);
+        const themes = ['black', 'white'];
+        let pageIdx = 0;
+
+        for (const theme of themes) {
+          currentTheme = theme;
+          for (const isBack of [false, true]) {
+            if (pageIdx > 0) pdf.addPage([94, 54], 'landscape');
+            const svgStr = isBack ? buildBackSVG(p, theme, 'proof-' + pageIdx) : buildFrontSVG(p, theme, 'proof-' + pageIdx);
+            const c = getThemeColors();
+            const r = parseInt(c.bg.slice(1,3), 16);
+            const g = parseInt(c.bg.slice(3,5), 16);
+            const b = parseInt(c.bg.slice(5,7), 16);
+            pdf.setFillColor(r, g, b);
+            pdf.rect(0, 0, 94, 54, 'F');
+
+            const logoImg = await rasterizeGradientLogo(svgStr);
+            const strippedSvg = logoImg ? stripLogoGroup(svgStr) : svgStr;
+            const svgDoc = parser.parseFromString(strippedSvg, "image/svg+xml");
+            await pdf.svg(svgDoc.documentElement, { x:0, y:0, width:94, height:54, fontCallback: () => font });
+            if (logoImg) pdf.addImage(logoImg, 'PNG', 0, 0, 94, 54);
+            pageIdx++;
+          }
+        }
+        pdf.save(`BRITZMEDI_Proof_${p.nameKr}.pdf`);
+      } catch(e) { console.error(e); alert('개별 시안 PDF 생성 실패'); }
+      currentTheme = savedTheme;
+      renderPreview(); renderAllCards();
+      btn.innerHTML = origText; btn.disabled = false;
+    }
+
+    async function downloadAllProofPDF(event) {
+      const btn = event.currentTarget;
+      const origText = btn.innerHTML;
+      btn.disabled = true;
+      const savedTheme = currentTheme;
+      try {
+        const { jsPDF } = window.jspdf;
+        const parser = new DOMParser();
+        const pdf = new jsPDF({ orientation:'landscape', unit:'mm', format:[94, 54] });
+        const font = await loadFont(pdf);
+        const themes = ['black', 'white'];
+        let pageIdx = 0;
+
+        for (let i = 0; i < employees.length; i++) {
+          const p = employees[i];
+          btn.innerHTML = `<span class="icon">⏳</span> ${i+1}/${employees.length}`;
+          for (const theme of themes) {
+            currentTheme = theme;
+            for (const isBack of [false, true]) {
+              if (pageIdx > 0) pdf.addPage([94, 54], 'landscape');
+              const svgStr = isBack ? buildBackSVG(p, theme, 'ap-' + pageIdx) : buildFrontSVG(p, theme, 'ap-' + pageIdx);
+              const c = getThemeColors();
+              const r = parseInt(c.bg.slice(1,3), 16);
+              const g = parseInt(c.bg.slice(3,5), 16);
+              const b = parseInt(c.bg.slice(5,7), 16);
+              pdf.setFillColor(r, g, b);
+              pdf.rect(0, 0, 94, 54, 'F');
+
+              const logoImg = await rasterizeGradientLogo(svgStr);
+              const strippedSvg = logoImg ? stripLogoGroup(svgStr) : svgStr;
+              const svgDoc = parser.parseFromString(strippedSvg, "image/svg+xml");
+              await pdf.svg(svgDoc.documentElement, { x:0, y:0, width:94, height:54, fontCallback: () => font });
+              if (logoImg) pdf.addImage(logoImg, 'PNG', 0, 0, 94, 54);
+              pageIdx++;
+            }
+          }
+        }
+        pdf.save('BRITZMEDI_Proof_All.pdf');
+      } catch(e) { console.error(e); alert('전체 시안 PDF 생성 실패'); }
+      currentTheme = savedTheme;
+      renderPreview(); renderAllCards();
       btn.innerHTML = origText; btn.disabled = false;
     }
 

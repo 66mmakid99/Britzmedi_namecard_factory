@@ -732,24 +732,41 @@
       const w = 540; const h = 310;
       const c = getThemeColors();
       const font = "'Noto Sans KR', sans-serif";
+      
+      const defs = `
+        <defs>
+          <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:${c.line};stop-opacity:0" />
+            <stop offset="50%" style="stop-color:${c.line};stop-opacity:1" />
+            <stop offset="100%" style="stop-color:${c.line};stop-opacity:0" />
+          </linearGradient>
+          <linearGradient id="bottomGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:${c.line};stop-opacity:0" />
+            <stop offset="50%" style="stop-color:${c.line};stop-opacity:0.4" />
+            <stop offset="100%" style="stop-color:${c.line};stop-opacity:0" />
+          </linearGradient>
+        </defs>`;
 
       if (isBack) {
         const symW = 72; const symH = 65;
         return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+          ${defs}
           <rect width="100%" height="100%" fill="${c.bg}"/>
           <g transform="translate(234, 80)">
             ${makeSymbol(symW, symH, 'v-b')}
           </g>
-          <text x="270" y="195" text-anchor="middle" font-family="${font}" font-size="13" font-weight="500" letter-spacing="8" fill="${c.titleKr}">BRITZMEDI</text>
-          <rect x="248" y="210" width="44" height="1" fill="${c.line}"/>
-          <text x="270" y="235" text-anchor="middle" font-family="${font}" font-size="9" font-weight="400" letter-spacing="5" fill="${c.muted}">AESTHETIC MEDICAL DEVICE</text>
+          <text x="270" y="192" text-anchor="middle" font-family="${font}" font-size="13" font-weight="500" letter-spacing="8" fill="${c.titleKr}">BRITZMEDI</text>
+          <rect x="248" y="206" width="44" height="1" fill="url(#lineGrad)"/>
+          <text x="270" y="225" text-anchor="middle" font-family="${font}" font-size="9" font-weight="400" letter-spacing="5" fill="${c.muted}">AESTHETIC MEDICAL DEVICE</text>
         </svg>`;
       } else {
         const logoW = 44; const logoH = 52;
         const leftPadding = 32;
 
         return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+          ${defs}
           <rect width="100%" height="100%" fill="${c.bg}"/>
+          <rect x="0" y="${h-1}" width="${w}" height="1" fill="url(#bottomGrad)"/>
           
           <!-- Top section -->
           <g transform="translate(${leftPadding}, 51)">
@@ -758,8 +775,8 @@
           <g transform="translate(${leftPadding + 64}, 82)">
             <text x="0" y="0" font-family="${font}" font-size="26" font-weight="600" fill="${c.nameKr}">${p.nameKr}</text>
             <text x="${p.nameKr.length * 26 + 12}" y="-2" font-family="${font}" font-size="11" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
-            <text x="0" y="24" font-family="${font}" font-size="12.5" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
-            <text x="${p.nameEn.length * 7.5 + 12}" y="24" font-family="${font}" font-size="9" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
+            <text x="0" y="22" font-family="${font}" font-size="12.5" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
+            <text x="${p.nameEn.length * 7.5 + 12}" y="22" font-family="${font}" font-size="9" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
           </g>
 
           <!-- Middle section (Addresses) -->
@@ -775,18 +792,18 @@
             <text x="0" y="0" font-family="${font}" font-size="10.5" font-weight="600" fill="${c.highlight}">M. </text>
             <text x="16" y="0" font-family="${font}" font-size="10.5" fill="${c.highlight}">${p.phone}</text>
             
-            <text x="0" y="17" font-family="${font}" font-size="10.5" font-weight="500" fill="${c.sub}" opacity="0.75">T. </text>
-            <text x="16" y="17" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.tel}</text>
+            <text x="0" y="16" font-family="${font}" font-size="10.5" font-weight="500" fill="${c.sub}" opacity="0.75">T. </text>
+            <text x="16" y="16" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.tel}</text>
             
-            <text x="0" y="34" font-family="${font}" font-size="10.5" font-weight="500" fill="${c.sub}" opacity="0.75">F. </text>
-            <text x="16" y="34" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.fax}</text>
+            <text x="0" y="32" font-family="${font}" font-size="10.5" font-weight="500" fill="${c.sub}" opacity="0.75">F. </text>
+            <text x="16" y="32" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.fax}</text>
 
             <!-- Divider -->
             <line x1="130" y1="-8" x2="130" y2="42" stroke="${c.line}" stroke-width="0.5" stroke-opacity="0.2"/>
 
             <!-- Right column -->
             <text x="145" y="0" font-family="${font}" font-size="10.5" fill="${c.highlight}">${p.email}</text>
-            <text x="145" y="17" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.website}</text>
+            <text x="145" y="16" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.website}</text>
           </g>
         </svg>`;
       }
@@ -794,10 +811,13 @@
 
     async function svgToCanvas(svgStr) {
       return new Promise((resolve) => {
+        const scale = 5.333; // 540px * 5.333 = 2880px (approx 300 DPI for 9.4cm/3.7in)
         const canvas = document.createElement('canvas');
-        canvas.width = 540 * 4; 
-        canvas.height = 310 * 4;
+        canvas.width = Math.round(540 * scale); 
+        canvas.height = Math.round(310 * scale);
         const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
         const img = new Image();
         const svgBlob = new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'});
         const url = URL.createObjectURL(svgBlob);

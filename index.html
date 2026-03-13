@@ -769,9 +769,15 @@
         </defs>`;
 
       if (isBack) {
+        const scale = 0.1175; // Matches 144px height (144 / 1225)
+        const targetW = 908 * scale;
+        const targetH = 1225 * scale;
+        const x = (w - targetW) / 2;
+        const y = (h - targetH) / 2;
+
         return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
           <rect width="100%" height="100%" fill="${c.bg}"/>
-          <g transform="translate(180, 32) scale(0.2)">
+          <g transform="translate(${x}, ${y}) scale(${scale})">
             <svg viewBox="571 466 908 1225" width="908" height="1225">
               ${getLockupContent()}
             </svg>

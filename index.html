@@ -1034,59 +1034,51 @@
 
     function generateVectorSVG(p, isBack) {
       const c = getThemeColors();
-      const font = "Helvetica, Arial, sans-serif"; // Standard PDF fonts avoid encoding issues
+      const font = "'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif";
 
       if (currentMode === 'envelope') {
           const spec = ENVELOPE_SPECS[currentEnvSize];
           const isFlat = currentEnvView === 'flat';
           const totalW = spec.w + (isFlat ? spec.wing * 2 : 0);
           const totalH = spec.h + (isFlat ? spec.flap * 2 : 0);
-          const offset = isFlat ? { x: spec.wing, y: spec.flap } : { x: 0, y: 0 };
-          const isA4 = currentEnvSize === 'A4';
+          
+          // Use a scale factor for envelope to keep coordinates manageable but high-res
+          const scale = 4; 
+          const offset = isFlat ? { x: spec.wing * scale, y: spec.flap * scale } : { x: 0, y: 0 };
 
-          return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalW}mm" height="${totalH}mm" viewBox="0 0 ${totalW} ${totalH}">
-              <rect width="${totalW}" height="${totalH}" fill="${isFlat ? '#f5f5f5' : c.bg}" />
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalW}mm" height="${totalH}mm" viewBox="0 0 ${totalW * scale} ${totalH * scale}">
+              <defs>${getSvgGradient('env-pdf')}</defs>
+              <rect width="100%" height="100%" fill="${isFlat ? '#f9f9f9' : c.bg}" />
               <g transform="translate(${offset.x}, ${offset.y})">
-                  <rect width="${spec.w}" height="${spec.h}" fill="${c.bg}" />
+                  <rect width="${spec.w * scale}" height="${spec.h * scale}" fill="${c.bg}" />
                   
-                  <g transform="translate(${isA4 ? 15 : 10}, ${isA4 ? 15 : 10})">
-                      <g transform="translate(0, 2) scale(0.008)">
-                          ${makeLogo(44, 52, 'env-pdf', true)}
+                  <g transform="translate(${scale * (currentEnvSize === 'A4' ? 40 : 25)}, ${scale * (currentEnvSize === 'A4' ? 40 : 25)})">
+                      <g transform="scale(${scale * 0.08}) translate(-571, -466)">
+                          ${getLockupContent().replace('id="pg_back"', 'id="pg_env_pdf"').replace('url(#pg_back)', 'url(#pg-env-pdf)')}
                       </g>
-                      <g transform="translate(14, 4)">
-                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 4.5 : 3.5}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
-                          <text x="0" y="${isA4 ? 4.5 : 3.5}" font-family="${font}" font-size="${isA4 ? 2.5 : 2}" fill="${c.titleKr}" letter-spacing="0.5">AESTHETIC MEDICAL DEVICE</text>
+                      <g transform="translate(${scale * 60}, ${scale * 10})">
+                          <text x="0" y="0" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 14 : 11)}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
+                          <text x="0" y="${scale * 14}" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 8 : 7)}" fill="${c.titleKr}" letter-spacing="${scale * 3}">AESTHETIC MEDICAL DEVICE</text>
                       </g>
-                      <g transform="translate(0, 18)">
-                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 3.2 : 2.5}" fill="${c.address}">${p.addressKr}</text>
-                          <text x="0" y="${isA4 ? 4.5 : 3.5}" font-family="${font}" font-size="${isA4 ? 2.8 : 2.2}" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
-                          <text x="0" y="${isA4 ? 9 : 7}" font-family="${font}" font-size="${isA4 ? 3 : 2.4}" fill="${c.highlight}">T. ${p.tel} &nbsp; F. ${p.fax} &nbsp; www.britzmedi.co.kr</text>
+                      <g transform="translate(0, ${scale * 70})">
+                          <text x="0" y="0" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 10 : 8)}" fill="${c.address}">${p.addressKr}</text>
+                          <text x="0" y="${scale * 16}" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 8 : 7)}" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
+                          <text x="0" y="${scale * 32}" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 9 : 7.5)}" fill="${c.highlight}">T. ${p.tel} &nbsp; F. ${p.fax} &nbsp; www.britzmedi.co.kr</text>
                       </g>
                   </g>
               </g>
-
               ${isFlat ? `
-                <path d="M${spec.wing},${spec.flap} h${spec.w} l${spec.wing},${spec.wing} v${spec.h - spec.wing*2} l-${spec.wing},${spec.wing} h-${spec.w} l-${spec.wing},-${spec.wing} v-${spec.h - spec.wing*2} l${spec.wing},-${spec.wing} Z" fill="none" stroke="#222" stroke-width="0.1" />
-                <path d="M${spec.wing},${spec.flap} l10,-${spec.flap} h${spec.w - 20} l10,${spec.flap} Z" fill="none" stroke="#222" stroke-width="0.1" />
-                <path d="M${spec.wing},${totalH - spec.flap} l15,${spec.flap-10} h${spec.w - 30} l15,-${spec.flap-10} Z" fill="none" stroke="#222" stroke-width="0.1" />
+                <path d="M${spec.wing * scale},${spec.flap * scale} h${spec.w * scale} l${spec.wing * scale},${spec.wing * scale} v${(spec.h - spec.wing*2) * scale} l-${spec.wing * scale},${spec.wing * scale} h-${spec.w * scale} l-${spec.wing * scale},-${spec.wing*scale} v-${(spec.h - spec.wing*2)*scale} l${spec.wing*scale},-${spec.wing*scale} Z" fill="none" stroke="#222" stroke-width="0.5" />
               ` : ''}
           </svg>`;
       }
 
-      // Card Dimensions (mm)
-      const W = 94; 
-      const H = 54;
-      const bleedInPx = 12; // 12px bleed in HTML
-      const mmScale = 94 / 540; // 1mm roughly equals 5.74px, but let's use the 94/540 ratio
-      
-      const pxToMm = (px) => px * mmScale;
-      const margin = pxToMm(bleedInPx + 20); // bleed + padding
-
+      // ─── Business Card (540x310 ViewBox for 1:1 UI parity) ───
       const fullDefs = `
         <defs>
-          ${getSvgGradient('v-f')}
-          ${getSvgGradient('back')}
-          <linearGradient id="bottomGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          ${getSvgGradient('vec-f')}
+          ${getSvgGradient('vec-b')}
+          <linearGradient id="bottomGradVec" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" style="stop-color:${c.line};stop-opacity:0" />
             <stop offset="50%" style="stop-color:${c.line};stop-opacity:0.4" />
             <stop offset="100%" style="stop-color:${c.line};stop-opacity:0" />
@@ -1094,61 +1086,60 @@
         </defs>`;
 
       if (isBack) {
-        // Logo size in back card (target height: approx 25.1mm based on 144px/5.74)
-        const backLogoScale = pxToMm(144) / 1225; 
-        const targetW = 908 * backLogoScale;
-        const targetH = 1225 * backLogoScale;
-        const x = (W - targetW) / 2;
-        const y = (H - targetH) / 2 + 1.5; // Adjusted offset for centering
+        // Match backCard logic exactly
+        const logoH = 144;
+        const logoW = logoH * (908/1225);
+        const x = (540 - logoW) / 2;
+        const y = (310 - logoH) / 2;
 
-        return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 540 310">
           ${fullDefs}
           <rect width="100%" height="100%" fill="${c.bg}"/>
-          <g transform="translate(${x}, ${y}) scale(${backLogoScale})">
-               ${getLockupContent().replace('id="pg_back"', 'id="pg_back_v"').replace('url(#pg_back)', 'url(#pg-back)')}
+          <g transform="translate(${x}, ${y}) scale(${logoH / 1225}) translate(-571, -466)">
+               ${getLockupContent().replace('id="pg_back"', 'id="pg_vec_b"').replace('url(#pg_back)', 'url(#pg-vec-b)')}
           </g>
         </svg>`;
       } else {
-        // Front Card
-        const logoSize = pxToMm(44); // 44px logo in HTML
-        const nameX = margin + pxToMm(58); // logo width + gap
-        
-        return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">
+        // Front Card logic parity
+        const logoW = 44;
+        const logoH = 52;
+        const leftPadding = 32;
+
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 540 310">
           ${fullDefs}
           <rect width="100%" height="100%" fill="${c.bg}"/>
-          <rect x="0" y="${H-0.5}" width="${W}" height="0.5" fill="url(#bottomGrad)"/>
+          <rect x="0" y="309" width="540" height="1" fill="url(#bottomGradVec)"/>
           
-          <!-- Top Section -->
-          <g transform="translate(${margin}, ${pxToMm(bleedInPx + 24)})">
-             <g transform="scale(${pxToMm(44)/908})">
-                ${makeLogo(44, 52, 'v-f', true)}
-             </g>
+          <!-- Logo -->
+          <g transform="translate(${leftPadding}, 50) scale(${logoH / 1225}) translate(-571, -466)">
+             ${getLockupContent().replace('id="pg_back"', 'id="pg_vec_f"').replace('url(#pg_back)', 'url(#pg-vec-f)')}
           </g>
 
-          <g transform="translate(${nameX}, ${pxToMm(bleedInPx + 22)})">
-            <text x="0" y="${pxToMm(20)}" font-family="${font}" font-size="${pxToMm(26)}" font-weight="bold" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="${pxToMm(p.nameKr.length * 26 + 10)}" y="${pxToMm(18.5)}" font-family="${font}" font-size="${pxToMm(11.5)}" fill="${c.titleKr}">${p.titleKr}</text>
-            <text x="0" y="${pxToMm(38)}" font-family="${font}" font-size="${pxToMm(13)}" fill="${c.nameEn}">${p.nameEn}</text>
-            <text x="${pxToMm(p.nameEn.length * 8 + 10)}" y="${pxToMm(38)}" font-family="${font}" font-size="${pxToMm(10)}" fill="${c.titleEn}">${p.titleEn}</text>
+          <!-- Names -->
+          <g transform="translate(${leftPadding + 64}, 78)">
+            <text x="0" y="0" font-family="${font}" font-size="26" font-weight="bold" fill="${c.nameKr}">${p.nameKr}</text>
+            <text x="${p.nameKr.length * 26 + 10}" y="-1.5" font-family="${font}" font-size="11.5" fill="${c.titleKr}">${p.titleKr}</text>
+            <text x="0" y="22" font-family="${font}" font-size="13" fill="${c.nameEn}">${p.nameEn}</text>
+            <text x="${p.nameEn.length * 8 + 10}" y="22" font-family="${font}" font-size="10" fill="${c.titleEn}">${p.titleEn}</text>
           </g>
 
-          <!-- Middle Section -->
-          <g transform="translate(${margin + pxToMm(4)}, ${pxToMm(bleedInPx + 85)})">
-            <text x="0" y="0" font-family="${font}" font-size="${pxToMm(10.5)}" fill="${c.address}">${p.addressKr}</text>
-            <text x="0" y="${pxToMm(14)}" font-family="${font}" font-size="${pxToMm(10)}" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
-            <rect x="0" y="${pxToMm(20)}" width="${pxToMm(34)}" height="0.2" fill="${c.line}" opacity="0.75"/>
+          <!-- Address -->
+          <g transform="translate(${leftPadding + 4}, 175)">
+            <text x="0" y="0" font-family="${font}" font-size="10.5" fill="${c.address}">${p.addressKr}</text>
+            <text x="0" y="14" font-family="${font}" font-size="10" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
+            <rect x="0" y="22" width="34" height="1.2" fill="${c.line}" opacity="0.75"/>
           </g>
 
-          <!-- Bottom Section -->
-          <g transform="translate(${margin + pxToMm(4)}, ${pxToMm(bleedInPx + 118)})">
-            <text x="0" y="0" font-family="${font}" font-size="${pxToMm(11)}" font-weight="bold" fill="${c.highlight}">M. ${p.phone}</text>
-            <text x="0" y="${pxToMm(14)}" font-family="${font}" font-size="${pxToMm(11)}" fill="${c.sub}">T. ${p.tel}</text>
-            <text x="0" y="${pxToMm(28)}" font-family="${font}" font-size="${pxToMm(11)}" fill="${c.sub}">F. ${p.fax}</text>
+          <!-- Contacts -->
+          <g transform="translate(${leftPadding + 4}, 214)">
+            <text x="0" y="0" font-family="${font}" font-size="11" font-weight="bold" fill="${c.highlight}">M. ${p.phone}</text>
+            <text x="0" y="16" font-family="${font}" font-size="11" fill="${c.sub}">T. ${p.tel}</text>
+            <text x="0" y="32" font-family="${font}" font-size="11" fill="${c.sub}">F. ${p.fax}</text>
 
-            <line x1="${pxToMm(125)}" y1="-2" x2="${pxToMm(125)}" y2="${pxToMm(30)}" stroke="${c.line}" stroke-width="0.1" stroke-opacity="0.2"/>
+            <line x1="130" y1="-8" x2="130" y2="42" stroke="${c.line}" stroke-width="0.5" stroke-opacity="0.2"/>
 
-            <text x="${pxToMm(140)}" y="0" font-family="${font}" font-size="${pxToMm(11)}" fill="${c.highlight}">${p.email}</text>
-            <text x="${pxToMm(140)}" y="${pxToMm(14)}" font-family="${font}" font-size="${pxToMm(11)}" fill="${c.sub}">${p.website}</text>
+            <text x="145" y="0" font-family="${font}" font-size="11" fill="${c.highlight}">${p.email}</text>
+            <text x="145" y="16" font-family="${font}" font-size="11" fill="${c.sub}">${p.website}</text>
           </g>
         </svg>`;
       }

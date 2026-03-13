@@ -558,7 +558,7 @@
               <div style="flex-shrink:0;margin-top:${Math.round(2*s)}px">
                 ${makeLogo(Math.round(44*s), Math.round(52*s), 'front-'+id)}
               </div>
-              <div>
+              <div style="margin-top:${Math.round(3*s)}px">
                 <div style="display:flex;align-items:baseline;gap:${Math.round(10*s)}px;margin-bottom:${Math.round(4*s)}px">
                   <span style="font-size:${Math.round(26*s)}px;font-weight:600;letter-spacing:0.5px;color:${c.nameKr};line-height:1">${p.nameKr}</span>
                   <span style="font-size:${Math.round(11*s)}px;font-weight:400;color:${c.titleKr};opacity:0.8">${p.titleKr}</span>
@@ -755,7 +755,7 @@
           <g transform="translate(${leftPadding}, 51)">
             ${makeLogo(logoW, logoH, 'v-f')}
           </g>
-          <g transform="translate(${leftPadding + 64}, 79)">
+          <g transform="translate(${leftPadding + 64}, 82)">
             <text x="0" y="0" font-family="${font}" font-size="26" font-weight="600" fill="${c.nameKr}">${p.nameKr}</text>
             <text x="${p.nameKr.length * 26 + 12}" y="-2" font-family="${font}" font-size="11" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
             <text x="0" y="24" font-family="${font}" font-size="12.5" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>

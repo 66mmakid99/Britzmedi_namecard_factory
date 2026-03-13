@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/svg2pdf.js/2.2.3/svg2pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     :root {
@@ -1128,9 +1129,8 @@
 
     async function svgToCanvas(svgStr, w_mm, h_mm) {
       return new Promise((resolve) => {
-        const dpi = 300;
         const mmToPx = 3.7795; // 1mm = 3.7795px
-        const scale = 2.5; // Additional scale for ultra sharpness
+        const scale = 6.25; // 6.25 scale results in 600+ DPI (Professional Print Grade)
         
         const canvas = document.createElement('canvas');
         canvas.width = Math.round(w_mm * mmToPx * scale); 
@@ -1139,6 +1139,10 @@
         const ctx = canvas.getContext('2d');
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
+        
+        // Ensure vector-like sharpness for text and paths
+        ctx.textBaseline = 'top';
+        ctx.fontKerning = 'normal';
         
         const img = new Image();
         const svgBlob = new Blob([svgStr], {type: 'image/svg+xml;charset=utf-8'});
@@ -1161,32 +1165,42 @@
         const { jsPDF } = window.jspdf;
         const p = employees[currentPerson];
         
+        const generatePage = async (doc, isBack) => {
+          const svgStr = generateVectorSVG(p, isBack);
+          const parser = new DOMParser();
+          const svgDoc = parser.parseFromString(svgStr, "image/svg+xml");
+          const svgElement = svgDoc.documentElement;
+          
+          let w, h;
+          if (currentMode === 'envelope') {
+             const spec = ENVELOPE_SPECS[currentEnvSize];
+             const isFlat = currentEnvView === 'flat';
+             w = spec.w + (isFlat ? spec.wing * 2 : 0);
+             h = spec.h + (isFlat ? spec.flap * 2 : 0);
+          } else {
+             w = 94; h = 54;
+          }
+          
+          await doc.svg(svgElement, { x: 0, y: 0, width: w, height: h });
+        };
+
         if (currentMode === 'envelope') {
             const spec = ENVELOPE_SPECS[currentEnvSize];
             const isFlat = currentEnvView === 'flat';
             const w = spec.w + (isFlat ? spec.wing * 2 : 0);
             const h = spec.h + (isFlat ? spec.flap * 2 : 0);
-            
             const pdf = new jsPDF({ orientation: w > h ? 'landscape' : 'portrait', unit:'mm', format:[w, h] });
-            const svg = generateVectorSVG(p, false);
-            const canvas = await svgToCanvas(svg, w, h);
-            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h, undefined, 'NONE');
-            pdf.save(`BRITZMEDI_Envelope_${currentEnvSize}_${p.nameKr}.pdf`);
+            
+            await generatePage(pdf, false);
+            pdf.save(`BRITZMEDI_Env_${currentEnvSize}_Vector_${p.nameKr}.pdf`);
         } else {
             const pdf = new jsPDF({ orientation:'landscape', unit:'mm', format:[94, 54] });
-
-            const frontSvg = generateVectorSVG(p, false);
-            const frontCanvas = await svgToCanvas(frontSvg, 94, 54);
-            pdf.addImage(frontCanvas.toDataURL('image/png'), 'PNG', 0, 0, 94, 54, undefined, 'NONE');
-
+            await generatePage(pdf, false); // Front
             pdf.addPage([94, 54], 'landscape');
-            const backSvg = generateVectorSVG(p, true);
-            const backCanvas = await svgToCanvas(backSvg, 94, 54);
-            pdf.addImage(backCanvas.toDataURL('image/png'), 'PNG', 0, 0, 94, 54, undefined, 'NONE');
-
-            pdf.save(`BRITZMEDI_Card_${p.nameKr}.pdf`);
+            await generatePage(pdf, true); // Back
+            pdf.save(`BRITZMEDI_Card_Vector_${p.nameKr}.pdf`);
         }
-      } catch(e) { console.error(e); alert('PDF 생성 실패'); }
+      } catch(e) { console.error(e); alert('PDF 생성 실패 (Vector Mode)'); }
       btn.innerHTML = origText; btn.disabled = false;
     }
 
@@ -1242,7 +1256,14 @@
       btn.disabled = true;
       try {
         const { jsPDF } = window.jspdf;
+        const parser = new DOMParser();
         
+        const addVectorPage = async (doc, person, isBack, w, h) => {
+          const svgStr = generateVectorSVG(person, isBack);
+          const svgDoc = parser.parseFromString(svgStr, "image/svg+xml");
+          await doc.svg(svgDoc.documentElement, { x: 0, y: 0, width: w, height: h });
+        };
+
         if (currentMode === 'envelope') {
           const spec = ENVELOPE_SPECS[currentEnvSize];
           const isFlat = currentEnvView === 'flat';
@@ -1253,11 +1274,9 @@
           for (let i = 0; i < employees.length; i++) {
             btn.innerHTML = `<span class="icon">⏳</span> ${i+1}/${employees.length}`;
             if (i > 0) pdf.addPage([w, h], w > h ? 'landscape' : 'portrait');
-            const svg = generateVectorSVG(employees[i], false);
-            const canvas = await svgToCanvas(svg, w, h);
-            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h, undefined, 'NONE');
+            await addVectorPage(pdf, employees[i], false, w, h);
           }
-          pdf.save(`BRITZMEDI_Envelopes_${currentEnvSize}_Full.pdf`);
+          pdf.save(`BRITZMEDI_Envelopes_${currentEnvSize}_Full_Vector.pdf`);
         } else {
           const pdf = new jsPDF({ orientation:'landscape', unit:'mm', format:[94, 54] });
 
@@ -1266,23 +1285,15 @@
             const p = employees[i];
             
             if (i > 0) pdf.addPage([94, 54], 'landscape');
-            const frontSvg = generateVectorSVG(p, false);
-            const frontCanvas = await svgToCanvas(frontSvg, 94, 54);
-            pdf.addImage(frontCanvas.toDataURL('image/png'), 'PNG', 0, 0, 94, 54, undefined, 'NONE');
+            await addVectorPage(pdf, p, false, 94, 54); // Front
 
             pdf.addPage([94, 54], 'landscape');
-            const backSvg = generateVectorSVG(p, true);
-            const backCanvas = await svgToCanvas(backSvg, 94, 54);
-            pdf.addImage(backCanvas.toDataURL('image/png'), 'PNG', 0, 0, 94, 54, undefined, 'NONE');
+            await addVectorPage(pdf, p, true, 94, 54); // Back
           }
-          pdf.save('BRITZMEDI_Cards_Full.pdf');
+          pdf.save('BRITZMEDI_Cards_Full_Vector.pdf');
         }
-      } catch(e) {
-        console.error(e);
-        alert('PDF 생성 실패');
-      }
-      btn.innerHTML = origText;
-      btn.disabled = false;
+      } catch(e) { console.error(e); alert('전체 PDF 생성 실패 (Vector Mode)'); }
+      btn.innerHTML = origText; btn.disabled = false;
     }
 
     // ─── Excel Template ───

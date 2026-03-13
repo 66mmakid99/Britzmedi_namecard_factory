@@ -872,11 +872,11 @@
         return content;
     }
 
-    function getLockupContent() {
+    function getLockupContent(noDefs) {
       const stops = currentTheme === 'white'
         ? ['#8A7B4D', '#B8A978', '#D4C89A']
         : ['#D4C89A', '#EDE4C8', '#FFFFFF'];
-      return `
+      const defs = noDefs ? '' : `
         <defs>
           <linearGradient id="pg_back" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="${stops[0]}"/>
@@ -885,7 +885,9 @@
             <stop offset="75%" stop-color="${stops[1]}"/>
             <stop offset="100%" stop-color="${stops[0]}"/>
           </linearGradient>
-        </defs>
+        </defs>`;
+      return `
+        ${defs}
         <path fill="url(#pg_back)" d="M851,972.106C834.869,972.106 819.237,972.106 803.327,972.106C803.327,1005.739 803.327,1038.979 803.327,1072.526C804.674,1072.613 805.954,1072.767 807.234,1072.767C850.899,1072.777 894.564,1072.82 938.229,1072.684C941.976,1072.672 944.836,1073.674 947.73,1075.949C1000.764,1117.659 1053.857,1159.295 1106.937,1200.948C1113.27,1205.917 1119.599,1210.891 1126.927,1216.646C967.592,1216.646 809.705,1216.646 651.489,1216.646C651.489,1087.788 651.489,959.067 651.489,829.842C850.572,829.842 1049.479,829.842 1248.673,829.842C1248.673,783.116 1248.673,736.893 1248.673,690.188C1049.496,690.188 850.596,690.188 651.43,690.188C651.43,642.111 651.43,594.515 651.43,546.507C900.557,546.507 1149.591,546.507 1399.172,546.507C1399.172,548.42 1399.172,550.2 1399.172,551.98C1399.17,669.976 1399.156,787.972 1399.231,905.968C1399.233,909.577 1398.39,911.929 1395.229,914.172C1363.183,936.918 1331.281,959.868 1299.348,982.773C1297.895,983.814 1296.524,984.969 1294.853,986.275C1319.413,1006.804 1343.563,1027.002 1367.726,1047.182C1377.444,1055.298 1387.241,1063.322 1396.87,1071.542C1398.059,1072.557 1399.079,1074.53 1399.083,1076.062C1399.177,1122.393 1399.134,1168.724 1399.103,1215.056C1399.103,1215.38 1398.963,1215.704 1398.781,1216.5C1391.552,1216.793 1384.916,1217.32 1377.974,1212.191C1285.551,1143.898 1192.861,1075.965 1100.239,1007.941C1085.339,996.999 1070.519,985.946 1055.468,975.216C1052.986,973.447 1049.501,972.214 1046.476,972.207C981.484,972.046 916.492,972.096 851,972.106Z"/>
         <path fill="url(#pg_back)" d="M651.184,1386C651.184,1373.365 651.184,1361.23 651.184,1349.007C652.094,1348.782 652.721,1348.49 653.348,1348.492C690.483,1348.614 727.624,1348.44 764.749,1349.142C773.373,1349.305 782.334,1351.41 790.45,1354.458C807.223,1360.758 814.46,1376.748 809.147,1392.815C806.736,1400.107 801.421,1404.59 794.062,1408.291C796.041,1409.032 797.321,1409.483 798.578,1409.988C816.075,1417.021 825.334,1434.751 820.697,1453.016C817.048,1467.386 806.311,1474.104 792.791,1476.886C785.987,1478.287 778.93,1479.022 771.982,1479.065C733.013,1479.309 694.042,1479.252 655.071,1479.281C653.931,1479.282 652.791,1479.1 651.184,1478.964C651.184,1448.036 651.184,1417.268 651.184,1386Z M774.084,1445.861C778.029,1444.804 781.268,1443.202 781.156,1438.251C781.047,1433.432 778.201,1430.825 774.049,1429.809C770.209,1428.869 766.172,1428.347 762.218,1428.327C738.727,1428.205 715.234,1428.282 691.742,1428.292C690.152,1428.292 688.561,1428.292 686.966,1428.292C686.966,1434.725 686.966,1440.611 686.966,1446.679C710,1446.679 732.654,1446.725 755.307,1446.648C761.292,1446.627 767.276,1446.225 774.084,1445.861Z M769.198,1385.501C765.217,1380.718 759.557,1380.49 754.119,1380.448C732.005,1380.275 709.889,1380.364 687.774,1380.384C687.508,1380.384 687.243,1380.739 686.875,1381.001C686.875,1387.188 686.875,1393.443 686.875,1400.171C688.531,1400.171 689.984,1400.171 691.436,1400.171C712.39,1400.17 733.343,1400.181 754.297,1400.151C756.62,1400.148 758.972,1400.104 761.259,1399.75C769.742,1398.435 772.243,1394.297 769.198,1385.501Z"/>
         <path fill="url(#pg_back)" d="M1249.999,1380.254C1240.037,1380.254 1230.575,1380.254 1220.787,1380.254C1220.787,1369.641 1220.787,1359.402 1220.787,1348.786C1280.094,1348.786 1339.316,1348.786 1399.08,1348.786C1399.08,1356.422 1399.242,1364.033 1398.926,1371.625C1398.872,1372.937 1397.005,1374.491 1395.621,1375.383C1363.596,1396.035 1331.518,1416.602 1299.465,1437.208C1295.193,1439.955 1291.004,1442.832 1287.064,1446.519C1324.243,1446.519 1361.421,1446.519 1398.894,1446.519C1398.894,1457.547 1398.894,1468.123 1398.894,1479C1339.548,1479 1280.328,1479 1220.32,1479C1220.32,1470.579 1220.2,1462.298 1220.452,1454.029C1220.489,1452.833 1222.102,1451.382 1223.331,1450.571C1251.108,1432.222 1278.938,1413.952 1306.749,1395.654C1314.089,1390.824 1321.399,1385.951 1329.996,1380.255C1302.542,1380.255 1276.521,1380.255 1249.999,1380.254Z"/>
@@ -1034,7 +1036,7 @@
 
     function generateVectorSVG(p, isBack) {
       const c = getThemeColors();
-      const font = "Pretendard-Regular"; 
+      const font = "Pretendard"; 
 
       if (currentMode === 'envelope') {
           const spec = ENVELOPE_SPECS[currentEnvSize];
@@ -1043,8 +1045,8 @@
           const H = spec.h + (isFlat ? spec.flap * 2 : 0);
           const offset = isFlat ? { x: spec.wing, y: spec.flap } : { x: 0, y: 0 };
           const isA4 = currentEnvSize === 'A4';
+          const logoContent = getLockupContent(true).split('url(#pg_back)').join('url(#pg-env_v)');
 
-          // Use 10 units = 1mm scaling for high precision
           return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W*10} ${H*10}">
               <defs>${getSvgGradient('env_v')}</defs>
               <rect width="100%" height="100%" fill="${isFlat ? '#f2f2f2' : c.bg}" />
@@ -1052,7 +1054,7 @@
                   <rect width="${spec.w * 10}" height="${spec.h * 10}" fill="${c.bg}" />
                   <g transform="translate(${isA4 ? 150 : 100}, ${isA4 ? 150 : 100})">
                       <g transform="scale(0.08) translate(-571, -466)">
-                          ${getLockupContent().replace('id="pg_back"', 'id="pg_envv"').replace('url(#pg_back)', 'url(#pg-envv)')}
+                          ${logoContent}
                       </g>
                       <g transform="translate(130, 30)">
                           <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 40 : 30}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
@@ -1069,69 +1071,45 @@
           </svg>`;
       }
 
-      // ─── Business Card (94x54mm Accurate Calibration) ───
-      const W = 940; // 94mm * 10
-      const H = 540; // 54mm * 10
-      const leftMargin = 120; // 12mm
-
-      const fullDefs = `
-        <defs>
-          ${getSvgGradient('vf')}
-          ${getSvgGradient('vb')}
-          <linearGradient id="bGradV" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="${c.line}" stop-opacity="0" />
-            <stop offset="50%" stop-color="${c.line}" stop-opacity="0.3" />
-            <stop offset="100%" stop-color="${c.line}" stop-opacity="0" />
-          </linearGradient>
-        </defs>`;
+      const W = 940; 
+      const H = 540;
+      const leftMargin = 120;
+      const fullDefs = `<defs>${getSvgGradient('vf')}${getSvgGradient('vb')}<linearGradient id="bGradV" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="${c.line}" stop-opacity="0" /><stop offset="50%" stop-color="${c.line}" stop-opacity="0.3" /><stop offset="100%" stop-color="${c.line}" stop-opacity="0" /></linearGradient></defs>`;
 
       if (isBack) {
-        const logoH = 260; // 26mm
+        const logoH = 260; 
         const logoW = logoH * (908/1225);
         const x = (W - logoW) / 2;
         const y = (H - logoH) / 2;
-
-        return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 ${W} ${H}">
-          ${fullDefs}
-          <rect width="100%" height="100%" fill="${c.bg}"/>
-          <g transform="translate(${x}, ${y}) scale(${logoH / 1225}) translate(-571, -466)">
-               ${getLockupContent().replace('id="pg_back"', 'id="pg_vb"').replace('url(#pg_back)', 'url(#pg-vb)')}
-          </g>
-        </svg>`;
+        const logoContent = getLockupContent(true).split('url(#pg_back)').join('url(#pg-vb)');
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 ${W} ${H}">${fullDefs}<rect width="100%" height="100%" fill="${c.bg}"/><g transform="translate(${x}, ${y}) scale(${logoH / 1225}) translate(-571, -466)">${logoContent}</g></svg>`;
       } else {
         const infoX = leftMargin + 110;
-
+        const logoContent = getLockupContent(true).split('url(#pg_back)').join('url(#pg-vf)');
+        const nameKrW = p.nameKr.length * 55; 
         return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 ${W} ${H}">
           ${fullDefs}
           <rect width="100%" height="100%" fill="${c.bg}"/>
           <rect x="0" y="${H-5}" width="${W}" height="5" fill="url(#bGradV)"/>
-          
           <g transform="translate(${leftMargin}, 90)">
-             <g transform="scale(${100 / 1225}) translate(-571, -466)">
-                ${getLockupContent().replace('id="pg_back"', 'id="pg_vf"').replace('url(#pg_back)', 'url(#pg-vf)')}
-             </g>
+             <g transform="scale(${100 / 1225}) translate(-571, -466)">${logoContent}</g>
           </g>
-
           <g transform="translate(${infoX}, 130)">
             <text x="0" y="0" font-family="${font}" font-size="55" font-weight="bold" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="${p.nameKr.length * 60}" y="-4" font-family="${font}" font-size="24" fill="${c.titleKr}">${p.titleKr}</text>
+            <text x="${nameKrW + 15}" y="-4" font-family="${font}" font-size="24" fill="${c.titleKr}">${p.titleKr}</text>
             <text x="0" y="42" font-family="${font}" font-size="30" fill="${c.nameEn}">${p.nameEn}</text>
-            <text x="${p.nameEn.length * 18 + 20}" y="42" font-family="${font}" font-size="22" fill="${c.titleEn}">${p.titleEn}</text>
+            <text x="${p.nameEn.length * 16 + 20}" y="42" font-family="${font}" font-size="22" fill="${c.titleEn}">${p.titleEn}</text>
           </g>
-
           <g transform="translate(${leftMargin}, 300)">
             <text x="0" y="0" font-family="${font}" font-size="22" fill="${c.address}">${p.addressKr}</text>
             <text x="0" y="32" font-family="${font}" font-size="20" fill="${c.address}">${p.addressEn}</text>
             <rect x="0" y="48" width="80" height="1.5" fill="${c.line}"/>
           </g>
-
           <g transform="translate(${leftMargin}, 410)">
             <text x="0" y="0" font-family="${font}" font-size="26" font-weight="bold" fill="${c.highlight}">M. ${p.phone}</text>
             <text x="0" y="35" font-family="${font}" font-size="24" fill="${c.sub}">T. ${p.tel}</text>
             <text x="0" y="70" font-family="${font}" font-size="24" fill="${c.sub}">F. ${p.fax}</text>
-
             <line x1="380" y1="-20" x2="380" y2="80" stroke="${c.line}" stroke-width="1"/>
-
             <text x="420" y="0" font-family="${font}" font-size="26" font-weight="bold" fill="${c.highlight}">${p.email}</text>
             <text x="420" y="35" font-family="${font}" font-size="24" fill="${c.sub}">${p.website}</text>
           </g>
@@ -1174,10 +1152,17 @@
         const fontUrl = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/public/static/Pretendard-Medium.ttf";
         const response = await fetch(fontUrl);
         const arrayBuffer = await response.arrayBuffer();
-        const base64 = btoa(new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+        
+        // Use a more reliable way to convert ArrayBuffer to Base64 for large files
+        const base64 = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result.split(',')[1]);
+          reader.readAsDataURL(new Blob([arrayBuffer]));
+        });
+
         doc.addFileToVFS('Pretendard.ttf', base64);
-        doc.addFont('Pretendard.ttf', 'Pretendard-Regular', 'normal');
-        return 'Pretendard-Regular';
+        doc.addFont('Pretendard.ttf', 'Pretendard', 'normal');
+        return 'Pretendard';
       } catch(e) {
         console.warn("Font loading failed", e);
         return 'sans-serif';

@@ -550,7 +550,7 @@
           <div class="card-bg-overlay" style="background:${c.overlay}"></div>
           <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,${c.line}66,transparent)"></div>
 
-          <div class="card-content" style="padding:${bleed+12}px ${bleed+20}px;height:100%;position:relative;display:flex;flex-direction:column;justify-content:space-between;">
+          <div class="card-content" style="padding:${bleed+23}px ${bleed+20}px ${bleed+12}px ${bleed+20}px;height:100%;position:relative;display:flex;flex-direction:column;justify-content:space-between;">
             <!-- Top Section: Logo & Name/Title -->
             <div style="display:flex;align-items:flex-start;gap:${Math.round(20*s)}px">
               <div style="flex-shrink:0;margin-top:${Math.round(2*s)}px">
@@ -750,10 +750,10 @@
           <rect width="100%" height="100%" fill="${c.bg}"/>
           
           <!-- Top section -->
-          <g transform="translate(${leftPadding}, 40)">
+          <g transform="translate(${leftPadding}, 51)">
             ${makeLogo(logoW, logoH, 'v-f')}
           </g>
-          <g transform="translate(${leftPadding + 64}, 68)">
+          <g transform="translate(${leftPadding + 64}, 79)">
             <text x="0" y="0" font-family="${font}" font-size="26" font-weight="600" fill="${c.nameKr}">${p.nameKr}</text>
             <text x="${p.nameKr.length * 26 + 12}" y="-2" font-family="${font}" font-size="11" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
             <text x="0" y="24" font-family="${font}" font-size="12.5" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>

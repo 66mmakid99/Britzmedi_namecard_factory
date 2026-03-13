@@ -1034,7 +1034,7 @@
 
     function generateVectorSVG(p, isBack) {
       const c = getThemeColors();
-      const font = "Arial, sans-serif"; // Safer for PDF embedding without custom fonts
+      const font = "Helvetica, Arial, sans-serif"; // Standard PDF fonts avoid encoding issues
 
       if (currentMode === 'envelope') {
           const spec = ENVELOPE_SPECS[currentEnvSize];
@@ -1049,32 +1049,38 @@
               <g transform="translate(${offset.x}, ${offset.y})">
                   <rect width="${spec.w}" height="${spec.h}" fill="${c.bg}" />
                   
-                  <!-- Content with high DPI logic but simplified for vector -->
-                  <g transform="translate(${isA4 ? 40 : 25}, ${isA4 ? 40 : 25})">
-                      <g transform="scale(0.0035)">
+                  <g transform="translate(${isA4 ? 15 : 10}, ${isA4 ? 15 : 10})">
+                      <g transform="translate(0, 2) scale(0.008)">
                           ${makeLogo(44, 52, 'env-pdf', true)}
                       </g>
-                      <g transform="translate(60, 10)">
-                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 14 : 11}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
-                          <text x="0" y="14" font-family="${font}" font-size="${isA4 ? 8 : 7}" fill="${c.titleKr}" letter-spacing="3">AESTHETIC MEDICAL DEVICE</text>
+                      <g transform="translate(14, 4)">
+                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 4.5 : 3.5}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
+                          <text x="0" y="${isA4 ? 4.5 : 3.5}" font-family="${font}" font-size="${isA4 ? 2.5 : 2}" fill="${c.titleKr}" letter-spacing="0.5">AESTHETIC MEDICAL DEVICE</text>
                       </g>
-                      <g transform="translate(0, 70)">
-                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 10 : 8}" fill="${c.address}">${p.addressKr}</text>
-                          <text x="0" y="16" font-family="${font}" font-size="${isA4 ? 8 : 7}" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
-                          <text x="0" y="32" font-family="${font}" font-size="${isA4 ? 9 : 7.5}" fill="${c.highlight}">T. ${p.tel} &nbsp; F. ${p.fax} &nbsp; www.britzmedi.co.kr</text>
+                      <g transform="translate(0, 18)">
+                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 3.2 : 2.5}" fill="${c.address}">${p.addressKr}</text>
+                          <text x="0" y="${isA4 ? 4.5 : 3.5}" font-family="${font}" font-size="${isA4 ? 2.8 : 2.2}" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
+                          <text x="0" y="${isA4 ? 9 : 7}" font-family="${font}" font-size="${isA4 ? 3 : 2.4}" fill="${c.highlight}">T. ${p.tel} &nbsp; F. ${p.fax} &nbsp; www.britzmedi.co.kr</text>
                       </g>
                   </g>
               </g>
 
               ${isFlat ? `
-                <!-- DIELINES -->
-                <path d="M${spec.wing},${spec.flap} h${spec.w} l${spec.wing},${spec.wing} v${spec.h - spec.wing*2} l-${spec.wing},${spec.wing} h-${spec.w} l-${spec.wing},-${spec.wing} v-${spec.h - spec.wing*2} l${spec.wing},-${spec.wing} Z" fill="none" stroke="#222" stroke-width="0.3" />
+                <path d="M${spec.wing},${spec.flap} h${spec.w} l${spec.wing},${spec.wing} v${spec.h - spec.wing*2} l-${spec.wing},${spec.wing} h-${spec.w} l-${spec.wing},-${spec.wing} v-${spec.h - spec.wing*2} l${spec.wing},-${spec.wing} Z" fill="none" stroke="#222" stroke-width="0.1" />
+                <path d="M${spec.wing},${spec.flap} l10,-${spec.flap} h${spec.w - 20} l10,${spec.flap} Z" fill="none" stroke="#222" stroke-width="0.1" />
+                <path d="M${spec.wing},${totalH - spec.flap} l15,${spec.flap-10} h${spec.w - 30} l15,-${spec.flap-10} Z" fill="none" stroke="#222" stroke-width="0.1" />
               ` : ''}
           </svg>`;
       }
 
-      const w = 94; const h = 54;
-      const leftPadding = 32;
+      // Card Dimensions (mm)
+      const W = 94; 
+      const H = 54;
+      const bleedInPx = 12; // 12px bleed in HTML
+      const mmScale = 94 / 540; // 1mm roughly equals 5.74px, but let's use the 94/540 ratio
+      
+      const pxToMm = (px) => px * mmScale;
+      const margin = pxToMm(bleedInPx + 20); // bleed + padding
 
       const fullDefs = `
         <defs>
@@ -1088,53 +1094,61 @@
         </defs>`;
 
       if (isBack) {
-        const logoScale = 0.035; 
-        const targetW = 908 * logoScale;
-        const targetH = 1225 * logoScale;
-        const x = (w - targetW) / 2;
-        const y = (h - targetH) / 2;
+        // Logo size in back card (target height: approx 25.1mm based on 144px/5.74)
+        const backLogoScale = pxToMm(144) / 1225; 
+        const targetW = 908 * backLogoScale;
+        const targetH = 1225 * backLogoScale;
+        const x = (W - targetW) / 2;
+        const y = (H - targetH) / 2 + 1.5; // Adjusted offset for centering
 
-        return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}mm" height="${h}mm" viewBox="0 0 ${w} ${h}">
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">
           ${fullDefs}
           <rect width="100%" height="100%" fill="${c.bg}"/>
-          <g transform="translate(${x}, ${y}) scale(${logoScale})">
-               ${getLockupContent().replace('id="pg_back"', 'id="pg_back_unused"').replace('url(#pg_back)', 'url(#pg-back)')}
+          <g transform="translate(${x}, ${y}) scale(${backLogoScale})">
+               ${getLockupContent().replace('id="pg_back"', 'id="pg_back_v"').replace('url(#pg_back)', 'url(#pg-back)')}
           </g>
         </svg>`;
       } else {
-        return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}mm" height="${h}mm" viewBox="0 0 ${w} ${h}">
+        // Front Card
+        const logoSize = pxToMm(44); // 44px logo in HTML
+        const nameX = margin + pxToMm(58); // logo width + gap
+        
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">
           ${fullDefs}
           <rect width="100%" height="100%" fill="${c.bg}"/>
-          <rect x="0" y="${h-1}" width="${w}" height="1" fill="url(#bottomGrad)"/>
+          <rect x="0" y="${H-0.5}" width="${W}" height="0.5" fill="url(#bottomGrad)"/>
           
-          <g transform="translate(${leftPadding}, 8)">
-             <g transform="scale(0.04)">
+          <!-- Top Section -->
+          <g transform="translate(${margin}, ${pxToMm(bleedInPx + 24)})">
+             <g transform="scale(${pxToMm(44)/908})">
                 ${makeLogo(44, 52, 'v-f', true)}
              </g>
           </g>
 
-          <g transform="translate(${leftPadding + 18}, 14)">
-            <text x="0" y="0" font-family="${font}" font-size="8" font-weight="bold" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="${p.nameKr.length * 8 + 4}" y="-0.5" font-family="${font}" font-size="3.5" fill="${c.titleKr}">${p.titleKr}</text>
-            <text x="0" y="6" font-family="${font}" font-size="4" fill="${c.nameEn}">${p.nameEn}</text>
-            <text x="${p.nameEn.length * 2.5 + 4}" y="6" font-family="${font}" font-size="3" fill="${c.titleEn}">${p.titleEn}</text>
+          <g transform="translate(${nameX}, ${pxToMm(bleedInPx + 22)})">
+            <text x="0" y="${pxToMm(20)}" font-family="${font}" font-size="${pxToMm(26)}" font-weight="bold" fill="${c.nameKr}">${p.nameKr}</text>
+            <text x="${pxToMm(p.nameKr.length * 26 + 10)}" y="${pxToMm(18.5)}" font-family="${font}" font-size="${pxToMm(11.5)}" fill="${c.titleKr}">${p.titleKr}</text>
+            <text x="0" y="${pxToMm(38)}" font-family="${font}" font-size="${pxToMm(13)}" fill="${c.nameEn}">${p.nameEn}</text>
+            <text x="${pxToMm(p.nameEn.length * 8 + 10)}" y="${pxToMm(38)}" font-family="${font}" font-size="${pxToMm(10)}" fill="${c.titleEn}">${p.titleEn}</text>
           </g>
 
-          <g transform="translate(${leftPadding + 2}, 30)">
-            <text x="0" y="0" font-family="${font}" font-size="3" fill="${c.address}">${p.addressKr}</text>
-            <text x="0" y="4" font-family="${font}" font-size="2.8" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
-            <rect x="0" y="6.5" width="10" height="0.4" fill="${c.line}" opacity="0.75"/>
+          <!-- Middle Section -->
+          <g transform="translate(${margin + pxToMm(4)}, ${pxToMm(bleedInPx + 85)})">
+            <text x="0" y="0" font-family="${font}" font-size="${pxToMm(10.5)}" fill="${c.address}">${p.addressKr}</text>
+            <text x="0" y="${pxToMm(14)}" font-family="${font}" font-size="${pxToMm(10)}" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
+            <rect x="0" y="${pxToMm(20)}" width="${pxToMm(34)}" height="0.2" fill="${c.line}" opacity="0.75"/>
           </g>
 
-          <g transform="translate(${leftPadding + 2}, 42)">
-            <text x="0" y="0" font-family="${font}" font-size="3.2" fill="${c.highlight}">M. ${p.phone}</text>
-            <text x="0" y="4.5" font-family="${font}" font-size="3.2" fill="${c.sub}">T. ${p.tel}</text>
-            <text x="0" y="9" font-family="${font}" font-size="3.2" fill="${c.sub}">F. ${p.fax}</text>
+          <!-- Bottom Section -->
+          <g transform="translate(${margin + pxToMm(4)}, ${pxToMm(bleedInPx + 118)})">
+            <text x="0" y="0" font-family="${font}" font-size="${pxToMm(11)}" font-weight="bold" fill="${c.highlight}">M. ${p.phone}</text>
+            <text x="0" y="${pxToMm(14)}" font-family="${font}" font-size="${pxToMm(11)}" fill="${c.sub}">T. ${p.tel}</text>
+            <text x="0" y="${pxToMm(28)}" font-family="${font}" font-size="${pxToMm(11)}" fill="${c.sub}">F. ${p.fax}</text>
 
-            <line x1="45" y1="-2" x2="45" y2="10" stroke="${c.line}" stroke-width="0.1" stroke-opacity="0.2"/>
+            <line x1="${pxToMm(125)}" y1="-2" x2="${pxToMm(125)}" y2="${pxToMm(30)}" stroke="${c.line}" stroke-width="0.1" stroke-opacity="0.2"/>
 
-            <text x="50" y="0" font-family="${font}" font-size="3.2" fill="${c.highlight}">${p.email}</text>
-            <text x="50" y="4.5" font-family="${font}" font-size="3.2" fill="${c.sub}">${p.website}</text>
+            <text x="${pxToMm(140)}" y="0" font-family="${font}" font-size="${pxToMm(11)}" fill="${c.highlight}">${p.email}</text>
+            <text x="${pxToMm(140)}" y="${pxToMm(14)}" font-family="${font}" font-size="${pxToMm(11)}" fill="${c.sub}">${p.website}</text>
           </g>
         </svg>`;
       }

@@ -610,10 +610,10 @@
       const trimColor = currentTheme === 'white' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.12)';
       const cornerColor = currentTheme === 'white' ? 'rgba(168,153,104,0.6)' : 'rgba(168,153,104,0.35)';
 
-      const lockupH = Math.round(180 * s); // Adjusted for visual balance
+      const lockupH = Math.round(144 * s); // Reduced by 20% (180 -> 144)
 
       return `
-        <div class="card-face" style="width:${w}px;height:${h}px;background:#000000; overflow:hidden;">
+        <div class="card-face" style="width:${w}px;height:${h}px;background:${c.bg}; overflow:hidden;">
           <!-- Trim guides -->
           <div class="trim-guide" style="border-color:${trimColor}"></div>
           <div class="trim-corner tl" style="color:${cornerColor}"></div>
@@ -770,8 +770,8 @@
 
       if (isBack) {
         return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
-          <rect width="100%" height="100%" fill="#000000"/>
-          <g transform="translate(155, 65) scale(0.25)">
+          <rect width="100%" height="100%" fill="${c.bg}"/>
+          <g transform="translate(180, 32) scale(0.2)">
             <svg viewBox="571 466 908 1225" width="908" height="1225">
               ${getLockupContent()}
             </svg>

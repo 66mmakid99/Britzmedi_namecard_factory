@@ -522,10 +522,16 @@
       'DL': { w: 220, h: 110, flap: 35, wing: 12, bleed: 3 }
     };
     var employees = [
-      { dept: "Management", nameKr: "이성호", nameEn: "Lee Sungho", titleKr: "홈뷰티 부문장", titleEn: "Head of Home Beauty Devices", phone: "010-6525-9442", email: "sh.lee@britzmedi.co.kr", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
-      { dept: "Management", nameKr: "김남호", nameEn: "Kim Nam Ho", titleKr: "영업이사", titleEn: "Sales Director", phone: "010-8762-1142", email: "nh.kim@britzmedi.co.kr", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
-      { dept: "Sales", nameKr: "정승원", nameEn: "Jung Seung Won", titleKr: "과장", titleEn: "Sales Manager", phone: "010-4446-4827", email: "sw.jung@britzmedi.co.kr", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
-      { dept: "Sales", nameKr: "김경현", nameEn: "Kim Kyeong Hyeon", titleKr: "대리", titleEn: "Sales Assistant Manager", phone: "010-9393-9475", email: "kh.kim@britzmedi.co.kr", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 400 }
+      // ─── Management ───────────────────────────────────────────────────────────
+      { dept: "Management", nameKr: "이신재", nameEn: "Lee Shin Jae",    titleKr: "대표이사",        titleEn: "CEO",                                phone: "010-5620-0754", email: "sj.lee@britzmedi.co.kr / ssuibs@naver.com", tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Management", nameKr: "이상덕", nameEn: "Lee Sang Duk",    titleKr: "부사장",          titleEn: "Vice President",                     phone: "010-9397-3107", email: "sd.lee@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Management", nameKr: "민경욱", nameEn: "Min Kyung Wook",  titleKr: "개발총괄이사",    titleEn: "Chief Development Director",         phone: "010-4751-7894", email: "kw.min@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Management", nameKr: "김남호", nameEn: "Kim Nam Ho",       titleKr: "영업이사",        titleEn: "Sales Director",                     phone: "010-8762-1142", email: "nh.kim@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Management", nameKr: "이성호", nameEn: "Lee Sungho",       titleKr: "해외영업 마케팅이사", titleEn: "Overseas Sales Marketing Director", phone: "010-6525-9442", email: "sh.lee@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Management", nameKr: "이성호", nameEn: "Lee Sungho",       titleKr: "홈뷰티 부문장",   titleEn: "Head of Home Beauty Devices",        phone: "010-6525-9442", email: "sh.lee@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      // ─── Sales ────────────────────────────────────────────────────────────────
+      { dept: "Sales",       nameKr: "정승원", nameEn: "Jung Seung Won",  titleKr: "과장",            titleEn: "Sales Manager",                      phone: "010-4446-4827", email: "sw.jung@britzmedi.co.kr",                   tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 200 },
+      { dept: "Sales",       nameKr: "김경현", nameEn: "Kim Kyeong Hyeon",titleKr: "대리",            titleEn: "Sales Assistant Manager",            phone: "010-9393-9475", email: "kh.kim@britzmedi.co.kr",                    tel: "070-4348-7244", fax: "070-4009-8993", website: "www.britzmedi.co.kr / www.britzmedi.com", addressKr: "경기도 성남시 중원구 둔촌대로 388 (상대원동, 크란츠 테크노), 1211호", addressEn: "1211 ho, 388, Dunchon-daero, Jungwon-gu, Seongnam-si, Gyeonggi-do, Republic of Korea", qty: 400 }
     ];
 
     // ─── SVG Assets (Dynamic) ───
@@ -568,7 +574,7 @@
     }
 
 
-    var VERSION = '1.6.0';
+    var VERSION = '1.7.0';
 
     function hardReset() {
       if (confirm("모든 데이터를 초기화하고 최신 [Stationery Builder] 디자인 가이드로 복구하시겠습니까?\n(기존에 저장된 명함 리스트가 삭제됩니다)")) {
@@ -853,8 +859,9 @@
         }
         return w;
       }
-      var titleKrX = Math.round(190 + estW(p.nameKr, 45) + 24);
-      var titleEnX = Math.round(190 + estW(p.nameEn, 22) + 18);
+      var nameKrW  = estW(p.nameKr, 45);
+      var nameEnW  = estW(p.nameEn, 22);
+      var titleX   = Math.round(140 + Math.max(nameKrW, nameEnW) + 24);
 
       return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 940 540">
   <defs>
@@ -879,20 +886,20 @@
   <rect width="940" height="540" fill="url(#${ovlId})"/>
   <rect x="0" y="535" width="940" height="5" fill="url(#${bGId})"/>
   <rect x="12" y="12" width="916" height="516" fill="none" stroke="${trimColor}" stroke-width="1" stroke-dasharray="4,2"/>
-  <g transform="translate(56,56) scale(0.07347) translate(-571,-466)">${logoRaw}</g>
-  <text x="190" y="75" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="45" font-weight="600" fill="${c.nameKr}">${p.nameKr}</text>
-  <text x="${titleKrX}" y="70" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="20" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
-  <text x="190" y="107" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="22" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
-  <text x="${titleEnX}" y="107" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="17" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
+  <g transform="translate(56,20) scale(0.07347) translate(-571,-466)">${logoRaw}</g>
+  <text x="140" y="75" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="45" font-weight="600" fill="${c.nameKr}">${p.nameKr}</text>
+  <text x="${titleX}" y="75" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="20" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
+  <text x="140" y="107" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="22" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
+  <text x="${titleX}" y="107" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="17" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
   <text x="56" y="282" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="18" font-weight="300" fill="${c.address}" opacity="0.9">${p.addressKr}</text>
   <text x="56" y="306" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="17" font-weight="300" fill="${c.address}" opacity="0.5">${p.addressEn}</text>
   <rect x="56" y="322" width="59" height="2" fill="${c.line}" opacity="0.75"/>
   <text x="56" y="362" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="19" font-weight="600" fill="${c.highlight}">M. ${p.phone}</text>
   <text x="56" y="386" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="18" fill="${c.sub}" opacity="0.85">T. ${p.tel}</text>
   <text x="56" y="412" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="18" fill="${c.sub}" opacity="0.85">F. ${p.fax}</text>
-  <line x1="710" y1="342" x2="710" y2="428" stroke="${c.line}" stroke-width="1" opacity="0.2"/>
-  <text x="720" y="362" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="19" font-weight="600" fill="${c.highlight}">${p.email}</text>
-  <text x="720" y="386" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="18" fill="${c.sub}" opacity="0.85">${p.website}</text>
+  <line x1="260" y1="342" x2="260" y2="428" stroke="${c.line}" stroke-width="1" opacity="0.25"/>
+  <text x="275" y="362" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="19" font-weight="600" fill="${c.highlight}">${p.email}</text>
+  <text x="275" y="386" font-family="'Pretendard','Noto Sans KR',sans-serif" font-size="17" fill="${c.sub}" opacity="0.85">${p.website}</text>
 </svg>`;
     }
 

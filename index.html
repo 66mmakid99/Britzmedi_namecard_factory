@@ -516,14 +516,14 @@
       return {
         bg: '#000000',
         nameKr: '#FFFFFF',
-        titleKr: '#D4C89A',
-        nameEn: '#EDE4C8',
-        titleEn: '#B8A978',
-        address: '#D4C89A',
-        highlight: '#FDF4D8',
-        sub: '#B8A978',
-        muted: '#B8A978',
-        line: '#D4C89A',
+        titleKr: '#EDE4C8',
+        nameEn: '#FFFFFF',
+        titleEn: '#D4C89A',
+        address: '#EDE4C8',
+        highlight: '#FFFFFF',
+        sub: '#EDE4C8',
+        muted: '#D4C89A',
+        line: '#EDE4C8',
         overlay: 'radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.03) 0%, transparent 50%)'
       };
     }
@@ -561,11 +561,11 @@
               <div style="margin-top:${Math.round(2*s)}px">
                 <div style="display:flex;align-items:baseline;gap:${Math.round(10*s)}px;margin-bottom:${Math.round(3*s)}px">
                   <span style="font-size:${Math.round(26*s)}px;font-weight:600;letter-spacing:0.4px;color:${c.nameKr};line-height:1">${p.nameKr}</span>
-                  <span style="font-size:${Math.round(11*s)}px;font-weight:400;color:${c.titleKr};opacity:0.8">${p.titleKr}</span>
+                  <span style="font-size:${Math.round(11.5*s)}px;font-weight:400;color:${c.titleKr};opacity:0.8">${p.titleKr}</span>
                 </div>
                 <div style="display:flex;align-items:baseline;gap:${Math.round(10*s)}px">
-                  <span style="font-size:${Math.round(12.5*s)}px;font-weight:400;letter-spacing:0.2px;color:${c.nameEn};opacity:0.9">${p.nameEn}</span>
-                  <span style="font-size:${Math.round(9*s)}px;font-weight:400;color:${c.titleEn};opacity:0.6">${p.titleEn}</span>
+                  <span style="font-size:${Math.round(13*s)}px;font-weight:400;letter-spacing:0.2px;color:${c.nameEn};opacity:0.9">${p.nameEn}</span>
+                  <span style="font-size:${Math.round(10*s)}px;font-weight:400;color:${c.titleEn};opacity:0.6">${p.titleEn}</span>
                 </div>
               </div>
             </div>
@@ -574,10 +574,10 @@
             <div style="width:100%; padding-bottom:${Math.round(20*s)}px">
               <!-- Middle Section: Addresses -->
               <div style="margin-bottom:${Math.round(2*s)}px;">
-                <div style="font-size:${Math.round(9.5*s)}px;color:${c.address};letter-spacing:0.2px;margin-bottom:${Math.round(4*s)}px;opacity:0.9;font-weight:300">
+                <div style="font-size:${Math.round(10.5*s)}px;color:${c.address};letter-spacing:0.2px;margin-bottom:${Math.round(4*s)}px;opacity:0.9;font-weight:300">
                   ${p.addressKr}
                 </div>
-                <div style="font-size:${Math.round(9*s)}px;color:${c.address};letter-spacing:0.2px;margin-bottom:${Math.round(10*s)}px;opacity:0.5;font-weight:300">
+                <div style="font-size:${Math.round(10*s)}px;color:${c.address};letter-spacing:0.2px;margin-bottom:${Math.round(10*s)}px;opacity:0.5;font-weight:300">
                   ${p.addressEn}
                 </div>
                 <div style="width:${Math.round(34*s)}px;height:1.2px;background:${c.line};opacity:0.75"></div>
@@ -585,16 +585,16 @@
 
               <!-- Bottom Section: Split Columns -->
               <div style="display:flex;gap:${Math.round(30*s)}px;align-items:flex-start">
-                <div style="flex:0 0 auto; min-width:${Math.round(105*s)}px; font-size:${Math.round(10.5*s)}px;color:${c.sub};letter-spacing:0px;line-height:1.5">
+                <div style="flex:0 0 auto; min-width:${Math.round(105*s)}px; font-size:${Math.round(11*s)}px;color:${c.sub};letter-spacing:0px;line-height:1.5">
                   <div style="color:${c.highlight}"><b style="font-weight:600">M.</b> ${p.phone}</div>
-                  <div style="opacity:0.75"><b style="font-weight:500">T.</b> ${p.tel}</div>
-                  <div style="opacity:0.75"><b style="font-weight:500">F.</b> ${p.fax}</div>
+                  <div style="opacity:0.85"><b style="font-weight:500">T.</b> ${p.tel}</div>
+                  <div style="opacity:0.85"><b style="font-weight:500">F.</b> ${p.fax}</div>
                 </div>
                 <!-- Vertical Divider -->
                 <div style="width:1px;height:${Math.round(40*s)}px;background:${c.line};opacity:0.2;margin-top:${Math.round(2*s)}px"></div>
-                <div style="flex:1;font-size:${Math.round(10.5*s)}px;color:${c.sub};letter-spacing:0px;line-height:1.5">
+                <div style="flex:1;font-size:${Math.round(11*s)}px;color:${c.sub};letter-spacing:0px;line-height:1.5">
                   <div style="color:${c.highlight}">${p.email}</div>
-                  <div style="opacity:0.75">${p.website}</div>
+                  <div style="opacity:0.85">${p.website}</div>
                 </div>
               </div>
             </div>
@@ -801,36 +801,36 @@
           </g>
           <g transform="translate(${leftPadding + 64}, 78)">
             <text x="0" y="0" font-family="${font}" font-size="26" font-weight="600" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="${p.nameKr.length * 26 + 10}" y="-1.5" font-family="${font}" font-size="11" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
-            <text x="0" y="22" font-family="${font}" font-size="12.5" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
-            <text x="${p.nameEn.length * 7.5 + 10}" y="22" font-family="${font}" font-size="9" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
+            <text x="${p.nameKr.length * 26 + 10}" y="-1.5" font-family="${font}" font-size="11.5" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
+            <text x="0" y="22" font-family="${font}" font-size="13" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
+            <text x="${p.nameEn.length * 7.5 + 10}" y="22" font-family="${font}" font-size="10" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
           </g>
 
           <!-- Middle section (Addresses) -->
           <g transform="translate(${leftPadding + 4}, 175)">
-            <text x="0" y="0" font-family="${font}" font-size="9.5" fill="${c.address}" opacity="0.9">${p.addressKr}</text>
-            <text x="0" y="14" font-family="${font}" font-size="9" fill="${c.address}" opacity="0.5">${p.addressEn}</text>
+            <text x="0" y="0" font-family="${font}" font-size="10.5" fill="${c.address}" opacity="0.9">${p.addressKr}</text>
+            <text x="0" y="14" font-family="${font}" font-size="10" fill="${c.address}" opacity="0.5">${p.addressEn}</text>
             <rect x="0" y="22" width="34" height="1.2" fill="${c.line}" opacity="0.75"/>
           </g>
 
           <!-- Bottom section (Two columns) -->
           <g transform="translate(${leftPadding + 4}, 214)">
             <!-- Left column -->
-            <text x="0" y="0" font-family="${font}" font-size="10.5" font-weight="600" fill="${c.highlight}">M. </text>
-            <text x="16" y="0" font-family="${font}" font-size="10.5" fill="${c.highlight}">${p.phone}</text>
+            <text x="0" y="0" font-family="${font}" font-size="11" font-weight="600" fill="${c.highlight}">M. </text>
+            <text x="16" y="0" font-family="${font}" font-size="11" fill="${c.highlight}">${p.phone}</text>
             
-            <text x="0" y="16" font-family="${font}" font-size="10.5" font-weight="500" fill="${c.sub}" opacity="0.75">T. </text>
-            <text x="16" y="16" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.tel}</text>
+            <text x="0" y="16" font-family="${font}" font-size="11" font-weight="500" fill="${c.sub}" opacity="0.85">T. </text>
+            <text x="16" y="16" font-family="${font}" font-size="11" fill="${c.sub}" opacity="0.85">${p.tel}</text>
             
-            <text x="0" y="32" font-family="${font}" font-size="10.5" font-weight="500" fill="${c.sub}" opacity="0.75">F. </text>
-            <text x="16" y="32" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.fax}</text>
+            <text x="0" y="32" font-family="${font}" font-size="11" font-weight="500" fill="${c.sub}" opacity="0.85">F. </text>
+            <text x="16" y="32" font-family="${font}" font-size="11" fill="${c.sub}" opacity="0.85">${p.fax}</text>
 
             <!-- Divider -->
             <line x1="130" y1="-8" x2="130" y2="42" stroke="${c.line}" stroke-width="0.5" stroke-opacity="0.2"/>
 
             <!-- Right column -->
-            <text x="145" y="0" font-family="${font}" font-size="10.5" fill="${c.highlight}">${p.email}</text>
-            <text x="145" y="16" font-family="${font}" font-size="10.5" fill="${c.sub}" opacity="0.75">${p.website}</text>
+            <text x="145" y="0" font-family="${font}" font-size="11" fill="${c.highlight}">${p.email}</text>
+            <text x="145" y="16" font-family="${font}" font-size="11" fill="${c.sub}" opacity="0.85">${p.website}</text>
           </g>
         </svg>`;
       }

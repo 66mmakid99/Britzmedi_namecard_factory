@@ -552,19 +552,19 @@
           <div class="card-bg-overlay" style="background:${c.overlay}"></div>
           <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,${c.line}66,transparent)"></div>
 
-          <div class="card-content" style="padding:${bleed+23}px ${bleed+20}px ${bleed+12}px ${bleed+20}px;height:100%;position:relative;display:flex;flex-direction:column;justify-content:space-between;">
+          <div class="card-content" style="padding:${bleed+20}px ${bleed+20}px ${bleed+12}px ${bleed+20}px;height:100%;position:relative;display:flex;flex-direction:column;justify-content:space-between;">
             <!-- Top Section: Logo & Name/Title -->
             <div style="display:flex;align-items:flex-start;gap:${Math.round(20*s)}px">
               <div style="flex-shrink:0;margin-top:${Math.round(2*s)}px">
                 ${makeLogo(Math.round(44*s), Math.round(52*s), 'front-'+id)}
               </div>
-              <div style="margin-top:${Math.round(3*s)}px">
-                <div style="display:flex;align-items:baseline;gap:${Math.round(10*s)}px;margin-bottom:${Math.round(4*s)}px">
-                  <span style="font-size:${Math.round(26*s)}px;font-weight:600;letter-spacing:0.5px;color:${c.nameKr};line-height:1">${p.nameKr}</span>
+              <div style="margin-top:${Math.round(1*s)}px">
+                <div style="display:flex;align-items:baseline;gap:${Math.round(10*s)}px;margin-bottom:${Math.round(3*s)}px">
+                  <span style="font-size:${Math.round(26*s)}px;font-weight:600;letter-spacing:0.4px;color:${c.nameKr};line-height:1">${p.nameKr}</span>
                   <span style="font-size:${Math.round(11*s)}px;font-weight:400;color:${c.titleKr};opacity:0.8">${p.titleKr}</span>
                 </div>
                 <div style="display:flex;align-items:baseline;gap:${Math.round(10*s)}px">
-                  <span style="font-size:${Math.round(12.5*s)}px;font-weight:400;letter-spacing:0.3px;color:${c.nameEn};opacity:0.9">${p.nameEn}</span>
+                  <span style="font-size:${Math.round(12.5*s)}px;font-weight:400;letter-spacing:0.2px;color:${c.nameEn};opacity:0.9">${p.nameEn}</span>
                   <span style="font-size:${Math.round(9*s)}px;font-weight:400;color:${c.titleEn};opacity:0.6">${p.titleEn}</span>
                 </div>
               </div>
@@ -623,10 +623,10 @@
           <div class="card-bg-overlay" style="background:radial-gradient(ellipse at 50% 50%, ${currentTheme==='white'?'rgba(168,153,104,0.06)':'rgba(184,169,120,0.04)'} 0%, transparent 60%)"></div>
 
           <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:1">
-            ${makeSymbol(symW, symH, 'back-'+id)}
-            <div style="font-size:${Math.round(13*s)}px;letter-spacing:8px;color:${c.titleKr};margin-top:${Math.round(12*s)}px;font-weight:500">BRITZMEDI</div>
-            <div style="width:${Math.round(44*s)}px;height:1px;background:linear-gradient(90deg,transparent,${c.line},transparent);margin:${Math.round(6*s)}px 0"></div>
-            <div style="font-size:${Math.round(9*s)}px;letter-spacing:5px;color:${c.muted};font-weight:400">AESTHETIC MEDICAL DEVICE</div>
+            <div style="margin-bottom:${Math.round(10*s)}px">${makeSymbol(symW, symH, 'back-'+id)}</div>
+            <div style="font-size:${Math.round(13*s)}px;letter-spacing:8px;color:${c.titleKr};font-weight:500;margin-bottom:${Math.round(4*s)}px">BRITZMEDI</div>
+            <div style="width:${Math.round(44*s)}px;height:1px;background:linear-gradient(90deg,transparent,${c.line},transparent);margin-bottom:${Math.round(10*s)}px"></div>
+            <div style="font-size:${Math.round(9*s)}px;letter-spacing:5.5px;color:${c.muted};font-weight:400">AESTHETIC MEDICAL DEVICE</div>
           </div>
         </div>`;
     }
@@ -752,12 +752,12 @@
         return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
           ${defs}
           <rect width="100%" height="100%" fill="${c.bg}"/>
-          <g transform="translate(234, 80)">
+          <g transform="translate(234, 75)">
             ${makeSymbol(symW, symH, 'v-b')}
           </g>
-          <text x="270" y="192" text-anchor="middle" font-family="${font}" font-size="13" font-weight="500" letter-spacing="8" fill="${c.titleKr}">BRITZMEDI</text>
-          <rect x="248" y="206" width="44" height="1" fill="url(#lineGrad)"/>
-          <text x="270" y="225" text-anchor="middle" font-family="${font}" font-size="9" font-weight="400" letter-spacing="5" fill="${c.muted}">AESTHETIC MEDICAL DEVICE</text>
+          <text x="270" y="180" text-anchor="middle" font-family="${font}" font-size="13" font-weight="500" letter-spacing="8" fill="${c.titleKr}">BRITZMEDI</text>
+          <rect x="248" y="196" width="44" height="1" fill="url(#lineGrad)"/>
+          <text x="270" y="215" text-anchor="middle" font-family="${font}" font-size="9" font-weight="400" letter-spacing="5.5" fill="${c.muted}">AESTHETIC MEDICAL DEVICE</text>
         </svg>`;
       } else {
         const logoW = 44; const logoH = 52;
@@ -769,14 +769,14 @@
           <rect x="0" y="${h-1}" width="${w}" height="1" fill="url(#bottomGrad)"/>
           
           <!-- Top section -->
-          <g transform="translate(${leftPadding}, 51)">
+          <g transform="translate(${leftPadding}, 48)">
             ${makeLogo(logoW, logoH, 'v-f')}
           </g>
-          <g transform="translate(${leftPadding + 64}, 82)">
+          <g transform="translate(${leftPadding + 64}, 77)">
             <text x="0" y="0" font-family="${font}" font-size="26" font-weight="600" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="${p.nameKr.length * 26 + 12}" y="-2" font-family="${font}" font-size="11" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
+            <text x="${p.nameKr.length * 26 + 10}" y="-1.5" font-family="${font}" font-size="11" fill="${c.titleKr}" opacity="0.8">${p.titleKr}</text>
             <text x="0" y="22" font-family="${font}" font-size="12.5" fill="${c.nameEn}" opacity="0.9">${p.nameEn}</text>
-            <text x="${p.nameEn.length * 7.5 + 12}" y="22" font-family="${font}" font-size="9" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
+            <text x="${p.nameEn.length * 7.5 + 10}" y="22" font-family="${font}" font-size="9" fill="${c.titleEn}" opacity="0.6">${p.titleEn}</text>
           </g>
 
           <!-- Middle section (Addresses) -->

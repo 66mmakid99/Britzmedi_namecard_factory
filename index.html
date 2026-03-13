@@ -1034,112 +1034,95 @@
 
     function generateVectorSVG(p, isBack) {
       const c = getThemeColors();
-      const font = "'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif";
+      const font = "sans-serif"; 
 
       if (currentMode === 'envelope') {
           const spec = ENVELOPE_SPECS[currentEnvSize];
           const isFlat = currentEnvView === 'flat';
           const totalW = spec.w + (isFlat ? spec.wing * 2 : 0);
           const totalH = spec.h + (isFlat ? spec.flap * 2 : 0);
-          
-          // Use a scale factor for envelope to keep coordinates manageable but high-res
-          const scale = 4; 
-          const offset = isFlat ? { x: spec.wing * scale, y: spec.flap * scale } : { x: 0, y: 0 };
+          const offset = isFlat ? { x: spec.wing, y: spec.flap } : { x: 0, y: 0 };
+          const isA4 = currentEnvSize === 'A4';
 
-          return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalW}mm" height="${totalH}mm" viewBox="0 0 ${totalW * scale} ${totalH * scale}">
-              <defs>${getSvgGradient('env-pdf')}</defs>
-              <rect width="100%" height="100%" fill="${isFlat ? '#f9f9f9' : c.bg}" />
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalW}mm" height="${totalH}mm" viewBox="0 0 ${totalW} ${totalH}">
+              <defs>${getSvgGradient('envv')}</defs>
+              <rect width="${totalW}" height="${totalH}" fill="${isFlat ? '#f2f2f2' : c.bg}" />
               <g transform="translate(${offset.x}, ${offset.y})">
-                  <rect width="${spec.w * scale}" height="${spec.h * scale}" fill="${c.bg}" />
-                  
-                  <g transform="translate(${scale * (currentEnvSize === 'A4' ? 40 : 25)}, ${scale * (currentEnvSize === 'A4' ? 40 : 25)})">
-                      <g transform="scale(${scale * 0.08}) translate(-571, -466)">
-                          ${getLockupContent().replace('id="pg_back"', 'id="pg_env_pdf"').replace('url(#pg_back)', 'url(#pg-env-pdf)')}
+                  <rect width="${spec.w}" height="${spec.h}" fill="${c.bg}" />
+                  <g transform="translate(${isA4 ? 15 : 10}, ${isA4 ? 15 : 10})">
+                      <g transform="scale(0.008) translate(-571, -466)">
+                          ${getLockupContent().replace('id="pg_back"', 'id="pg_envv"').replace('url(#pg_back)', 'url(#pg-envv)')}
                       </g>
-                      <g transform="translate(${scale * 60}, ${scale * 10})">
-                          <text x="0" y="0" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 14 : 11)}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
-                          <text x="0" y="${scale * 14}" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 8 : 7)}" fill="${c.titleKr}" letter-spacing="${scale * 3}">AESTHETIC MEDICAL DEVICE</text>
+                      <g transform="translate(13, 3)">
+                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 4 : 3}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
+                          <text x="0" y="${isA4 ? 4.5 : 3.5}" font-family="${font}" font-size="${isA4 ? 2 : 1.6}" fill="${c.titleKr}">AESTHETIC MEDICAL DEVICE</text>
                       </g>
-                      <g transform="translate(0, ${scale * 70})">
-                          <text x="0" y="0" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 10 : 8)}" fill="${c.address}">${p.addressKr}</text>
-                          <text x="0" y="${scale * 16}" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 8 : 7)}" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
-                          <text x="0" y="${scale * 32}" font-family="${font}" font-size="${scale * (currentEnvSize === 'A4' ? 9 : 7.5)}" fill="${c.highlight}">T. ${p.tel} &nbsp; F. ${p.fax} &nbsp; www.britzmedi.co.kr</text>
+                      <g transform="translate(0, 16)">
+                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 2.8 : 2.2}" fill="${c.address}">${p.addressKr}</text>
+                          <text x="0" y="3.5" font-family="${font}" font-size="${isA4 ? 2.4 : 1.9}" fill="${c.address}">${p.addressEn}</text>
+                          <text x="0" y="7.5" font-family="${font}" font-size="${isA4 ? 2.6 : 2}" fill="${c.highlight}">T. ${p.phone} | F. ${p.fax} | www.britzmedi.co.kr</text>
                       </g>
                   </g>
               </g>
-              ${isFlat ? `
-                <path d="M${spec.wing * scale},${spec.flap * scale} h${spec.w * scale} l${spec.wing * scale},${spec.wing * scale} v${(spec.h - spec.wing*2) * scale} l-${spec.wing * scale},${spec.wing * scale} h-${spec.w * scale} l-${spec.wing * scale},-${spec.wing*scale} v-${(spec.h - spec.wing*2)*scale} l${spec.wing*scale},-${spec.wing*scale} Z" fill="none" stroke="#222" stroke-width="0.5" />
-              ` : ''}
+              ${isFlat ? `<path d="M${spec.wing},${spec.flap} h${spec.w} l${spec.wing},${spec.wing} v${spec.h - spec.wing*2} l-${spec.wing},${spec.wing} h-${spec.w} l-${spec.wing},-${spec.wing} v-${spec.h - spec.wing*2} l${spec.wing},-${spec.wing} Z" fill="none" stroke="#888" stroke-width="0.1" />` : ''}
           </svg>`;
       }
 
-      // ─── Business Card (540x310 ViewBox for 1:1 UI parity) ───
+      const W = 94; const H = 54;
+      const leftMargin = 12;
+
       const fullDefs = `
         <defs>
-          ${getSvgGradient('vec-f')}
-          ${getSvgGradient('vec-b')}
-          <linearGradient id="bottomGradVec" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:${c.line};stop-opacity:0" />
-            <stop offset="50%" style="stop-color:${c.line};stop-opacity:0.4" />
-            <stop offset="100%" style="stop-color:${c.line};stop-opacity:0" />
+          ${getSvgGradient('vf')}
+          ${getSvgGradient('vb')}
+          <linearGradient id="bGradV" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="${c.line}" stop-opacity="0" />
+            <stop offset="50%" stop-color="${c.line}" stop-opacity="0.3" />
+            <stop offset="100%" stop-color="${c.line}" stop-opacity="0" />
           </linearGradient>
         </defs>`;
 
       if (isBack) {
-        // Match backCard logic exactly
-        const logoH = 144;
+        const logoH = 26; 
         const logoW = logoH * (908/1225);
-        const x = (540 - logoW) / 2;
-        const y = (310 - logoH) / 2;
-
-        return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 540 310">
+        const x = (W - logoW) / 2;
+        const y = (H - logoH) / 2;
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">
           ${fullDefs}
-          <rect width="100%" height="100%" fill="${c.bg}"/>
+          <rect width="${W}" height="${H}" fill="${c.bg}"/>
           <g transform="translate(${x}, ${y}) scale(${logoH / 1225}) translate(-571, -466)">
-               ${getLockupContent().replace('id="pg_back"', 'id="pg_vec_b"').replace('url(#pg_back)', 'url(#pg-vec-b)')}
+               ${getLockupContent().replace('id="pg_back"', 'id="pg_vb"').replace('url(#pg_back)', 'url(#pg-vb)')}
           </g>
         </svg>`;
       } else {
-        // Front Card logic parity
-        const logoW = 44;
-        const logoH = 52;
-        const leftPadding = 32;
-
-        return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 540 310">
+        const infoX = leftMargin + 11;
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">
           ${fullDefs}
-          <rect width="100%" height="100%" fill="${c.bg}"/>
-          <rect x="0" y="309" width="540" height="1" fill="url(#bottomGradVec)"/>
-          
-          <!-- Logo -->
-          <g transform="translate(${leftPadding}, 50) scale(${logoH / 1225}) translate(-571, -466)">
-             ${getLockupContent().replace('id="pg_back"', 'id="pg_vec_f"').replace('url(#pg_back)', 'url(#pg-vec-f)')}
+          <rect width="${W}" height="${H}" fill="${c.bg}"/>
+          <rect x="0" y="${H-0.5}" width="${W}" height="0.5" fill="url(#bGradV)"/>
+          <g transform="translate(${leftMargin}, 9)">
+             <g transform="scale(${10 / 1225}) translate(-571, -466)">
+                ${getLockupContent().replace('id="pg_back"', 'id="pg_vf"').replace('url(#pg_back)', 'url(#pg-vf)')}
+             </g>
           </g>
-
-          <!-- Names -->
-          <g transform="translate(${leftPadding + 64}, 78)">
-            <text x="0" y="0" font-family="${font}" font-size="26" font-weight="bold" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="${p.nameKr.length * 26 + 10}" y="-1.5" font-family="${font}" font-size="11.5" fill="${c.titleKr}">${p.titleKr}</text>
-            <text x="0" y="22" font-family="${font}" font-size="13" fill="${c.nameEn}">${p.nameEn}</text>
-            <text x="${p.nameEn.length * 8 + 10}" y="22" font-family="${font}" font-size="10" fill="${c.titleEn}">${p.titleEn}</text>
+          <g transform="translate(${infoX}, 13)">
+            <text x="0" y="0" font-family="${font}" font-size="5.5" font-weight="bold" fill="${c.nameKr}">${p.nameKr}</text>
+            <text x="${p.nameKr.length * 6}" y="-0.4" font-family="${font}" font-size="2.4" fill="${c.titleKr}">${p.titleKr}</text>
+            <text x="0" y="4.2" font-family="${font}" font-size="3" fill="${c.nameEn}">${p.nameEn}</text>
+            <text x="${p.nameEn.length * 1.8 + 2}" y="4.2" font-family="${font}" font-size="2.2" fill="${c.titleEn}">${p.titleEn}</text>
           </g>
-
-          <!-- Address -->
-          <g transform="translate(${leftPadding + 4}, 175)">
-            <text x="0" y="0" font-family="${font}" font-size="10.5" fill="${c.address}">${p.addressKr}</text>
-            <text x="0" y="14" font-family="${font}" font-size="10" fill="${c.address}" opacity="0.6">${p.addressEn}</text>
-            <rect x="0" y="22" width="34" height="1.2" fill="${c.line}" opacity="0.75"/>
+          <g transform="translate(${leftMargin}, 30)">
+            <text x="0" y="0" font-family="${font}" font-size="2.2" fill="${c.address}">${p.addressKr}</text>
+            <text x="0" y="3.2" font-family="${font}" font-size="2.0" fill="${c.address}">${p.addressEn}</text>
+            <rect x="0" y="4.8" width="8" height="0.15" fill="${c.line}"/>
           </g>
-
-          <!-- Contacts -->
-          <g transform="translate(${leftPadding + 4}, 214)">
-            <text x="0" y="0" font-family="${font}" font-size="11" font-weight="bold" fill="${c.highlight}">M. ${p.phone}</text>
-            <text x="0" y="16" font-family="${font}" font-size="11" fill="${c.sub}">T. ${p.tel}</text>
-            <text x="0" y="32" font-family="${font}" font-size="11" fill="${c.sub}">F. ${p.fax}</text>
-
-            <line x1="130" y1="-8" x2="130" y2="42" stroke="${c.line}" stroke-width="0.5" stroke-opacity="0.2"/>
-
-            <text x="145" y="0" font-family="${font}" font-size="11" fill="${c.highlight}">${p.email}</text>
-            <text x="145" y="16" font-family="${font}" font-size="11" fill="${c.sub}">${p.website}</text>
+          <g transform="translate(${leftMargin}, 41)">
+            <text x="0" y="0" font-family="${font}" font-size="2.6" font-weight="bold" fill="${c.highlight}">M. ${p.phone}</text>
+            <text x="0" y="3.5" font-family="${font}" font-size="2.4" fill="${c.sub}">T. ${p.tel}</text>
+            <text x="0" y="7" font-family="${font}" font-size="2.4" fill="${c.sub}">F. ${p.fax}</text>
+            <line x1="38" y1="-2" x2="38" y2="8" stroke="${c.line}" stroke-width="0.1"/>
+            <text x="42" y="0" font-family="${font}" font-size="2.6" font-weight="bold" fill="${c.highlight}">${p.email}</text>
+            <text x="42" y="3.5" font-family="${font}" font-size="2.4" fill="${c.sub}">${p.website}</text>
           </g>
         </svg>`;
       }
@@ -1200,9 +1183,20 @@
           }
           
           if (typeof doc.svg !== 'function') {
-            throw new Error("svg2pdf 렌더링 엔진을 불러오지 못했습니다. 인터넷 연결을 확인하거나 잠시 후 다시 시도해주세요.");
+            throw new Error("svg2pdf 렌더링 엔진을 불러오지 못했습니다.");
           }
-          await doc.svg(svgElement, { x: 0, y: 0, width: w, height: h });
+          
+          const c = getThemeColors();
+          doc.setFillColor(c.bg);
+          doc.rect(0, 0, w, h, 'F');
+
+          await doc.svg(svgElement, { 
+            x: 0, y: 0, width: w, height: h,
+            fontCallback: (family) => {
+              if (family.includes('Noto')) return 'font-notosans';
+              return 'helvetica';
+            }
+          });
         };
 
         if (currentMode === 'envelope') {
@@ -1216,6 +1210,9 @@
             pdf.save(`BRITZMEDI_Env_${currentEnvSize}_Vector_${p.nameKr}.pdf`);
         } else {
             const pdf = new jsPDF({ orientation:'landscape', unit:'mm', format:[94, 54] });
+            // Font registration for Unicode support in Vector PDF
+            const fontUrl = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2"; // Placeholder or direct load
+            // For now, using Arial as fallback but setting up the structure
             await generatePage(pdf, false); // Front
             pdf.addPage([94, 54], 'landscape');
             await generatePage(pdf, true); // Back

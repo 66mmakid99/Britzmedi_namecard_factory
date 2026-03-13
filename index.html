@@ -1034,42 +1034,45 @@
 
     function generateVectorSVG(p, isBack) {
       const c = getThemeColors();
-      const font = "sans-serif"; 
+      const font = "'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', 'sans-serif'";
 
       if (currentMode === 'envelope') {
           const spec = ENVELOPE_SPECS[currentEnvSize];
           const isFlat = currentEnvView === 'flat';
-          const totalW = spec.w + (isFlat ? spec.wing * 2 : 0);
-          const totalH = spec.h + (isFlat ? spec.flap * 2 : 0);
+          const W = spec.w + (isFlat ? spec.wing * 2 : 0);
+          const H = spec.h + (isFlat ? spec.flap * 2 : 0);
           const offset = isFlat ? { x: spec.wing, y: spec.flap } : { x: 0, y: 0 };
           const isA4 = currentEnvSize === 'A4';
 
-          return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalW}mm" height="${totalH}mm" viewBox="0 0 ${totalW} ${totalH}">
-              <defs>${getSvgGradient('envv')}</defs>
-              <rect width="${totalW}" height="${totalH}" fill="${isFlat ? '#f2f2f2' : c.bg}" />
-              <g transform="translate(${offset.x}, ${offset.y})">
-                  <rect width="${spec.w}" height="${spec.h}" fill="${c.bg}" />
-                  <g transform="translate(${isA4 ? 15 : 10}, ${isA4 ? 15 : 10})">
-                      <g transform="scale(0.008) translate(-571, -466)">
+          // Use 10 units = 1mm scaling for high precision
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W*10} ${H*10}">
+              <defs>${getSvgGradient('env_v')}</defs>
+              <rect width="100%" height="100%" fill="${isFlat ? '#f2f2f2' : c.bg}" />
+              <g transform="translate(${offset.x * 10}, ${offset.y * 10})">
+                  <rect width="${spec.w * 10}" height="${spec.h * 10}" fill="${c.bg}" />
+                  <g transform="translate(${isA4 ? 150 : 100}, ${isA4 ? 150 : 100})">
+                      <g transform="scale(0.08) translate(-571, -466)">
                           ${getLockupContent().replace('id="pg_back"', 'id="pg_envv"').replace('url(#pg_back)', 'url(#pg-envv)')}
                       </g>
-                      <g transform="translate(13, 3)">
-                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 4 : 3}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
-                          <text x="0" y="${isA4 ? 4.5 : 3.5}" font-family="${font}" font-size="${isA4 ? 2 : 1.6}" fill="${c.titleKr}">AESTHETIC MEDICAL DEVICE</text>
+                      <g transform="translate(130, 30)">
+                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 40 : 30}" font-weight="bold" fill="${c.nameKr}">BRITZMEDI</text>
+                          <text x="0" y="${isA4 ? 45 : 35}" font-family="${font}" font-size="${isA4 ? 20 : 16}" fill="${c.titleKr}">AESTHETIC MEDICAL DEVICE</text>
                       </g>
-                      <g transform="translate(0, 16)">
-                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 2.8 : 2.2}" fill="${c.address}">${p.addressKr}</text>
-                          <text x="0" y="3.5" font-family="${font}" font-size="${isA4 ? 2.4 : 1.9}" fill="${c.address}">${p.addressEn}</text>
-                          <text x="0" y="7.5" font-family="${font}" font-size="${isA4 ? 2.6 : 2}" fill="${c.highlight}">T. ${p.phone} | F. ${p.fax} | www.britzmedi.co.kr</text>
+                      <g transform="translate(0, 160)">
+                          <text x="0" y="0" font-family="${font}" font-size="${isA4 ? 28 : 22}" fill="${c.address}">${p.addressKr}</text>
+                          <text x="0" y="35" font-family="${font}" font-size="${isA4 ? 24 : 19}" fill="${c.address}">${p.addressEn}</text>
+                          <text x="0" y="75" font-family="${font}" font-size="${isA4 ? 26 : 20}" fill="${c.highlight}">T. ${p.phone} | F. ${p.fax} | www.britzmedi.co.kr</text>
                       </g>
                   </g>
               </g>
-              ${isFlat ? `<path d="M${spec.wing},${spec.flap} h${spec.w} l${spec.wing},${spec.wing} v${spec.h - spec.wing*2} l-${spec.wing},${spec.wing} h-${spec.w} l-${spec.wing},-${spec.wing} v-${spec.h - spec.wing*2} l${spec.wing},-${spec.wing} Z" fill="none" stroke="#888" stroke-width="0.1" />` : ''}
+              ${isFlat ? `<path d="M${spec.wing * 10},${spec.flap * 10} h${spec.w * 10} l${spec.wing * 10},${spec.wing * 10} v${(spec.h - spec.wing*2) * 10} l-${spec.wing * 10},${spec.wing * 10} h-${spec.w * 10} l-${spec.wing * 10},-${spec.wing * 10} v-${(spec.h - spec.wing*2) * 10} l${spec.wing * 10},-${spec.wing * 10} Z" fill="none" stroke="#999" stroke-width="1" />` : ''}
           </svg>`;
       }
 
-      const W = 94; const H = 54;
-      const leftMargin = 12;
+      // ─── Business Card (94x54mm Accurate Calibration) ───
+      const W = 940; // 94mm * 10
+      const H = 540; // 54mm * 10
+      const leftMargin = 120; // 12mm
 
       const fullDefs = `
         <defs>
@@ -1083,46 +1086,54 @@
         </defs>`;
 
       if (isBack) {
-        const logoH = 26; 
+        const logoH = 260; // 26mm
         const logoW = logoH * (908/1225);
         const x = (W - logoW) / 2;
         const y = (H - logoH) / 2;
-        return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">
+
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 ${W} ${H}">
           ${fullDefs}
-          <rect width="${W}" height="${H}" fill="${c.bg}"/>
+          <rect width="100%" height="100%" fill="${c.bg}"/>
           <g transform="translate(${x}, ${y}) scale(${logoH / 1225}) translate(-571, -466)">
                ${getLockupContent().replace('id="pg_back"', 'id="pg_vb"').replace('url(#pg_back)', 'url(#pg-vb)')}
           </g>
         </svg>`;
       } else {
-        const infoX = leftMargin + 11;
-        return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}mm" height="${H}mm" viewBox="0 0 ${W} ${H}">
+        const infoX = leftMargin + 110;
+
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="94mm" height="54mm" viewBox="0 0 ${W} ${H}">
           ${fullDefs}
-          <rect width="${W}" height="${H}" fill="${c.bg}"/>
-          <rect x="0" y="${H-0.5}" width="${W}" height="0.5" fill="url(#bGradV)"/>
-          <g transform="translate(${leftMargin}, 9)">
-             <g transform="scale(${10 / 1225}) translate(-571, -466)">
+          <rect width="100%" height="100%" fill="${c.bg}"/>
+          <rect x="0" y="${H-5}" width="${W}" height="5" fill="url(#bGradV)"/>
+          
+          <g transform="translate(${leftMargin}, 90)">
+             <g transform="scale(${100 / 1225}) translate(-571, -466)">
                 ${getLockupContent().replace('id="pg_back"', 'id="pg_vf"').replace('url(#pg_back)', 'url(#pg-vf)')}
              </g>
           </g>
-          <g transform="translate(${infoX}, 13)">
-            <text x="0" y="0" font-family="${font}" font-size="5.5" font-weight="bold" fill="${c.nameKr}">${p.nameKr}</text>
-            <text x="${p.nameKr.length * 6}" y="-0.4" font-family="${font}" font-size="2.4" fill="${c.titleKr}">${p.titleKr}</text>
-            <text x="0" y="4.2" font-family="${font}" font-size="3" fill="${c.nameEn}">${p.nameEn}</text>
-            <text x="${p.nameEn.length * 1.8 + 2}" y="4.2" font-family="${font}" font-size="2.2" fill="${c.titleEn}">${p.titleEn}</text>
+
+          <g transform="translate(${infoX}, 130)">
+            <text x="0" y="0" font-family="${font}" font-size="55" font-weight="bold" fill="${c.nameKr}">${p.nameKr}</text>
+            <text x="${p.nameKr.length * 60}" y="-4" font-family="${font}" font-size="24" fill="${c.titleKr}">${p.titleKr}</text>
+            <text x="0" y="42" font-family="${font}" font-size="30" fill="${c.nameEn}">${p.nameEn}</text>
+            <text x="${p.nameEn.length * 18 + 20}" y="42" font-family="${font}" font-size="22" fill="${c.titleEn}">${p.titleEn}</text>
           </g>
-          <g transform="translate(${leftMargin}, 30)">
-            <text x="0" y="0" font-family="${font}" font-size="2.2" fill="${c.address}">${p.addressKr}</text>
-            <text x="0" y="3.2" font-family="${font}" font-size="2.0" fill="${c.address}">${p.addressEn}</text>
-            <rect x="0" y="4.8" width="8" height="0.15" fill="${c.line}"/>
+
+          <g transform="translate(${leftMargin}, 300)">
+            <text x="0" y="0" font-family="${font}" font-size="22" fill="${c.address}">${p.addressKr}</text>
+            <text x="0" y="32" font-family="${font}" font-size="20" fill="${c.address}">${p.addressEn}</text>
+            <rect x="0" y="48" width="80" height="1.5" fill="${c.line}"/>
           </g>
-          <g transform="translate(${leftMargin}, 41)">
-            <text x="0" y="0" font-family="${font}" font-size="2.6" font-weight="bold" fill="${c.highlight}">M. ${p.phone}</text>
-            <text x="0" y="3.5" font-family="${font}" font-size="2.4" fill="${c.sub}">T. ${p.tel}</text>
-            <text x="0" y="7" font-family="${font}" font-size="2.4" fill="${c.sub}">F. ${p.fax}</text>
-            <line x1="38" y1="-2" x2="38" y2="8" stroke="${c.line}" stroke-width="0.1"/>
-            <text x="42" y="0" font-family="${font}" font-size="2.6" font-weight="bold" fill="${c.highlight}">${p.email}</text>
-            <text x="42" y="3.5" font-family="${font}" font-size="2.4" fill="${c.sub}">${p.website}</text>
+
+          <g transform="translate(${leftMargin}, 410)">
+            <text x="0" y="0" font-family="${font}" font-size="26" font-weight="bold" fill="${c.highlight}">M. ${p.phone}</text>
+            <text x="0" y="35" font-family="${font}" font-size="24" fill="${c.sub}">T. ${p.tel}</text>
+            <text x="0" y="70" font-family="${font}" font-size="24" fill="${c.sub}">F. ${p.fax}</text>
+
+            <line x1="380" y1="-20" x2="380" y2="80" stroke="${c.line}" stroke-width="1"/>
+
+            <text x="420" y="0" font-family="${font}" font-size="26" font-weight="bold" fill="${c.highlight}">${p.email}</text>
+            <text x="420" y="35" font-family="${font}" font-size="24" fill="${c.sub}">${p.website}</text>
           </g>
         </svg>`;
       }
@@ -1288,25 +1299,33 @@
           const w = spec.w + (isFlat ? spec.wing * 2 : 0);
           const h = spec.h + (isFlat ? spec.flap * 2 : 0);
           const pdf = new jsPDF({ orientation: w > h ? 'landscape' : 'portrait', unit:'mm', format:[w, h] });
+          const c = getThemeColors();
 
           for (let i = 0; i < employees.length; i++) {
             btn.innerHTML = `<span class="icon">⏳</span> ${i+1}/${employees.length}`;
             if (i > 0) pdf.addPage([w, h], w > h ? 'landscape' : 'portrait');
+            pdf.setFillColor(c.bg);
+            pdf.rect(0, 0, w, h, 'F');
             await addVectorPage(pdf, employees[i], false, w, h);
           }
           pdf.save(`BRITZMEDI_Envelopes_${currentEnvSize}_Full_Vector.pdf`);
         } else {
           const pdf = new jsPDF({ orientation:'landscape', unit:'mm', format:[94, 54] });
+          const c = getThemeColors();
 
           for (let i = 0; i < employees.length; i++) {
             btn.innerHTML = `<span class="icon">⏳</span> ${i+1}/${employees.length}`;
             const p = employees[i];
             
+            // Front
             if (i > 0) pdf.addPage([94, 54], 'landscape');
-            await addVectorPage(pdf, p, false, 94, 54); // Front
+            pdf.setFillColor(c.bg); pdf.rect(0, 0, 94, 54, 'F');
+            await addVectorPage(pdf, p, false, 94, 54);
 
+            // Back
             pdf.addPage([94, 54], 'landscape');
-            await addVectorPage(pdf, p, true, 94, 54); // Back
+            pdf.setFillColor(c.bg); pdf.rect(0, 0, 94, 54, 'F');
+            await addVectorPage(pdf, p, true, 94, 54);
           }
           pdf.save('BRITZMEDI_Cards_Full_Vector.pdf');
         }

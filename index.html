@@ -1838,7 +1838,7 @@
     }
 
     // Font cache: avoid re-downloading on repeated PDF exports within same session
-    var _fontCache = { notoB64: null };
+    var _fontCache = { regB64: null, boldB64: null };
 
     async function loadFont(doc) {
       try {
@@ -1853,31 +1853,20 @@
           });
         };
 
-        // Primary: Noto Sans KR variable font (same font as viewer CSS for perfect consistency)
-        // Fallback: NanumGothic static fonts (reliable, similar Korean font)
-        if (!_fontCache.notoB64) {
-          try {
-            _fontCache.notoB64 = await toBase64(
-              "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosanskr/NotoSansKR%5Bwght%5D.ttf"
-            );
-          } catch(e2) {
-            console.warn("Noto Sans KR fetch failed, falling back to NanumGothic", e2);
-            const [regB64, boldB64] = await Promise.all([
-              toBase64("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Regular.ttf"),
-              toBase64("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Bold.ttf")
-            ]);
-            doc.addFileToVFS('NanumGothic.ttf', regB64);
-            doc.addFont('NanumGothic.ttf', 'Noto Sans KR', 'normal');
-            doc.addFileToVFS('NanumGothicBold.ttf', boldB64);
-            doc.addFont('NanumGothicBold.ttf', 'Noto Sans KR', 'bold');
-            return 'Noto Sans KR';
-          }
+        // NanumGothic: separate Regular + Bold TTFs for reliable bold rendering
+        // (jsPDF cannot interpret variable font weight axes, so static TTFs are required)
+        if (!_fontCache.regB64) {
+          const results = await Promise.all([
+            toBase64("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Regular.ttf"),
+            toBase64("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/nanumgothic/NanumGothic-Bold.ttf")
+          ]);
+          _fontCache.regB64 = results[0];
+          _fontCache.boldB64 = results[1];
         }
-        // Register Noto Sans KR variable font for both normal and bold weights
-        doc.addFileToVFS('NotoSansKR.ttf', _fontCache.notoB64);
-        doc.addFont('NotoSansKR.ttf', 'Noto Sans KR', 'normal');
-        doc.addFileToVFS('NotoSansKR-Bold.ttf', _fontCache.notoB64);
-        doc.addFont('NotoSansKR-Bold.ttf', 'Noto Sans KR', 'bold');
+        doc.addFileToVFS('NanumGothic.ttf', _fontCache.regB64);
+        doc.addFont('NanumGothic.ttf', 'Noto Sans KR', 'normal');
+        doc.addFileToVFS('NanumGothicBold.ttf', _fontCache.boldB64);
+        doc.addFont('NanumGothicBold.ttf', 'Noto Sans KR', 'bold');
         return 'Noto Sans KR';
       } catch(e) {
         console.warn("Font loading failed", e);
